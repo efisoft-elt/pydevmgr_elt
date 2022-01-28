@@ -1,0 +1,140 @@
+Drot:
+  cfg:
+    #Drot specific parameters
+    focus_sign:         cfg.nFocusSign
+    dir_sign:           cfg.nDirSign
+    stat_ref:           cfg.lrStatRef
+    sky_ref:            cfg.lrSkyRef
+    elev_ref:           cfg.lrElevRef
+    user_ref:           cfg.lrUserRef
+    user_par1:          cfg.lrUserPar1
+    user_par2:          cfg.lrUserPar2
+    user_par3:          cfg.lrUserPar3
+    user_par4:          cfg.lrUserPar4
+    latitude:           cfg.site.latitude
+    longitude:          cfg.site.longitude
+    trk_period:         cfg.nMinSkipCycles
+    trk_threshold:      cfg.lrTrkThreshold
+
+    #Motor parameters (DROT reuses all motor parameres)
+    brake:              motor.cfg.bUseBrake
+    backlash:           motor.cfg.lrBacklash
+    axis_type:          motor.cfg.nAxisType
+    velocity:           motor.cfg.lrDefaultVelocity
+    max_pos:            motor.cfg.lrMaxPosition
+    min_pos:            motor.cfg.lrMinPosition
+    check_inpos:        motor.cfg.bCheckInPos
+    lock:               motor.cfg.bLock
+    lock_pos:           motor.cfg.lrLockPos
+    lock_tolerance:     motor.cfg.lrLockTol
+    disable:            motor.cfg.bDisableAfterMove
+
+    tout_init:          motor.cfg.nTimeoutInit
+    tout_move:          motor.cfg.nTimeoutMove
+    tout_switch:        motor.cfg.nTimeoutSwitch
+
+
+    low_brake:          motor.cfg.bActiveLowBrake
+    low_inpos:          motor.cfg.bActiveLowInPos
+    active_low_lstop:   motor.cfg.bArrActiveLow[0].bValue
+    active_low_lhw:     motor.cfg.bArrActiveLow[1].bValue
+    active_low_ref:     motor.cfg.bArrActiveLow[2].bValue
+    active_low_index:   motor.cfg.bArrActiveLow[3].bValue
+    active_low_uhw:     motor.cfg.bArrActiveLow[4].bValue
+    active_low_ustop:   motor.cfg.bArrActiveLow[5].bValue
+
+    exec_pre_init:      motor.cfg.bExecUserPreInit
+    exec_post_init:     motor.cfg.bExecUserPostInit
+    exec_pre_move:      motor.cfg.bExecUserPreMove
+    exec_post_move:     motor.cfg.bExecUserPostMove
+
+    init_seq1_action:   motor.cfg.strArrInitSeq[1].nAction
+    init_seq1_value1:   motor.cfg.strArrInitSeq[1].lrValue1
+    init_seq1_value2:   motor.cfg.strArrInitSeq[1].lrValue2
+
+    init_seq2_action:   motor.cfg.strArrInitSeq[2].nAction
+    init_seq2_value1:   motor.cfg.strArrInitSeq[2].lrValue1
+    init_seq2_value2:   motor.cfg.strArrInitSeq[2].lrValue2
+
+    init_seq3_action:   motor.cfg.strArrInitSeq[3].nAction
+    init_seq3_value1:   motor.cfg.strArrInitSeq[3].lrValue1
+    init_seq3_value2:   motor.cfg.strArrInitSeq[3].lrValue2
+
+    init_seq4_action:   motor.cfg.strArrInitSeq[4].nAction
+    init_seq4_value1:   motor.cfg.strArrInitSeq[4].lrValue1
+    init_seq4_value2:   motor.cfg.strArrInitSeq[4].lrValue2
+
+    init_seq5_action:   motor.cfg.strArrInitSeq[5].nAction
+    init_seq5_value1:   motor.cfg.strArrInitSeq[5].lrValue1
+    init_seq5_value2:   motor.cfg.strArrInitSeq[5].lrValue2
+
+    init_seq6_action:   motor.cfg.strArrInitSeq[6].nAction
+    init_seq6_value1:   motor.cfg.strArrInitSeq[6].lrValue1
+    init_seq6_value2:   motor.cfg.strArrInitSeq[6].lrValue2
+
+    init_seq7_action:   motor.cfg.strArrInitSeq[7].nAction
+    init_seq7_value1:   motor.cfg.strArrInitSeq[7].lrValue1
+    init_seq7_value2:   motor.cfg.strArrInitSeq[7].lrValue2
+
+    init_seq8_action:   motor.cfg.strArrInitSeq[8].nAction
+    init_seq8_value1:   motor.cfg.strArrInitSeq[8].lrValue1
+    init_seq8_value2:   motor.cfg.strArrInitSeq[8].lrValue2
+
+    init_seq9_action:   motor.cfg.strArrInitSeq[9].nAction
+    init_seq9_value1:   motor.cfg.strArrInitSeq[9].lrValue1
+    init_seq9_value2:   motor.cfg.strArrInitSeq[9].lrValue2
+
+    init_seq10_action:  motor.cfg.strArrInitSeq[10].nAction
+    init_seq10_value1:  motor.cfg.strArrInitSeq[10].lrValue1
+    init_seq10_value2:  motor.cfg.strArrInitSeq[10].lrValue2
+
+  stat:
+    state:             stat.sm.nState
+    substate:          stat.sm.nSubstate
+    initialised:       stat.bInitialised
+    track_mode:        stat.nMode
+    alpha:             stat.apparent.alpha
+    delta:             stat.apparent.delta
+    angle_on_sky:      stat.lrAngleOnSky
+    error_code:        motor.stat.nErrorCode
+    status:            motor.stat.nStatus
+    pos_target:        motor.stat.lrPosTarget
+    pos_actual:        motor.stat.lrPosActual
+    pos_error:         motor.stat.lrPosError
+    vel_actual:        motor.stat.lrVelActual
+    #vel_target:        motor.stat.lrVelTarget
+    scale_factor:      motor.stat.lrScaleFactor
+    local:             motor.stat.bLocal
+    backlash_step:     motor.stat.nBacklashStep
+
+    mode:              motor.stat.nMode
+    init_step:         motor.stat.nInitStep
+    init_action:       motor.stat.nInitAction
+    axis_ready:        motor.stat.bAxisReady
+    axis_enable:       motor.stat.bEnabled
+    axis_inposition:   motor.stat.bInPosition
+    axis_lock:         motor.stat.bLock
+    axis_brake:        motor.stat.bBrakeActive
+    axis_info_data1:   motor.stat.nInfoData1
+    axis_info_data2:   motor.stat.nInfoData2
+    error_code:        motor.stat.nErrorCode
+
+    signal_lstop:      motor.stat.signals[0].bActive
+    signal_lhw:        motor.stat.signals[1].bActive
+    signal_ref:        motor.stat.signals[2].bActive
+    signal_index:      motor.stat.signals[3].bActive
+    signal_uhw:        motor.stat.signals[4].bActive
+    signal_ustop:      motor.stat.signals[5].bActive
+
+  rpc:
+    rpcInit:          RPC_Init
+    rpcEnable:        RPC_Enable
+    rpcDisable:       RPC_Disable
+    rpcMoveAbs:       RPC_MoveAbs
+    rpcMoveRel:       RPC_MoveRel
+    rpcMoveVel:       RPC_MoveVel
+    rpcMoveAngle:     RPC_MoveAngle
+    rpcStartTrack:    RPC_StartTrack
+    rpcStopTrack:     RPC_StopTrack
+    rpcStop:          RPC_Stop
+    rpcReset:         RPC_Reset

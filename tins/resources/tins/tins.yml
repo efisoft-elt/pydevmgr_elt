@@ -1,0 +1,57 @@
+
+server_id           : 'ins1.fcs1'
+
+ins1.fcs1:
+    req_endpoint    : "zpb.rr://127.0.0.1:12082/"
+    pub_endpoint    : "zpb.ps://127.0.0.1:12345/"
+    db_endpoint     : "127.0.0.1:6379"
+    db_timeout      : 2
+    scxml           : "tins/sm.xml"
+    dictionaries    : ['dit/stddid/primary.did', 'tins/fcf.did']
+    fits_prefix     : "FCS1"
+    #devices         : ['shutter1', 'lamp1', 'motor1', 'adc1', 'drot1', 'sensor1', 'ccc1', 'piezo1', 'actuator1']
+    devices         : ['shutter1', 'lamp1',  'piezo1', 'motor1', 'motor2', 'adc1', 'drot1']
+    #devices         : ['shutter1', 'lamp1',  'piezo1', 'motor1', 'motor2', 'drot1']
+    #devices         : ['motor1', 'motor2']
+    cmdtout         : 60000
+
+shutter1:
+  type: Shutter
+  cfgfile: "tins/shutter1.yml"
+
+lamp1:
+  type: Lamp
+  cfgfile: "tins/lamp1.yml"
+
+motor1:
+  type: Motor
+  cfgfile: "tins/motor1.yml"
+
+motor2:
+  type: Motor
+  cfgfile: "tins/motor2.yml"
+  
+sensor1:
+  type: Sensor
+  cfgfile: "tins/sensor1.yml"
+
+ccc1:
+  type: Sensor
+  cfgfile: "tins/ccc1.yml"
+
+drot1:
+  type: Drot
+  cfgfile: "tins/drot1.yml"
+
+adc1:
+  type: Adc
+  cfgfile: "tins/adc1.yml"
+
+piezo1:
+  type: Piezo
+  cfgfile: "tins/piezo1.yml"
+
+actuator1:
+  type: Actuator
+  cfgfile: "tins/actuator1.yml"
+

@@ -1,0 +1,21 @@
+{{ name }}:
+  type: Shutter
+  interface: Softing
+  identifier: PLC1                             # OPCUA Object Identifier
+  prefix: {{ prefix }}                      # OPCUA attribute prefix
+  simulated: false
+  ignored: false
+  address: {{ address }}        # TO BE UPDATED  PLC address (OPCUA Server)
+  simaddr: {{ simaddr }}      # Simulation address
+  mapfile: {{ map_file }}  # TO BE UPDATED 
+  fits_prefix: "{{ fits_prefix }}"
+  ctrl_config:
+    low_closed:     false
+    low_fault:      false                              # If T, signal is active low
+    low_open:       false                              # If T, signal is active low
+    low_switch:     false                              # If T, signal is active low
+    ignore_closed:  false                              # If T, ignore the signal
+    ignore_fault:   false                              # If T, ignore the signal
+    ignore_open:    false                              # If T, ignore the signal
+    initial_state:  false
+    timeout:       2000

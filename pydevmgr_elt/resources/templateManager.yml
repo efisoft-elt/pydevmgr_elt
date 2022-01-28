@@ -1,0 +1,18 @@
+server_id           : '{{ name }}'
+
+{{ name }}:
+    req_endpoint    : "zpb.rr://127.0.0.1:12082/"                             # Not used in pydevmgr 
+    pub_endpoint    : "zpb.ps://127.0.0.1:12345/"                             #
+    db_endpoint     : "127.0.0.1:6379"                                        #
+    db_timeout      : 2                                                       #
+    scxml           : "{{ cfgdir }}/sm.xml"                              #
+    dictionaries    : ['dit/stddid/primary.did', 'tins/fcf.did'] #
+    fits_prefix     : "{{ fits_prefix }}"
+    devices         : [{% for device in devices %}'{{ device.name }}', {% endfor %}]
+    cmdtout         : 60000
+
+{% for device in devices %}
+{{ device.name }}:
+   type: {{ device.type }}
+   cfgfile: {{ device.file }}
+{% endfor %}

@@ -1,0 +1,35 @@
+Lamp:
+  cfg:
+    low_fault:         cfg.bActiveLowFault
+    low_on:            cfg.bActiveLowOn
+    low_switch:        cfg.bActiveLowSwitch
+    ignore_fault:      cfg.bIgnoreFault
+    invert_analog:     cfg.bInvertAnalog
+    analog_threshold:  cfg.nAnalogThreshold
+    analog_range:      cfg.nFullRange
+    cooldown:          cfg.nCooldown
+    maxon:             cfg.nMaxOn
+    warmup:            cfg.nWarmup
+    initial_state:     cfg.bInitialState
+    timeout:           cfg.nTimeout
+
+  stat:
+    state:             stat.nState
+    substate:          stat.nSubstate
+    status:            stat.nStatus
+    local:             stat.bLocal
+    intensity:         stat.lrIntensity
+    error_code:        stat.nErrorCode
+    check_time_left:   stat.bCheckTimeLeft
+    time_left:         stat.nTimeLeft
+
+  rpc:
+    rpcInit:           RPC_Init
+    rpcEnable:         RPC_Enable
+    rpcDisable:        RPC_Disable
+    rpcSwitchOn:       RPC_On
+    rpcSwitchOff:      RPC_Off
+    rpcStop:           RPC_Stop
+    rpcReset:          RPC_Reset
+
+

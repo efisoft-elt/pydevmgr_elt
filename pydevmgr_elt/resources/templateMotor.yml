@@ -1,0 +1,56 @@
+{{ name }}:
+  type: Motor
+  interface: Softing
+  identifier: PLC1
+  prefix: {{ prefix }} # TO BE UPDATED  
+  simulated: false
+  ignored: false
+  address: {{ address }}   # TO BE UPDATED 
+  simaddr: {{ simaddr }}
+  mapfile: {{ map_file }}  # TO BE UPDATED 
+  fits_prefix: "MOT1"
+  ctrl_config:
+    velocity:              3.0
+    min_pos:               0.0
+    max_pos:               359.0
+    # axis_type accept LINEAR, CIRCULAR, CIRCULAR_OPTIMISED
+    axis_type:             CIRCULAR 
+    active_low_lstop:      false
+    active_low_lhw:        false
+    active_low_ref:        true
+    active_low_index:      false
+    active_low_uhw:        true
+    active_low_ustop:      false
+    brake:                 false
+    low_brake:             false
+    low_inpos:             false
+    backlash:              0.0
+    tout_init:             30000
+    tout_move:             120000
+    tout_switch:           10000
+  initialisation:
+      # sequence accepts : 
+      #  END, FIND_INDEX, FIND_REF_LE, FIND_REF_UE, FIND_LHW, FIND_UHW, 
+      # D ELAY, MOVE_ABS, MOVE_REL, CALIB_ABS, CALIB_REL , CALIB_SWITCH      
+      
+      sequence: ['END'] 
+      
+      # FIND_LHW: 
+      #    value1: 4.0
+      #    value2: 4.0
+      # FIND_UHW:
+      #    value1: 4.0
+      #    value2: 4.0
+      # CALIB_ABS:
+      #    value1: 0.0
+      #    value2: 0.0 
+      # .... etc .......
+      END:
+         value1: 0.0
+         value2: 0.0
+  positions:
+     # define named position here 
+     posnames: ['ON', 'OFF']
+     tolerance: 1                              # Tolerance in UU
+     "ON": 30
+     "OFF": 100

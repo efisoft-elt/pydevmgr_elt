@@ -1,0 +1,52 @@
+
+drot1:
+  type: Drot
+  interface: Softing
+  identifier: PLC1                             # OPCUA Object Identifier
+  prefix: MAIN.drot1                       # OPCUA attribute prefix
+  simulated: false
+  ignored: false
+  address: opc.tcp://192.168.1.11:4840
+  simaddr: opc.tcp://134.171.57.209:4840       # Simulation address
+  mapfile: "tins/mapDrot.yml"
+  fits_prefix: "DROT1"
+  ctrl_config:
+    latitude:              -0.429833092
+    longitude:             1.228800386
+    velocity:              3.0
+    min_pos:               -359
+    max_pos:               359.0
+    axis_type:             CIRCULAR
+    active_low_lstop:      false
+    active_low_lhw:        false
+    active_low_ref:        true
+    active_low_index:      false
+    active_low_uhw:        true
+    active_low_ustop:      false
+    brake:                 false
+    low_brake:             false
+    low_inpos:             false
+    backlash:              0.0
+    tout_init:             30000
+    tout_move:             120000
+    tout_switch:           10000
+  initialisation:
+      sequence: ['FIND_LHW', 'FIND_UHW', 'CALIB_ABS', 'END']
+      FIND_LHW:
+         value1: 4.0
+         value2: 4.0
+      FIND_UHW:
+         value1: 4.0
+         value2: 4.0
+      CALIB_ABS:
+         value1: 0.0
+         value2: 0.0
+      END:
+         value1: 0.0
+         value2: 0.0
+  positions:
+     posnames: ['ON', 'OFF']
+     tolerance: 1                              # Tolerance in UU
+     'ON': 30
+     'OFF': 100
+

@@ -1,0 +1,19 @@
+Sensor:
+
+  diChannels:
+    di1:              stat.bAlarm
+    di2:              stat.bDoorOpen
+    di3:              stat.bInitialized
+    di4:              stat.bWarning
+
+  iiChannels:
+    ii1:              stat.nErrorCode
+    ii2:              stat.nStatus
+
+  aiChannels:
+    ai1:              stat.lrAmbientTemperature
+    ai2:              stat.lrCabinetTemperature
+    ai3:              stat.lrCoolantFlow
+    ai4:              stat.lrCoolantValve
+    ai5:              stat.lrInletTemperature
+

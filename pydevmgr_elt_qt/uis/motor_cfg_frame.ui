@@ -1,0 +1,1425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Frame</class>
+ <widget class="QFrame" name="Frame">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>980</width>
+    <height>718</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Frame</string>
+  </property>
+  <property name="frameShape">
+   <enum>QFrame::StyledPanel</enum>
+  </property>
+  <property name="frameShadow">
+   <enum>QFrame::Raised</enum>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_7">
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="title">
+          <string>Init Sequence</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_8">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="init1_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="1">
+             <widget class="QLineEdit" name="init9_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
+             <widget class="QLineEdit" name="init3_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="2">
+             <widget class="QLineEdit" name="init2_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="2">
+             <widget class="QLineEdit" name="init9_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
+             <widget class="QLineEdit" name="init4_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="init4_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="2">
+             <widget class="QLineEdit" name="init6_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QLineEdit" name="init5_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="2">
+             <widget class="QLineEdit" name="init8_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLineEdit" name="init7_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="init3_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="init2_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="2">
+             <widget class="QLineEdit" name="init7_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="init5_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="init6_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="3">
+             <widget class="QLabel" name="init1_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="3">
+             <widget class="QLabel" name="init7_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="3">
+             <widget class="QLabel" name="init6_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="3">
+             <widget class="QLabel" name="init5_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="3">
+             <widget class="QLabel" name="init4_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="3">
+             <widget class="QLabel" name="init10_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="0">
+             <widget class="QComboBox" name="init10_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="0">
+             <widget class="QComboBox" name="init9_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="0">
+             <widget class="QComboBox" name="init8_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QComboBox" name="init1_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'.AppleSystemUIFont'; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QComboBox" name="init2_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QComboBox" name="init4_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QComboBox" name="init5_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QComboBox" name="init3_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="0">
+             <widget class="QComboBox" name="init6_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="8" column="3">
+             <widget class="QLabel" name="init9_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QComboBox" name="init7_action">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="toolTip">
+               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 0 - END                       [0] [0] (e.g. &amp;quot;END,0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 1 - FIND_INDEX          Find Index Switch [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_INDEX,10.0,0.5&amp;quot;) &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 2 - FIND_REF_LE        Find REF Switch Lower Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_LE,8,0.1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 3 - FIND_REF_UE       Find REF Switch Upper Edge [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_REF_UE,8.5,1&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 4 - FIND_LHW            Find Lower HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_LHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 5 - FIND_UHW            Find Upper HW Limit [fast Vel] [slow Vel] (e.g. &amp;quot;FIND_UHW,5.0,0.2&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 6 - DELAY                   Delay [ms] [0] (e.g. &amp;quot;DELAY,3000,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 7 - MOVE_ABS           Move Absolute [vel] [pos] (e.g. &amp;quot;MOVE_ABS,25.0,360.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 8 - MOVE_REL            Move Relative [vel] [pos] (e.g. &amp;quot;MOVE_REL,25.0,60.0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt; 9 - CALIB_ABS           Calibrate Absolute [pos] [0] (e.g. &amp;quot;CALIB_ABS,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;10 - CALIB_REL           Calibrate Relative [pos] [0] (e.g. &amp;quot;CALIB_REL,5.25,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;11 - CALIB_SWITCH    Calibrate on Switch [pos] [0.0] (e.g. &amp;quot;CALIB_SWITCH,180.0,0&amp;quot;)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="2">
+             <widget class="QLineEdit" name="init10_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="9" column="1">
+             <widget class="QLineEdit" name="init10_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="3">
+             <widget class="QLabel" name="init8_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="7" column="1">
+             <widget class="QLineEdit" name="init8_value1">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="3">
+             <widget class="QLabel" name="init2_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="3">
+             <widget class="QLabel" name="init3_actual">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>-----</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
+             <widget class="QLineEdit" name="init1_value2">
+              <property name="minimumSize">
+               <size>
+                <width>50</width>
+                <height>0</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Axis Type</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_19">
+          <item row="0" column="0">
+           <layout class="QGridLayout" name="gridLayout_20">
+            <item row="0" column="0">
+             <widget class="QComboBox" name="in_axis_type"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLabel" name="axis_type">
+              <property name="font">
+               <font>
+                <family>Courier</family>
+               </font>
+              </property>
+              <property name="text">
+               <string>Axis Type</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_3"/>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_6">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_8">
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="title">
+              <string>User Procs</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_5">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_11">
+                <item row="2" column="1">
+                 <widget class="QLabel" name="exec_pre_move">
+                  <property name="font">
+                   <font>
+                    <family>Courier</family>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>[ ]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="in_exec_pre_init">
+                  <property name="text">
+                   <string>Pre Init</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QCheckBox" name="in_exec_post_move">
+                  <property name="text">
+                   <string>Post Move</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="exec_pre_init">
+                  <property name="font">
+                   <font>
+                    <family>Courier</family>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>[ ]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="exec_post_init">
+                  <property name="font">
+                   <font>
+                    <family>Courier</family>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>[ ]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="in_exec_post_init">
+                  <property name="text">
+                   <string>Post Init</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QCheckBox" name="in_exec_pre_move">
+                  <property name="text">
+                   <string>Pre Move</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="exec_post_move">
+                  <property name="font">
+                   <font>
+                    <family>Courier</family>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>[ ]</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QGroupBox" name="groupBox_4">
+             <property name="title">
+              <string/>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_4">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_13">
+                <item row="1" column="1">
+                 <widget class="QLabel" name="disable">
+                  <property name="font">
+                   <font>
+                    <family>Courier</family>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>[ ]</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QCheckBox" name="in_disable">
+                  <property name="toolTip">
+                   <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Auto Disable Motor After Move&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  </property>
+                  <property name="text">
+                   <string>Auto Disable</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_12">
+             <item>
+              <widget class="QGroupBox" name="groupBox_3">
+               <property name="title">
+                <string>In Pos Check</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_9">
+                <item row="0" column="0">
+                 <layout class="QGridLayout" name="gridLayout_12">
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="low_inpos">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="check_inpos">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="in_low_inpos">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If checked, In-Position feedback signal is active low&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Active Low</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="in_check_inpos">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If active, check if the in-pos signal is active after the move completes. If it is not, it's a failure.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Check</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_9">
+           <item>
+            <layout class="QVBoxLayout" name="verticalLayout_13">
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="title">
+                <string>Switches (active low)</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_6">
+                <item row="0" column="0">
+                 <layout class="QGridLayout" name="gridLayout_14">
+                  <item row="3" column="0">
+                   <widget class="QCheckBox" name="in_active_low_ref">
+                    <property name="text">
+                     <string>REF</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QCheckBox" name="in_active_low_index">
+                    <property name="text">
+                     <string>Index</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLabel" name="active_low_ref">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLabel" name="active_low_lhw">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="in_active_low_ustop">
+                    <property name="text">
+                     <string>USTOP</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QCheckBox" name="in_active_low_lhw">
+                    <property name="text">
+                     <string>LHW</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QCheckBox" name="in_active_low_lstop">
+                    <property name="text">
+                     <string>LHW</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="active_low_index">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="active_low_ustop">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="active_low_uhw">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLabel" name="active_low_lstop">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="in_active_low_uhw">
+                    <property name="text">
+                     <string>UHW</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_6">
+               <property name="title">
+                <string>Brake</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_10">
+                <item row="0" column="0">
+                 <layout class="QGridLayout" name="gridLayout_15">
+                  <item row="1" column="0">
+                   <widget class="QCheckBox" name="in_low_brake">
+                    <property name="toolTip">
+                     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Brake Feedback Signal is Active Low&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                    </property>
+                    <property name="text">
+                     <string>Active Low</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="low_brake">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="brake">
+                    <property name="font">
+                     <font>
+                      <family>Courier</family>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>[ ]</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0">
+                   <widget class="QCheckBox" name="in_brake">
+                    <property name="text">
+                     <string>Use Brake</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QGroupBox" name="groupBox_7">
+           <property name="title">
+            <string>Timeouts [ms]</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_16">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>Init</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="in_tout_move">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;MOVE sequence timeout in [ms].&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="in_tout_switch">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;SWiTCH sequence timeout in [ms].&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>Move</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>Switch</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="in_tout_init">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;INIT sequence timeout in [ms].&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="tout_init">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>tout_init</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="tout_move">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>tout_move</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="tout_switch">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>tout_switch</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_8">
+           <property name="title">
+            <string>SW Limits</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_21">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_22">
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="in_max_pos">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Max position. Setting both limits to 0 means that limits are not used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="text">
+                 <string>Min</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_11">
+                <property name="text">
+                 <string>Max</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="max_pos">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>max</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="min_pos">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>min</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="in_min_pos">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Min position. Setting both limits to 0 means that limits are not used.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QGroupBox" name="groupBox_9">
+           <property name="title">
+            <string>Lock</string>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_17">
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="gridLayout_18">
+              <item row="1" column="0">
+               <widget class="QLabel" name="label">
+                <property name="text">
+                 <string>Position</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QLabel" name="lock_pos">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QLabel" name="lock_tolerance">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="in_lock_pos">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;If the motor is locked, during INIT the motor will not move and its position will be set to this value.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Tolerance</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="in_lock_tolerance">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;The motor will not move, if the target position is closer to the locked position than this value.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QCheckBox" name="in_lock">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Flag if motor is locked&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+                <property name="text">
+                 <string>Lock</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="lock">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>[_]</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <item>
+            <widget class="QGroupBox" name="groupBox_11">
+             <property name="title">
+              <string>Backlash</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_23">
+              <item row="0" column="0">
+               <layout class="QGridLayout" name="gridLayout_24">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_6">
+                  <property name="text">
+                   <string>Backlash</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item row="0" column="2">
+               <widget class="QLabel" name="backlash">
+                <property name="font">
+                 <font>
+                  <family>Courier</family>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>0.0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="in_backlash">
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Positive, negative or zero (no backlash)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_7"/>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QPushButton" name="in_upload_to">
+       <property name="text">
+        <string>Upload To PLC</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="in_download_from">
+       <property name="text">
+        <string>Download From PLC</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="in_from_config_file">
+       <property name="text">
+        <string>Load initial config</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="name">
+     <property name="font">
+      <font>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="text">
+      <string>name</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>init1_action</tabstop>
+  <tabstop>init1_value1</tabstop>
+  <tabstop>init1_value2</tabstop>
+  <tabstop>init2_action</tabstop>
+  <tabstop>init2_value1</tabstop>
+  <tabstop>init2_value2</tabstop>
+  <tabstop>init3_action</tabstop>
+  <tabstop>init3_value1</tabstop>
+  <tabstop>init3_value2</tabstop>
+  <tabstop>init4_action</tabstop>
+  <tabstop>init4_value1</tabstop>
+  <tabstop>init4_value2</tabstop>
+  <tabstop>init5_action</tabstop>
+  <tabstop>init5_value1</tabstop>
+  <tabstop>init5_value2</tabstop>
+  <tabstop>init6_action</tabstop>
+  <tabstop>init6_value1</tabstop>
+  <tabstop>init6_value2</tabstop>
+  <tabstop>init7_action</tabstop>
+  <tabstop>init7_value1</tabstop>
+  <tabstop>init7_value2</tabstop>
+  <tabstop>init8_action</tabstop>
+  <tabstop>init8_value1</tabstop>
+  <tabstop>init8_value2</tabstop>
+  <tabstop>init9_action</tabstop>
+  <tabstop>init9_value1</tabstop>
+  <tabstop>init9_value2</tabstop>
+  <tabstop>init10_action</tabstop>
+  <tabstop>init10_value1</tabstop>
+  <tabstop>init10_value2</tabstop>
+  <tabstop>in_axis_type</tabstop>
+  <tabstop>in_exec_pre_init</tabstop>
+  <tabstop>in_exec_post_init</tabstop>
+  <tabstop>in_exec_pre_move</tabstop>
+  <tabstop>in_exec_post_move</tabstop>
+  <tabstop>in_active_low_ustop</tabstop>
+  <tabstop>in_active_low_uhw</tabstop>
+  <tabstop>in_active_low_index</tabstop>
+  <tabstop>in_active_low_ref</tabstop>
+  <tabstop>in_active_low_lhw</tabstop>
+  <tabstop>in_active_low_lstop</tabstop>
+  <tabstop>in_disable</tabstop>
+  <tabstop>in_check_inpos</tabstop>
+  <tabstop>in_low_inpos</tabstop>
+  <tabstop>in_brake</tabstop>
+  <tabstop>in_low_brake</tabstop>
+  <tabstop>in_tout_init</tabstop>
+  <tabstop>in_tout_move</tabstop>
+  <tabstop>in_tout_switch</tabstop>
+  <tabstop>in_min_pos</tabstop>
+  <tabstop>in_max_pos</tabstop>
+  <tabstop>in_lock</tabstop>
+  <tabstop>in_lock_pos</tabstop>
+  <tabstop>in_lock_tolerance</tabstop>
+  <tabstop>in_upload_to</tabstop>
+  <tabstop>in_download_from</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

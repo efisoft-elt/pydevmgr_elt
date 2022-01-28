@@ -1,0 +1,31 @@
+Sensor:
+  cfg:
+
+
+  stat:
+    state:            stat.nState
+    substate:         stat.nSubstate
+    local:            stat.bLocal
+    error_code:        stat.nErrorCode
+
+  rpc:
+    rpcInit:          RPC_Init
+    rpcEnable:        RPC_Enable
+    rpcDisable:       RPC_Disable
+    rpcStop:          RPC_Stop
+    rpcReset:         RPC_Reset
+
+  diChannels:
+    di1:              arrDI[0].bValue
+    di2:              arrDI[1].bValue
+    di3:              arrDI[2].bValue
+    di4:              arrDI[3].bValue
+
+  aiChannels:
+    ai1:              stat.lrArrReadings[12].lrValue
+    ai2:              stat.lrArrReadings[13].lrValue
+    ai3:              stat.lrArrReadings[14].lrValue
+    ai4:              stat.lrArrReadings[15].lrValue
+    ai5:              stat.lrArrReadings[16].lrValue
+
+

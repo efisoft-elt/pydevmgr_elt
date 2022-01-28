@@ -1,0 +1,12 @@
+Device:
+  cfg: {}
+  stat:
+      state:         stat.nState
+      substate:      stat.nSubstate
+  rpc:
+      rpcInit:       RPC_Init
+      rpcEnable:     RPC_Enable
+      rpcDisable:    RPC_Disable
+      rpcReset:      RPC_Reset
+
+

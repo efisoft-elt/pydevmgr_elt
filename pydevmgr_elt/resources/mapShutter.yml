@@ -1,0 +1,28 @@
+Shutter:
+  cfg:
+    low_closed:     cfg.bActiveLowClosed
+    low_fault:      cfg.bActiveLowFault
+    low_open:       cfg.bActiveLowOpen
+    low_switch:     cfg.bActiveLowSwitch
+    ignore_closed:  cfg.bIgnoreClosed
+    ignore_fault:   cfg.bIgnoreFault
+    ignore_open:    cfg.bIgnoreOpen
+    initial_state:  cfg.bInitialState
+    timeout:        cfg.nTimeout
+  stat:
+    state:         stat.nState
+    substate:      stat.nSubstate
+    status:        stat.nStatus
+    local:         stat.bLocal
+    error_code:     stat.nErrorCode
+  rpc:
+    rpcInit:       RPC_Init
+    rpcEnable:     RPC_Enable
+    rpcDisable:    RPC_Disable
+    rpcClose:      RPC_Close
+    rpcOpen:       RPC_Open
+    rpcStop:       RPC_Stop
+    rpcReset:      RPC_Reset
+
+
+

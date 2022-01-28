@@ -1,0 +1,115 @@
+Motor:
+  cfg:
+    brake:              cfg.bUseBrake
+    backlash:           cfg.lrBacklash
+    axis_type:          cfg.nAxisType
+
+    velocity:           cfg.lrDefaultVelocity
+    max_pos:            cfg.lrMaxPosition
+    min_pos:            cfg.lrMinPosition
+    check_inpos:        cfg.bCheckInPos
+    lock:               cfg.bLock
+    lock_pos:           cfg.lrLockPos
+    lock_tolerance:     cfg.lrLockTol
+    disable:            cfg.bDisableAfterMove
+
+    tout_init:          cfg.nTimeoutInit
+    tout_move:          cfg.nTimeoutMove
+    tout_switch:        cfg.nTimeoutSwitch
+
+
+    low_brake:          cfg.bActiveLowBrake
+    low_inpos:          cfg.bActiveLowInPos
+    active_low_lstop:   cfg.bArrActiveLow[0].bValue
+    active_low_lhw:     cfg.bArrActiveLow[1].bValue
+    active_low_ref:     cfg.bArrActiveLow[2].bValue
+    active_low_index:   cfg.bArrActiveLow[3].bValue
+    active_low_uhw:     cfg.bArrActiveLow[4].bValue
+    active_low_ustop:   cfg.bArrActiveLow[5].bValue
+
+    exec_pre_init:      cfg.bExecUserPreInit
+    exec_post_init:     cfg.bExecUserPostInit
+    exec_pre_move:      cfg.bExecUserPreMove
+    exec_post_move:     cfg.bExecUserPostMove
+
+    init_seq1_action:   cfg.strArrInitSeq[1].nAction
+    init_seq1_value1:   cfg.strArrInitSeq[1].lrValue1
+    init_seq1_value2:   cfg.strArrInitSeq[1].lrValue2
+
+    init_seq2_action:   cfg.strArrInitSeq[2].nAction
+    init_seq2_value1:   cfg.strArrInitSeq[2].lrValue1
+    init_seq2_value2:   cfg.strArrInitSeq[2].lrValue2
+
+    init_seq3_action:   cfg.strArrInitSeq[3].nAction
+    init_seq3_value1:   cfg.strArrInitSeq[3].lrValue1
+    init_seq3_value2:   cfg.strArrInitSeq[3].lrValue2
+
+    init_seq4_action:   cfg.strArrInitSeq[4].nAction
+    init_seq4_value1:   cfg.strArrInitSeq[4].lrValue1
+    init_seq4_value2:   cfg.strArrInitSeq[4].lrValue2
+
+    init_seq5_action:   cfg.strArrInitSeq[5].nAction
+    init_seq5_value1:   cfg.strArrInitSeq[5].lrValue1
+    init_seq5_value2:   cfg.strArrInitSeq[5].lrValue2
+
+    init_seq6_action:   cfg.strArrInitSeq[6].nAction
+    init_seq6_value1:   cfg.strArrInitSeq[6].lrValue1
+    init_seq6_value2:   cfg.strArrInitSeq[6].lrValue2
+
+    init_seq7_action:   cfg.strArrInitSeq[7].nAction
+    init_seq7_value1:   cfg.strArrInitSeq[7].lrValue1
+    init_seq7_value2:   cfg.strArrInitSeq[7].lrValue2
+
+    init_seq8_action:   cfg.strArrInitSeq[8].nAction
+    init_seq8_value1:   cfg.strArrInitSeq[8].lrValue1
+    init_seq8_value2:   cfg.strArrInitSeq[8].lrValue2
+
+    init_seq9_action:   cfg.strArrInitSeq[9].nAction
+    init_seq9_value1:   cfg.strArrInitSeq[9].lrValue1
+    init_seq9_value2:   cfg.strArrInitSeq[9].lrValue2
+
+    init_seq10_action:  cfg.strArrInitSeq[10].nAction
+    init_seq10_value1:  cfg.strArrInitSeq[10].lrValue1
+    init_seq10_value2:  cfg.strArrInitSeq[10].lrValue2
+
+  stat:
+    state:             stat.nState
+    substate:          stat.nSubstate
+    status:            stat.nStatus
+    pos_target:        stat.lrPosTarget
+    pos_actual:        stat.lrPosActual
+    pos_error:         stat.lrPosError
+    vel_actual:        stat.lrVelActual
+    #vel_target:        stat.lrVelTarget
+    scale_factor:      stat.lrScaleFactor
+    local:             stat.bLocal
+    backlash_step:     stat.nBacklashStep
+    mode:              stat.nMode
+    initialised:       stat.bInitialised
+    init_step:         stat.nInitStep
+    init_action:       stat.nInitAction
+    axis_ready:        stat.bAxisReady
+    axis_enable:       stat.bEnabled
+    axis_inposition:   stat.bInPosition
+    axis_lock:         stat.bLock
+    axis_brake:        stat.bBrakeActive
+    axis_info_data1:   stat.nInfoData1
+    axis_info_data2:   stat.nInfoData2
+    error_code:        stat.nErrorCode
+
+    signal_lstop:      stat.signals[0].bActive
+    signal_lhw:        stat.signals[1].bActive
+    signal_ref:        stat.signals[2].bActive
+    signal_index:      stat.signals[3].bActive
+    signal_uhw:        stat.signals[4].bActive
+    signal_ustop:      stat.signals[5].bActive
+
+  rpc:
+    rpcInit:          RPC_Init
+    rpcEnable:        RPC_Enable
+    rpcDisable:       RPC_Disable
+    rpcMoveAbs:       RPC_MoveAbs
+    rpcMoveRel:       RPC_MoveRel
+    rpcMoveVel:       RPC_MoveVel
+    rpcStop:          RPC_Stop
+    rpcReset:         RPC_Reset

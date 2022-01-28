@@ -1,0 +1,13 @@
+{{ name }}:
+  type: Piezo 
+  interface: Softing
+  identifier: PLC1                             # OPCUA Object Identifier
+  prefix: {{ prefix }}                      # TO BE UPDATED OPCUA attribute prefix
+  simulated: false
+  address: {{ address }}     # TO BE UPDATED OPCUA server address 
+  simaddr: {{ simaddr }}
+  mapfile: {{ map_file }}  # TO BE UPDATED
+  fits_prefix: "{{ fits_prefix }}"
+  ctrl_config:
+     num_axis:      3
+     max_on:        180

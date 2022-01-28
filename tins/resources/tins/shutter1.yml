@@ -1,0 +1,24 @@
+
+shutter1:
+  type: Shutter
+  interface: Softing
+  identifier: PLC1                             # OPCUA Object Identifier
+  prefix: MAIN.Shutter1                      # OPCUA attribute prefix
+  simulated: false
+  ignored: false
+  address: opc.tcp://192.168.1.11:4840
+  simaddr: opc.tcp://134.171.2.213:7576      # Simulation address
+  mapfile: "tins/mapShutter.yml"
+  fits_prefix: "SHUT1"
+  ctrl_config:
+    low_closed:     false
+    low_fault:      false                              # If T, signal is active low
+    low_open:       false                              # If T, signal is active low
+    low_switch:     false                              # If T, signal is active low
+    ignore_closed:  false                              # If T, ignore the signal
+    ignore_fault:   false                              # If T, ignore the signal
+    ignore_open:    false                              # If T, ignore the signal
+    initial_state:  false
+    timeout:       2000
+
+

@@ -1,0 +1,55 @@
+Adc:
+  cfg:
+    pslope:             cfg.lrPslope
+    poffset:            cfg.lrPoffset
+    tslope:             cfg.lrTslope
+    toffset:            cfg.lrToffset
+    afactor:            cfg.lrAfactor
+    zdlimit:            cfg.lrZDlimit
+    minelev:            cfg.lrMinElev
+    latitude:           cfg.site.latitude
+    longitude:          cfg.site.longitude
+    trk_period:         cfg.nMinSkipCycles
+    trk_threshold:      cfg.lrTrkThreshold
+
+    mot1_signoff:       cfg.unitCfg[1].nSignOff
+    mot2_signoff:       cfg.unitCfg[2].nSignOff
+    mot1_signauto:      cfg.unitCfg[1].nSignAuto
+    mot2_signauto:      cfg.unitCfg[2].nSignAuto
+    mot1_signphi:       cfg.unitCfg[1].nSignPhi
+    mot2_signphi:       cfg.unitCfg[2].nSignPhi
+    mot1_refoff:        cfg.unitCfg[1].lrRefOff
+    mot2_refoff:        cfg.unitCfg[2].lrRefOff
+    mot1_refauto:       cfg.unitCfg[1].lrRefAuto
+    mot2_refauto:       cfg.unitCfg[2].lrRefAuto
+    mot1_coffset:       cfg.unitCfg[1].lrCoffset
+    mot2_coffset:       cfg.unitCfg[2].lrCoffset
+    mot1_poffset:       cfg.unitCfg[1].lrPosOffset
+    mot2_poffset:       cfg.unitCfg[2].lrPosOffset
+    mot1_drotfactor:    cfg.unitCfg[1].lrDrotFactor
+    mot2_drotfactor:    cfg.unitCfg[2].lrDrotFactor
+
+  stat:
+    state:             stat.sm.nState
+    substate:          stat.sm.nSubstate
+    initialised:       stat.bInitialised
+    track_mode:        stat.nMode
+    alpha:             stat.apparent.alpha
+    delta:             stat.apparent.delta
+    error_code:        stat.nErrorCode
+    status:            stat.nStatus
+    local:             stat.bLocal
+
+
+  rpc:
+    rpcInit:          RPC_Init
+    rpcEnable:        RPC_Enable
+    rpcDisable:       RPC_Disable
+    rpcMoveAbs:       RPC_MoveAbs
+    rpcMoveRel:       RPC_MoveRel
+    rpcMoveVel:       RPC_MoveVel
+    rpcMoveAngle:     RPC_MoveAngle
+    rpcStartTrack:    RPC_StartTrack
+    rpcStopTrack:     RPC_StopTrack
+    rpcStop:          RPC_Stop
+    rpcReset:         RPC_Reset

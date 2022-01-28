@@ -1,0 +1,41 @@
+# gitignore template for TwinCAT3
+# Author Sylvain Guieu inspired from https://alltwincat.com/2019/12/02/gitignore-for-twincat/
+# adpated for Instrument git repository of TC3 projects for ESO FCF framework
+
+
+# eritage of TC2 artifact of compilation 
+*.tpy
+
+# license response file 
+*.tclrs
+
+# assuming that pre-compiled library will be installed separetly 
+*.compiled-library
+
+# log file artifact of the compilation
+*.compileinfo
+
+# tmc file are probably needed for C++ projects 
+# *.tmc
+
+# Artifac of compilation 
+*.tmcRefac
+
+# So far in v1 .library projects are include inside projects repository 
+# My guess would be that it is better to deliver the libraries separatly 
+#*.library
+
+# Temp. Backup File
+*.project.~u 
+*.tsproj.bak
+*.xti.bak
+
+LineIDs.dbg
+LineIDs.dbg.bak
+
+# Directory containing files use for target/PLc
+_Boot/
+# Directory containing artifact of compilation 
+_CompileInfo/
+# 
+_Libraries/ 

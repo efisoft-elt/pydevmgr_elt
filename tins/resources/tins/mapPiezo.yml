@@ -1,0 +1,60 @@
+Piezo:
+  cfg:
+    max_on:         cfg.nMaxOn
+    num_axis:       cfg.nNumAxes
+    full_range1:    cfg.nFullRange[0].nValue
+    full_range2:    cfg.nFullRange[1].nValue
+    full_range3:    cfg.nFullRange[2].nValue
+    home1:          cfg.nHome[0].nValue
+    home2:          cfg.nHome[1].nValue
+    home3:          cfg.nHome[2].nValue
+    lower_limit1:   cfg.nLimitLow[0].nValue
+    lower_limit2:   cfg.nLimitLow[1].nValue
+    lower_limit3:   cfg.nLimitLow[2].nValue
+    upper_limit1:   cfg.nLimitHigh[0].nValue
+    upper_limit2:   cfg.nLimitHigh[1].nValue
+    upper_limit3:           cfg.nLimitHigh[2].nValue
+    user_to_bit_input1:     cfg.lrUser2Bit_Get[0].lrValue
+    user_to_bit_input2:     cfg.lrUser2Bit_Get[1].lrValue
+    user_to_bit_input3:     cfg.lrUser2Bit_Get[2].lrValue
+    user_offset_input1:     cfg.nUserOffsetBit_Get[0].nValue
+    user_offset_input2:     cfg.nUserOffsetBit_Get[1].nValue
+    user_offset_input3:     cfg.nUserOffsetBit_Get[2].nValue
+    user_to_bit_output1:    cfg.lrUser2Bit_Set[0].lrValue
+    user_to_bit_output2:    cfg.lrUser2Bit_Set[1].lrValue
+    user_to_bit_output3:    cfg.lrUser2Bit_Set[2].lrValue
+    user_offset_output1:    cfg.nUserOffsetBit_Set[0].nValue
+    user_offset_output2:    cfg.nUserOffsetBit_Set[1].nValue
+    user_offset_output3:    cfg.nUserOffsetBit_Set[2].nValue
+
+  stat:
+    state:                  stat.nState
+    substate:               stat.nSubstate
+    local:                  stat.bLocal
+    error_code:             stat.nErrorCode
+    actual_pos_bit1:        stat.nActPosBit[0].nValue
+    actual_pos_bit2:        stat.nActPosBit[1].nValue
+    actual_pos_bit3:        stat.nActPosBit[2].nValue
+    actual_pos_user1:       stat.lrActPosUsr[0].lrValue
+    actual_pos_user2:       stat.lrActPosUsr[1].lrValue
+    actual_pos_user3:       stat.lrActPosUsr[2].lrValue
+    mon_act_pos_bit1:       stat.monSetPosBit_0
+    mon_act_pos_bit2:       stat.monSetPosBit_1
+    mon_act_pos_bit3:       stat.monSetPosBit_2
+    mon_act_pos_usr1:       stat.monActPosUsr_0
+    mon_act_pos_usr2:       stat.monActPosUsr_1
+    mon_act_pos_usr3:       stat.monActPosUsr_2
+
+  rpc:
+    rpcInit:       RPC_Init
+    rpcEnable:     RPC_Enable
+    rpcDisable:    RPC_Disable
+    rpcStop:       RPC_Stop
+    rpcReset:      RPC_Reset
+    rpcAuto:       RPC_Auto
+    rpcPos:        RPC_Pos
+    rpcHome:       RPC_Home
+    rpcMoveBits:   RPC_MoveBit
+    rpcMoveUser:   RPC_MoveUser
+
+

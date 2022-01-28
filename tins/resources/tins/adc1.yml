@@ -1,0 +1,24 @@
+
+adc1:
+  type: Adc
+  interface: Softing
+  identifier: PLC1                             # OPCUA Object Identifier
+  prefix: MAIN.adc1                       # OPCUA attribute prefix
+  simulated: false
+  ignored: false
+  address: opc.tcp://192.168.1.11:4840
+  simaddr: opc.tcp://134.171.57.209:4840       # Simulation address
+  mapfile: "tins/mapAdc.yml"
+  fits_prefix: "ADC1"
+  ctrl_config:
+    latitude:              -0.429833092
+    longitude:             1.228800386
+    axes: ['adc1_motor1', 'adc1_motor2']
+
+  adc1_motor1:
+      prefix: "motor1"
+      cfgfile: "tins/adc1Motor1.yml"
+  adc1_motor2:
+      prefix: "motor2"
+      cfgfile: "tins/adc1Motor2.yml"
+

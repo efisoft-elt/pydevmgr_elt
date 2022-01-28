@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.3">
+  <POU Name="MAIN" Id="{bdc5a74c-f435-4ad1-a3b6-a53b79a6840c}" SpecialFunc="None">
+    <Declaration><![CDATA[PROGRAM MAIN
+VAR
+	{attribute 'OPC.UA.DA':='1'}
+	Shutter1:		FB_SHUTTER;
+	{attribute 'OPC.UA.DA':='1'}
+	Lamp1:		FB_LAMP;
+	{attribute 'OPC.UA.DA':='1'}
+	Piezo1:		FB_PIEZO_EXAMPLE;	// Piezo #1
+	
+	{attribute 'OPC.UA.DA':='1'}
+	Motor1:		FB_MOTOR;		
+	{attribute 'OPC.UA.DA':='1'}
+	Motor2:		FB_MOTOR;		
+	{attribute 'OPC.UA.DA':='1'}
+	adc1:		FB_MA_ADC;
+	
+    {attribute 'OPC.UA.DA':='1'}
+	drot1:       FB_MA_DROT;
+	
+	ccs_sim:	FB_CCS_SIM;
+	timer: FB_TIME;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_Shutter1:	FB_SIM_SHUTTER;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_Lamp1:	FB_SIM_LAMP;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_Piezo1:	FB_SIM_PIEZO;		// Simulator for Piezo #1 (if simulated)
+	
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_Motor1:	FB_SIM_MOTOR;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_Motor2:	FB_SIM_MOTOR;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_adc_motor1:	FB_SIM_MOTOR;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_adc_motor2:	FB_SIM_MOTOR;
+	{attribute 'OPC.UA.DA':='1'}
+	SIM_drot_motor:	FB_SIM_MOTOR;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[Shutter1(in_sName:='Shutter001');
+Lamp1(in_sName:='Lamp001', in_nTimeout:=5000);
+
+Piezo1(in_sName:='Piezo001', in_nNumAxes:=3);
+
+Motor1(sName:='Motor1',nNOVRAM_DevId:=0);
+Motor2(sName:='Motor2',nNOVRAM_DevId:=0);
+
+// ADC
+adc1(sName:='ADC', sMotorAdc1:= 'ADC1', sMotorAdc2:= 'ADC2');
+SIM_adc_motor1(ptrCfg:=ADR(adc1.motor1.cfg), 	ptrStat:=ADR(adc1.motor1.stat));
+SIM_adc_motor2(ptrCfg:=ADR(adc1.motor2.cfg), 	ptrStat:=ADR(adc1.motor2.stat));
+
+// DROT
+//
+drot1(sName:='DROT', sMotorName:= 'DrotMotor', nNOVRAM_DevId:=0);
+SIM_drot_motor(ptrCfg:=ADR(drot1.motor.cfg), ptrStat:=ADR(drot1.motor.stat));
+
+ccs_sim();
+
+timer();
+
+// Simulators
+SIM_Shutter1(ptrDev := ADR(Shutter1));
+SIM_Lamp1(ptrDev:=ADR(Lamp1));
+SIM_Piezo1();
+
+SIM_Motor1(ptrCfg:=ADR(Motor1.cfg), 	ptrStat:=ADR(Motor1.stat));
+SIM_Motor2(ptrCfg:=ADR(Motor2.cfg), 	ptrStat:=ADR(Motor2.stat));
+]]></ST>
+    </Implementation>
+    <LineIds Name="MAIN">
+      <LineId Id="2" Count="0" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="90" Count="3" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="94" Count="3" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="99" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="100" Count="0" />
+      <LineId Id="98" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="46" Count="0" />
+      <LineId Id="49" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

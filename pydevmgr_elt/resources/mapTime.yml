@@ -1,0 +1,30 @@
+Time:
+  cfg: {}
+    
+
+  stat:
+    
+    dc_time :  stat.sDcTime           
+    utc_time : stat.sUtcTime          
+    tai_time : stat.sTaiTime          
+    error_msg : stat.sErrorMsg        
+    mode :  stat.mode                 
+    
+    ptp_offset_time : stat.lPtpOffsetTime   
+    sim_offset_time : stat.lSimOffsetTime   
+    dc_time_int : stat.lDcCurrentTime       
+    utc_time_int : stat.lUtcTime            
+    tai_time_int : stat.lTaiTime            
+    tai_unix_time : stat.lTaiUnixTime       
+    
+    
+    user_time : stat.sUserTime #         STRING(29) := 'YYYY-MM-DD-hh:mm:ss.nnnnnnnnn'; // Last user configured datetime in format YYYY-MM-DD-hh:mm:ss.nnnnnnnnn
+    user_time_int :  stat.tUserTime #      ULINT := 0;
+    status : stat.signal.status
+    qos: stat.signal.qos
+    time_difference : stat.signal.time_difference #: UDINT; // Time difference between DC and External Time Source
+    
+  rpc:
+    rpcSetTime:           RPC_SetTime
+    rpcSetMode:           RPC_SetMode
+

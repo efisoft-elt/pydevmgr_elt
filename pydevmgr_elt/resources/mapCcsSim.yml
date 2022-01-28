@@ -1,0 +1,49 @@
+CcsSim:
+  cfg:
+      
+    latitude:           cfg.site.latitude
+    longitude:          cfg.site.longitude
+    
+  ctrl:
+    temperature: ctrl.environment.temperature 
+    pressure: ctrl.environment.pressure 
+    humidity: ctrl.environment.humidity
+    lapserate: ctrl.environment.lapserate
+    wavelength: ctrl.wavelength
+    dut: ctrl.dut
+    
+  stat:
+    time_mode  : stat.nTimeMode
+    sdc_time   : stat.sDcTime
+    dc_time    : stat.lDcTime
+    
+    apparent_alpha: stat.apparent.alpha
+    apparent_delta: stat.apparent.delta
+    alpha : stat.observed.alpha
+    delta : stat.observed.delta
+    ha : stat.observed.ha
+    zd : stat.observed.zd
+    az : stat.observed.az
+    
+    temperature: stat.environment.temperature 
+    pressure: stat.environment.pressure 
+    humidity: stat.environment.humidity
+    lapserate: stat.environment.lapserate
+    
+    lst : stat.data.lst
+    pa  : stat.data.pa
+    pa_deg : stat.data.pa_deg
+    alt : stat.data.alt
+    alt_deg : stat.data.alt_deg
+    ha: stat.data.ha
+    az: stat.data.az
+    az_deg : stat.data.az_deg
+    rotation: stat.data.rotation
+    rotation_deg : stat.data.rotation_deg
+    ra: stat.data.ra
+    dec: stat.data.dec
+
+  rpc:
+    rpcSetCoordinates:           RPC_SetCoordinates
+
+

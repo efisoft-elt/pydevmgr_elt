@@ -1,0 +1,60 @@
+layouts:
+    
+    ctrl: # all devices in more complete control widget 
+        size: [800,500]
+        ui_file: simple_devices_frame.ui
+        setup:
+            - device: "*"
+              layout: ly_devices
+              widget_kind: "ctrl"
+    
+    line: # all devices in one line control widget 
+        ui_file: simple_devices_frame.ui
+        setup:
+            - device: "*"
+              layout: ly_devices
+              widget_kind: "line"
+    
+    cfg: # un config panel for Motor devices 
+        ui_file: simple_devices_frame.ui
+        setup:
+            - device: "*"
+              dev_type: Motor
+              layout: ly_devices
+              widget_kind: "cfg"  
+    
+    motor1: # Focus on motor1 as an exemple 
+        size: [1200,500]
+        setup:
+            - device: motor1              
+              widget_kind: "ctrl"
+            - device: motor1              
+              widget_kind: "cfg"
+    
+    main: # use an other ui file, left panel general devices, right dedicated tabs 
+        ui_file: tins/tins_tab.ui
+        setup:
+            - device: motor1 
+              layout: ly_motor1             
+              widget_kind: "ctrl"
+            - device: motor1 
+              layout: ly_motor1  
+              widget_kind: "cfg"
+            - device: motor2 
+              layout: ly_motor2             
+              widget_kind: "ctrl"
+            - device: motor2 
+              layout: ly_motor2  
+              widget_kind: "cfg"
+            - device: adc1 
+              layout: ly_adc1  
+              widget_kind: "ctrl"
+            - device: drot1 
+              layout: ly_drot1  
+              widget_kind: "ctrl"
+            - device: shutter1
+              layout: ly_devices  
+              widget_kind: "ctrl"
+            - device: lamp1
+              layout: ly_devices  
+              widget_kind: "ctrl"
