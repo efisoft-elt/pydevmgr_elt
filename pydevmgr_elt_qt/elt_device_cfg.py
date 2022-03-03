@@ -19,5 +19,5 @@ class EltDeviceCfg(BaseUiLinker):
     Widget = EltDeviceCfgUi
     Data = EltDeviceData
             
-record_widget_factory("cfg", "Device", EltDeviceCfg) 
+record_widget_factory("cfg", "Elt", EltDeviceCfg) 
 

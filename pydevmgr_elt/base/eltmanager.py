@@ -50,7 +50,7 @@ class ManagerConfig(BaseManager.Config):
         for device in ds.get("devices", []):
             dio = d[device]
             Device = get_class( KINDS.DEVICE, dio['type'])
-            device_map[device] = Device.Config.from_cfgfile(dio['cfgfile'], device)
+            device_map[device] = Device.Config.from_cfgfile(dio['cfgfile'], path=device)
         
         ds['device_map'] = device_map
         return cls.parse_obj(ds)
@@ -64,7 +64,24 @@ class ManagerConfig(BaseManager.Config):
             d[name] = ioc.cfgdict()
         return d
 
-def open_manager(cfgfile, path=None, prefix="", key=None):
+def open_elt_manager(cfgfile, key=None, path=None, prefix=""):
+    """ Open a EltManager from a configuration file 
+
+    ..note::
+        
+        pydevmgr is using yaml configuration file different to the ones used in ELT v3 
+        However, do not wary, it will be transformed 
+
+    Args:
+        cfgfile: relative path to one of the $CFGPATH or absolute path to the yaml config file 
+        key: Key of the created Manager 
+        path (str, int, optional): 'a.b.c' will loock to cfg['a']['b']['c'] in the file. If int it will loock to the Nth
+                                    element in the file
+        prefix (str, optional): additional prefix added to the name or key
+
+    Output:
+        manager (EleManager) : elt manager handler
+    """
     return EltManager.from_cfgfile(cfgfile, path=path, prefix=prefix, key=key)
     
     
@@ -201,9 +218,9 @@ class EltManager(BaseManager):
     
     .. note::
     
-        Most likely the UaManager will be initialized by :meth:`UaManager.from_config` or its alias :func:`open_manager`
+        Most likely the UaManager will be initialized by :meth:`UaManager.from_config` or its alias :func:`open_elt_manager`
     
-    If :meth:`UaManager.from_config` or :func:`open_manager` is used all the device prefixes will be
+    If :meth:`UaManager.from_config` or :func:`open_elt_manager` is used all the device prefixes will be
     the key of the device manager.  
     
     Args:
@@ -432,30 +449,4 @@ class EltManager(BaseManager):
         warn(DeprecationWarning("configure_all method will be removed use configure "))
         return self.configure()    
     
-# def open_manager(
-#       file_name: str, 
-#       key: str ='', 
-#       extra_file: Optional[str] = None, 
-#       com_manager : Optional[UaComManager] = None
-#     ) -> UaManager:
-#     """ Create a :class:`UaManager` object from its yaml configuration file 
-# 
-#     Args:
-#         file_name (str) : This is the relative path to the yml file defining the manager. 
-#                 The file shall be present inside one of the directories defined by the 
-#                 $CFGPATH environmnet variable or it can be an absolute path.
-#         key (str, optional):  The key of the manager (which will be the prefix of all devices)
-#                If not given key will be the 'server_id' keyword has defined in the configuration file
-#         extra_file (str): This is the path to an extra yml file where some specific pydevmgr configuration 
-#                are writen. If not given a file FILE_NAME_extra.yml will be load if it exists. 
-#                FILE_NAME_extra.yml must be on the same directory than FILE_NAME.yml
-#                So far (v0.2) the _extra file is defined GUI layout configurations.
-#         com_manager (:class:`UaComManager`, optional)         
-#     """
-#     return UaManager.from_config(file_name, key=key, extra_file=extra_file)
-# 
-
-
-
-
-    
+   

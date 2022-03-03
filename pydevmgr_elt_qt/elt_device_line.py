@@ -78,4 +78,4 @@ class EltDeviceLine(BaseUiLinker):
                 
         self.actions.add(device.ignored.set, [self.inputs.ignored.get], feedback=self.feedback).connect_checkbox(w)
         
-record_widget_factory("line", "Device", EltDeviceLine)  
+record_widget_factory("line", "Elt", EltDeviceLine)  

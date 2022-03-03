@@ -1,8 +1,12 @@
 from .elt_device_ctrl import EltDeviceCtrl
 from .elt_device_line import EltDeviceLine
+from .elt_manager import EltManagerLinker
+
 from .motor_ctrl import MotorCtrl
 from .motor_line import MotorLine
 from .motor_cfg import MotorCfg
+from .motor_plot import MotorPlot
+
 
 from .adc_ctrl import AdcCtrl
 from .adc_line import AdcLine

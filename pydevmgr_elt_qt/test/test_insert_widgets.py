@@ -2,10 +2,10 @@ from PyQt5 import uic
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QGridLayout
 
 import pydevmgr_elt_qt
-from pydevmgr_core_qt.manager import insert_widgets
+from pydevmgr_core_qt.layouts import insert_widgets
 
 from pydevmgr_elt_qt import ShutterLine
-from pydevmgr_elt import open_manager
+from pydevmgr_elt import open_elt_manager
 from pydevmgr_core import Downloader
 
 import sys
@@ -18,12 +18,13 @@ if __name__=="__main__":
     
     frame = QFrame()
     #layout = QVBoxLayout()
-    layout = QGridLayout()
+    layout = QGridLayout(objectName='my_layout')
+    layout.setObjectName('my_layout')
     frame.setLayout(layout)
     
     downloader = Downloader()
     
-    manager = open_manager("tins/tins.yml", key="fcs")
+    manager = open_elt_manager("tins/tins.yml", key="fcs")
     
     
     frame.show()

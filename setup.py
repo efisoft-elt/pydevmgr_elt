@@ -36,9 +36,9 @@ setup(
     }, 
     entry_points = {
         'console_scripts': [
-                            'pydevmgr_dump=pydevmgr.scripts.dump:main', 
-                            'pydevmgr_gui=pydevmgr_qt.scripts.manager_gui:main', 
-                            'pydevmgr_motor_gui=pydevmgr_qt.scripts.motor_gui:main',
+                            'pydevmgr_dump=pydevmgr_elt.scripts.dump:main', 
+                            'pydevmgr_gui=pydevmgr_elt_qt.scripts.manager_gui:main', 
+                            'pydevmgr_motor_gui=pydevmgr_elt_qt.scripts.motor_gui:main',
                             ],
     }
 )

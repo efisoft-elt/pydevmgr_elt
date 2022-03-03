@@ -9,7 +9,7 @@ from .eltrpc import EltRpc
 
 from enum import Enum
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
-from pydevmgr_core import KINDS, get_device_class, upload, NodeVar, open_object, record_class, get_class, NodeAlias, NodeAlias1, LocalNode
+from pydevmgr_core import KINDS, get_device_class, upload, NodeVar, open_device, record_class, get_class, NodeAlias, NodeAlias1, LocalNode
 from pydevmgr_ua import UaDevice
 from typing import Optional, Type
 import logging
@@ -73,6 +73,7 @@ class EltDeviceConfig(UaDevice.Config):
     def cfgdict(self, exclude=set()):
         if self.version == 'pydevmgr':
             return super().cfgdict()
+        
         all_exclude = {*{'version', 'address',  'device_map',  'interface_map', 'node_map', 'rpc_map','ctrl_config'}, *exclude}
         d = super().cfgdict(exclude=all_exclude)
         if 'address' not in exclude:
@@ -82,8 +83,8 @@ class EltDeviceConfig(UaDevice.Config):
         return d
 
 
-def open_device(cfgfile, path=None, prefix="", key=None):
-    return open_object(KINDS.DEVICE, cfgfile, path=path, prefix=prefix, key=key) 
+def open_elt_device(cfgfile, key=None, path=0, prefix=""):
+    return open_device(cfgfile, key=key, path=path, prefix=prefix) 
 
 def load_device_config(
       file_name : str, 

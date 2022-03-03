@@ -54,7 +54,7 @@ class MotorLine(EltDeviceLine):
         
         # add more functionality to the dropdown menu, the standards commands are defined in 
         # super().connect_device
-        # Here we are adding MOVE ABS MOVE REL and MOVE VEL     
+        # Here we are adding STOP MOVE ABS MOVE REL and MOVE VEL     
         wa = self.widget.state_action
         # After an command put back the menu to the empty first index
         reset = lambda : wa.setCurrentIndex(0)

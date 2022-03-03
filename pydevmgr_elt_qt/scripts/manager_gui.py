@@ -2,42 +2,64 @@
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys, os
-from pydevmgr_elt import Downloader, open_manager
-from pydevmgr_qt.manager import ManagerMain
-from pydevmgr_qt import io
+from pydevmgr_elt import Downloader, open_elt_manager
+from pydevmgr_elt_qt  import EltManagerLinker
+from pydevmgr_core_qt import io
 from pydevmgr_core import io as pio
+import yaml
 
-usage = "pydevmgr_gui relative/path/to/manager.yml"
+
+usage = "pydevmgr_gui relative/path/to/manager.yml [path/to/manager_gui.yml]"
 
 # if len(sys.argv)!=2:
 #     print(usage)
 #     sys.exit(1)
 
+
+default_ui_cfg = """
+ctrl: # all devices in more complete control widget 
+    size: [800,500]
+    setup:
+        - device: "*"
+          layout: ly_devices
+          widget_kind: "ctrl"
+
+line: # all devices in one line control widget 
+    setup:
+        - device: "*"
+          layout: ly_devices
+          widget_kind: "line"
+"""
+
+
 mgr = None
 def app_main():
     global mgr
-    
-    option = {}
+    ui_cfg = None 
+    curent_view = None
     if len(sys.argv)<3: 
         file_body, _ = os.path.splitext(sys.argv[1])
         
-        try:
-            option['ui_resource'] = io.find_ui(file_body+".ui")
-        except (IOError, ValueError):
-            pass
+
+        for ext in ('_ui.yml', 'ui.yaml'):
+            try:
+                ui_cfg = io.load_config(file_body+ext)
+            except (IOError, ValueError):
+                pass
+
+
     else:
-        try:
-            option['ui_resource'] = io.find_ui(sys.argv[2])
-        except (IOError, ValueError):
-            print(usage)
-            print("\nCannot find ui file {}".format(sys.argv[2]))
-            raise ValueError()
-        
+        ui_cfg = io.load_config(sys.argv[2])
             
+    if len(sys.argv)>3:
+        current_view = sys.argv[3]
+
+    if ui_cfg is None:
+        ui_cfg = yaml.load(default_ui_cfg)
         
         
         
-    mgr = open_manager(sys.argv[1], '')
+    mgr = open_elt_manager(sys.argv[1], '')
     
     mgr.connect()
     #mgr.configure() # configure through OPC-UA all the devices !!!!!!!
@@ -47,8 +69,11 @@ def app_main():
 
     app = QApplication(sys.argv)
     
-    linker = ManagerMain()
-    linker.connect(downloader, mgr, link_failure=True)
+    linker = EltManagerLinker(config=ui_cfg)
+    data = linker.new_data(current_view="main")
+
+    
+    ctrl = linker.connect(downloader, mgr, data)
         
     linker.widget.show()
     
@@ -81,18 +106,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-    # exit_code = 1
-    # try:
-    #     exit_code = main()
-    # except Exception as e:
-    #     if mgr:        
-    #         mgr.disconnect_all()
-    #     raise e
-    # else:
-    #     mgr.disconnect_all()
-    #     sys.exit(exit_code)
-    # finally:
-    #     if mgr:        
-    #         mgr.disconnect_all()
-    #         sys.exit(exit_code)
-    # 

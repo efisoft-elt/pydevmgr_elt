@@ -1,4 +1,5 @@
-from pydevmgr_elt_qt import MotorCfg
+
+from pydevmgr_elt_qt import MotorPlot
 from pydevmgr_elt import Motor
 from pydevmgr_core import Downloader
 
@@ -9,7 +10,7 @@ from PyQt5 import  QtCore
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
-    devLinker = MotorCfg()
+    devLinker = MotorPlot(show_ignore_check_box=False, link_failure=False)
     devLinker.widget.show()
     downloader = Downloader()
     

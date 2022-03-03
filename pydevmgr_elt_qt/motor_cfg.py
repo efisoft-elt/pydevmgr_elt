@@ -5,7 +5,7 @@ from pydevmgr_elt import Motor, DataLink
 
 from pydevmgr_core_qt import record_widget_factory, InputOutputs, get_style, STYLE
 from .elt_device_cfg import EltDeviceCfg
-
+import math 
 
 class MotorCfgData(EltDeviceCfg.Data):
     CfgData = Motor.Data.CfgData
@@ -45,8 +45,18 @@ class InitSeq(InputOutputs.Base):
             input_value2.setText(f"{value2}")  
             
         def get():
-            v1 = float(input_value1.text())
-            v2 = float(input_value2.text())        
+
+            try:
+                v1 = float(input_value1.text())
+            except (TypeError, ValueError):
+                v1 = math.nan
+            
+            try:
+                v2 = float(input_value1.text())
+            except (TypeError, ValueError):
+                v2 = math.nan
+ 
+
             a = input_action.currentIndex()          
             return (a, v1, v2)
         

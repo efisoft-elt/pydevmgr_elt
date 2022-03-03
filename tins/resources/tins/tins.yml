@@ -10,8 +10,8 @@ ins1.fcs1:
     dictionaries    : ['dit/stddid/primary.did', 'tins/fcf.did']
     fits_prefix     : "FCS1"
     #devices         : ['shutter1', 'lamp1', 'motor1', 'adc1', 'drot1', 'sensor1', 'ccc1', 'piezo1', 'actuator1']
-    devices         : ['shutter1', 'lamp1',  'piezo1', 'motor1', 'motor2', 'adc1', 'drot1']
-    #devices         : ['shutter1', 'lamp1',  'piezo1', 'motor1', 'motor2', 'drot1']
+    #devices         : ['shutter1', 'lamp1', 'motor1', 'motor2', 'adc1', 'drot1']
+    devices         : ['shutter1', 'lamp1',  'piezo1', 'motor1', 'motor2', 'drot1', 'adc1']
     #devices         : ['motor1', 'motor2']
     cmdtout         : 60000
 

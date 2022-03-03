@@ -1,6 +1,6 @@
 
 from pydevmgr_elt import Motor, Downloader, NodeVar, DequeNode, LocalTimeNode, UnixTimeNode, open_device
-from pydevmgr_qt import MotorCtrl, MotorCfg, BaseUiLinker
+from pydevmgr_elt_qt import MotorCtrl, MotorCfg, BaseUiLinker
 from pydevmgr_core import io
 
 from pydantic import BaseModel, Field
