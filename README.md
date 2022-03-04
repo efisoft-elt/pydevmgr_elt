@@ -58,4 +58,9 @@ finally:
 
 ```
 
+Open from an elt yaml configuration file as defined in ELT IFW v3
 
+```python
+from pydevmgr_elt import open_elt_device
+motor1 = open_elt_device( "tins/motor1.yml" )
+```
