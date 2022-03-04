@@ -19,7 +19,7 @@ Sources are [here](https://github.com/efisoft-elt/pydevmgr_elt)
 From sources :
 
 ```bash
-> git pull https://github.com/efisoft-elt/pydevmgr_elt
+> git clone https://github.com/efisoft-elt/pydevmgr_elt
 > cd pydevmgr_elt 
 > python setup.py install
 ```
