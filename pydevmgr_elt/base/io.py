@@ -45,7 +45,7 @@ def find_map(dev_type, ioconfig=ioconfig):
         dev_type (str):  Device type as 'Motor' the map file shall be found as mapMotor.yml inside 
         the package resource directories
     """
-    resource_list = ['map'+dev_type.capitalize()+".yml", 'map'+dev_type.capitalize()+".yaml"]
+    resource_list = ['map'+dev_type+".yml", 'map'+dev_type.capitalize()+".yaml"]
     for resource in resource_list:
         if pkg_resources.resource_exists(pkg_name, os.path.join(ioconfig.resources, resource)):  
             break      

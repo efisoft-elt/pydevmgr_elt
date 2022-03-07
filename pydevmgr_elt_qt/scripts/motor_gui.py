@@ -23,8 +23,8 @@ usage = "pydevmgr_motor_gui relative/path/to/motor.yml"
 ############################################################
                                                          
 
-# create a node returning the Unix  time 
-time = UnixTimeNode('time')
+# create a node returning the unix  time 
+time = unixtimenode('time')
 
 
 class MotorPlotStatData(BaseModel):
