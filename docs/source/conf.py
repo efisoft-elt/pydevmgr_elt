@@ -19,14 +19,14 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'pydevmgr_core'
+project = 'pydevmgr_elt'
 copyright = '2022, Sylvain Guieu'
 author = 'Sylvain Guieu'
 
 # The short X.Y version
 version = ''
 # The full version, including alpha/beta/rc tags
-release = '0.3'
+release = '0.3.2'
 
 import sphinx_rtd_theme
 

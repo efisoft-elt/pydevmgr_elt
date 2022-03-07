@@ -94,10 +94,6 @@ With pip:
 
    > pip install pydevmgr_elt
 
-.. warning:: 
-
-   Before 0.3 this was  pydevmgr has to be installed instead of pydevmgr_elt 
-
 
 To see the last version : https://pypi.org/project/pydevmgr_elt/#history
 
@@ -112,10 +108,6 @@ Or from the sources:
 
 If `pydevmgr_elt_qt` module is used, PyQt5 must be installed separately. This is done in purpose to make the install lighter. 
 
-
-.. warning:: 
-
-   In 0.2 this module was named pydevmgr_qt instead of pydevmgr_elt_qt
 
 .. code-block:: bash
 

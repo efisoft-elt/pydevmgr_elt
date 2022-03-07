@@ -5,7 +5,7 @@ The package is intended to be used when a full instrument ELT software is not av
 A good exemple of the use case is making sequences of initialisation and movement of motors for AIT purposes without the
 need to buil a high level ELT software. 
 
-The documentation (for version >=0.3) is on its way. 
+The documentation (for version >=0.3) is [here](https://pydevmgr-elt.readthedocs.io/en/latest/pydevmgr_elt_manual.html)     
 
 Sources are [here](https://github.com/efisoft-elt/pydevmgr_elt)
 
