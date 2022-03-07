@@ -3,7 +3,6 @@
 pydevmgr_elt
 ************
 
-Current status : alpha version 0.2
 
 What is it ?
 ============
