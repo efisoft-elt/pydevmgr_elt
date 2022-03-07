@@ -820,7 +820,7 @@ to build it and than connect it to a device and a :class:`pydevmgr_core.Download
     motor1 = Motor('motor1', address='opc.tcp://192.168.1.28:4840', prefix='MAIN.Motor1', namespace=4)
     downloader = Downloader()
     motor_ctrl = MotorCtrl() # create an empty widget 
-    c = motor_ctrl.connect(downloader, motor1) # connect the widget to the downloader and the motor1 instance 
+    motor_ctrl.connect(downloader, motor1) # connect the widget to the downloader and the motor1 instance 
     
     downloader.download() # This will update the widget with the new values it can be called in a timer 
 
@@ -832,8 +832,22 @@ The ``connect`` method above does :
 - add the widget :meth:`pydevmgr_elt_qt.MotorCtrl.update` method to the ``downloader`` call back qeue: widget is updated after each downlaod 
 - update the widget (e.g. position names in dropdown menus, etc) and link buttons to device methods.  
 
-In the exemple aboce ``c.disconnect()`` does the contrary, it free the nodes and callbacks from the ``downloader``
-and remove buttons action, used when the widget is destroyed for instance. 
+The  :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` does the contrary, it free the nodes and callbacks from the ``downloader``
+and remove buttons action, used when the widget is destroyed for instance.
+
+Optionaly the :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` returns a object used to enable and disable the widget
+temporaly : 
+
+.. code-block:: python 
+
+   c = motor_ctrl.connec(downloader, motor1)
+   
+   c.diable() # diable the widget and suspend the nodes download associated to this widget 
+   c.enable() # reconnect the widget. 
+
+Also one can have access to the data used by the widget in the ``c.data``  attribute. 
+
+
 
 Here is a complete script to make a window GUI to control two motors : 
 
@@ -912,14 +926,14 @@ An automatic gui can be created easily with the `pydevmgr_gui` shell command :
 
    > pydevmgr_gui tins/tins.yml
    
-A definition of the gui view can be done in a yml file (with suffix ``_extra.yml``) and a ui file. 
+A definition of the gui "views" or layouts can be done in a yml file (with suffix ``_ui.yml``) and a ui file. 
 The yml define which device or type of device shall be included in layouts named in the ui file. For instance 
-if the .ui file has a ``QVBoxLayout`` named ``ly_devices`` the ``_extra.yml`` file can declare what to add in the layout:
+if the .ui file has a ``QVBoxLayout`` named ``ly_devices`` the manager suffixed ``_ui.yml`` file can declare what to add in the layout:
 
 
 .. code-block:: yaml
 
-    layouts:
+    views:
         ctrl: # name of the "view"
             ui_file: simple_devices_frame.ui  # shall be in resources
             setup: # a list of rules defined inside a dictionary 
@@ -936,13 +950,13 @@ if the .ui file has a ``QVBoxLayout`` named ``ly_devices`` the ``_extra.yml`` fi
                   widget_kind: "cfg"
               
   
-For the `tins` this open a gui with several layouts. The layouts are defined  in the `tins_extra.yml`_ file. 
+For the `tins` this open a gui with several views. The view are defined  in the `tins_ui.yml <https://github.com/efisoft-elt/pydevmgr_elt/blob/main/tins/resources/tins/tins_ui.yml>`_ file. 
 
 The best way to understand how the layout of the widget is done is to look at the screenshot bellow 
-and have a look at `tins_extra.yml`_  file which I think is self explanatory. 
+and have a look at `tins_extra.yml <https://github.com/efisoft-elt/pydevmgr_elt/blob/main/tins/resources/tins/tins_ui.yml>`_  file which I think is self explanatory. 
 
 
-If no ``_extra.yml`` file was generated you will get a default gui which includes 2 views. One with all 'line' widget 
+If no ``_ui.yml`` file was generated you will get a default gui which includes 2 views. One with all 'line' widget 
 and the other one with 'ctrl' widgets 
 
 .. image:: img/gui_mgr_line.png 
@@ -953,15 +967,13 @@ and the other one with 'ctrl' widgets
 
 
 
-.. _tins_extra.yml: https://gitlab.lam.fr/efisoft/pydevmgr/-/tree/master/tins/resources/fcf/devmgr/server/tins_extra.yml
 
 Auto generated Indexes 
 ======================
 
 .. automodule:: pydevmgr_elt
-    :members:  UaManager, UaDevice, UaInterface, UaRpcInterface, UaNode , UaRpc 
-               GROUP,  Motor,  Drot, Adc, Shutter, Lamp, Piezo, Time, CcsSim, UaManager, UaComNode , UaCom ,
-               open_elt_manager, open_device,  nodealiasproperty, nodealias, RpcError, UaRpc,  NodeAlias,  
+    :members:  GROUP,  Motor,  Drot, Adc, Shutter, Lamp, Piezo, Time, CcsSim, EltManager, 
+               open_elt_manager, open_elt_device,nodealias, RpcError, EltRpc,  NodeAlias,  
                AllTrue , AllFalse , AnyTrue , AnyFalse , InsideIntervalNode , PosNameNode ,
                Int16, Int32, Int64, UInt16, UInt32, UInt64, Float, Double, 
                INT  , DINT , LINT , UINT  , UDINT , ULINT  , REAL, LREAL, 
@@ -969,9 +981,8 @@ Auto generated Indexes
                local_time, DequeNode, LocalTimeNode , LocalUtcNode ,
                Downloader, Uploader, DataView,
                download, upload, 
-               open_device, open_elt_manager , load_device_config, load_manager_config, 
-               nodealias , NodeAlias , RpcError , kjoin , ksplit, 
-               nodeproperty , nodealiasproperty , rpcproperty , NodeVar , DataLink, 
-               DataView , Parser, Field, io, fsplit , fjoin
-    
+               open_elt_manager , 
+               nodealias ,   kjoin , ksplit, 
+               NodeVar , DataLink, 
+               DataView , io    
  
