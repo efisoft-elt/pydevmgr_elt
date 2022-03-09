@@ -1,6 +1,8 @@
 
-from pydevmgr_elt import Motor, Downloader, NodeVar, DequeNode, LocalTimeNode, UnixTimeNode, open_device
-from pydevmgr_elt_qt import MotorCtrl, MotorCfg, BaseUiLinker
+from pydevmgr_elt import Motor, Downloader, NodeVar, DequeNode, LocalTimeNode, UnixTimeNode, open_elt_device
+from pydevmgr_elt_qt import MotorCtrl, MotorCfg
+
+from pydevmgr_core_qt import BaseUiLinker
 from pydevmgr_core import io
 
 from pydantic import BaseModel, Field
@@ -24,7 +26,7 @@ usage = "pydevmgr_motor_gui relative/path/to/motor.yml"
                                                          
 
 # create a node returning the unix  time 
-time = unixtimenode('time')
+time = UnixTimeNode('time')
 
 
 class MotorPlotStatData(BaseModel):
@@ -196,7 +198,7 @@ def main():
             print(f"    {f}    inside {r}")
         return 1
     
-    motor = open_device(sys.argv[1])
+    motor = open_elt_device(sys.argv[1])
     motor.connect()
     
     try:

@@ -1,3 +1,7 @@
+0.3.3
+=====
+- fix motor gui 
+- align to pydevmgr_ua>=0.3.1
 
 
 0.3.2
