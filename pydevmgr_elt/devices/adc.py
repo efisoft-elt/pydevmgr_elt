@@ -307,10 +307,10 @@ class Adc(EltDevice,trk.Trk):
         for m in self.motors:
             m.disconnect()
             
-    def get_configuration(self, **kwargs) -> Dict[EltNode,Any]:
+    def get_configuration(self, exclude_unset=True, **kwargs) -> Dict[EltNode,Any]:
         cfg_dict = {}
         for m in self.motors:
-            cfg_dict.update( m.get_configuration() )
+            cfg_dict.update( m.get_configuration(exclude_unset=exclude_unset) )
         
         config = self._config 
         

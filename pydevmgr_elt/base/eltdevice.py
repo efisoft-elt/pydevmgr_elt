@@ -414,8 +414,9 @@ class EltDevice(UaDevice):
     def get_rpc_error_txt(self, rpc_errcode: int) -> str:
         """ Get a text description of the given rpc error code number """
         return self.RpcInterface.RPC_ERROR(rpc_errcode).txt
-    
-    def get_configuration(self, **kwargs):
+   
+
+    def get_configuration(self, exclude_unset=True, **kwargs):
         """ return a node/value pair dictionary ready to be uploaded 
         
         The node/value dictionary represent the device configuration. 
@@ -425,7 +426,9 @@ class EltDevice(UaDevice):
         This method need to be updated for special devices for instance.   
         
         Args:
-            **kwargs : name/value pairs pointing to cfg.name node
+            exclude_unset (optional, bool): Default is True. If True value that was left unset in 
+                the config will not be included in the configuration
+            \**kwargs : name/value pairs pointing to cfg.name node
                       This allow to change configuration on the fly
                       without changing the config file.             
         
@@ -435,13 +438,13 @@ class EltDevice(UaDevice):
         """
         # get values from the ctrl_config Config Model
         # do not include the default values, if they were unset, the PLC will use the default ones
-        values = self.config.ctrl_config.dict(exclude_none=True, exclude_unset=True)
+        values = self.config.ctrl_config.dict(exclude_none=True, exclude_unset=exclude_unset)
         cfg_dict = {self.cfg.get_node(k):v for k,v in values.items()}
         cfg_dict[self.ignored] = self.config.ignored 
         cfg_dict.update({self.cfg.get_node(k):v for k,v in kwargs.items()})
         return cfg_dict
-    
-    def configure(self, **kwargs):
+
+    def configure(self, exclude_unset=True, **kwargs):
         """ Configure the whole device in the PLC according to what is defined in the config dictionary 
         
         Quick changes on configuration value can be done by keywords where each key must point to a 
@@ -449,6 +452,9 @@ class EltDevice(UaDevice):
         overwritten by \**kwargs. In other word kwargs are not changing the default configuration  
         
         Args:
+            exclude_unset (optional, bool): Default is True. If True value that was left unset in 
+                the config will not be included in the configuration
+
             \**kwargs :  name/value pairs pointing to cfg.name node
                         This allow to quickly change configuration on the fly
                         without changing the config file.
@@ -462,10 +468,9 @@ class EltDevice(UaDevice):
         """
         # by default just copy the "ctrl_config" into cfg. This may not work for
         # all devices and should be customized  
-        upload(self.get_configuration(**kwargs))
-
-
-
+        upload(self.get_configuration(exclude_unset=exclude_unset, **kwargs))
+   
+ 
         
     
     

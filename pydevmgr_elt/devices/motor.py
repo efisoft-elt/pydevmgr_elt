@@ -710,7 +710,7 @@ class Motor(EltDevice):
         interface._mot_positions = self.config.positions
         
     
-    def get_configuration(self, **kwargs) -> Dict[EltNode,Any]:
+    def get_configuration(self, exclude_unset=True, **kwargs) -> Dict[EltNode,Any]:
         """  return a node/value pair dictionary ready to be uploaded 
         
         The node/value dictionary represent the device configuration. 
@@ -726,7 +726,7 @@ class Motor(EltDevice):
         ctrl_config = config.ctrl_config
         # just update what is in ctrl_config, this should work for motor 
         # one may need to check parse some variable more carefully       
-        values = ctrl_config.dict(exclude_none=True, exclude_unset=True)
+        values = ctrl_config.dict(exclude_none=True, exclude_unset=exclude_unset)
         cfg_dict = {self.cfg.get_node(k):v for k,v in  values.items() }
         cfg_dict[self.ignored] = self.config.ignored 
         cfg_dict.update({self.cfg.get_node(k):v for k,v in  kwargs.items() })
