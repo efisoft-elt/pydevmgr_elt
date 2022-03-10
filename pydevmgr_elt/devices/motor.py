@@ -167,6 +167,9 @@ class MotorCtrlConfig(EltDevice.Config.CtrlConfig):
         
 class MotorConfig(EltDevice.Config):
     CtrlConfig = MotorCtrlConfig
+    PositionsConfig = PositionsConfig
+    InitialisationConfig = InitialisationConfig
+    
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Data Structure 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
