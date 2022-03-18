@@ -1,10 +1,12 @@
-from pydevmgr_core import NodeAlias, buildproperty, NodeVar, record_class
+from pydevmgr_core import NodeAlias,  NodeVar, record_class
 from pydevmgr_ua import Int32, UInt32
 from ..base.eltdevice import EltDevice, GROUP
 
 from ..base.tools import  _inc, enum_group, enum_txt, EnumTool
 from enum import Enum
 from typing import Optional
+
+from ._lamp_autobuilt import _Lamp
 
 class LampCtrlConfig(EltDevice.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,7 +19,7 @@ class LampCtrlConfig(EltDevice.Config.CtrlConfig):
     timeout:          Optional[int]  = 2000 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-class LampConfig(EltDevice.Config):
+class LampConfig(_Lamp.Config):
     CtrlConfig = LampCtrlConfig
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Data Structure 
@@ -137,56 +139,14 @@ enum_txt ( {
 
 
 
-#  ____        _          __  __           _      _ 
-# |  _ \  __ _| |_ __ _  |  \/  | ___   __| | ___| |
-# | | | |/ _` | __/ _` | | |\/| |/ _ \ / _` |/ _ \ |
-# | |_| | (_| | || (_| | | |  | | (_) | (_| |  __/ |
-# |____/ \__,_|\__\__,_| |_|  |_|\___/ \__,_|\___|_|
-# 
-
-class LampCfgData(EltDevice.Data.CfgData):
-    low_fault:        NodeVar[bool] = False
-    low_on:           NodeVar[bool] = False
-    low_switch:       NodeVar[bool] = False
-    ignore_fault:     NodeVar[bool] = False
-    invert_analog:    NodeVar[bool] = False
-    analog_threshold: NodeVar[int] =  0
-    analog_range:     NodeVar[int] =  2**15-1
-    cooldown:         NodeVar[int] =  0
-    maxon:            NodeVar[int] =  0
-    warmup:           NodeVar[int] =  0
-    initial_state:    NodeVar[bool] =  False
-    timeout:          NodeVar[int] =   5000
-  
-class LampStatData(EltDevice.Data.StatData):
-    local:             NodeVar[bool] =  False
-    intensity:         NodeVar[float] =   0.0
-    error_code:        NodeVar[int] =     0
-    check_time_left:   NodeVar[bool] =    False
-    time_left:         NodeVar[int] =     0
-    # Node Aliases 
-    is_off: NodeVar[bool] = False
-    is_on:  NodeVar[bool] = False
-    
-class LampData(EltDevice.Data):
-    StatData = LampStatData
-    CfgData = LampCfgData
-        
-    cfg: CfgData = CfgData()
-    stat: StatData = StatData()    
-
 
 #  _       _             __                
 # (_)_ __ | |_ ___ _ __ / _| __ _  ___ ___ 
 # | | '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \
 # | | | | | ||  __/ |  |  _| (_| | (_|  __/
 # |_|_| |_|\__\___|_|  |_|  \__,_|\___\___|
-@record_class
-class LampStatInterface(EltDevice.StatInterface):
-    class Config(EltDevice.StatInterface.Config):
-        type: str = 'Lamp.Stat'
-    
-    Data = LampStatData
+class LampStatInterface(_Lamp.Stat):
+     
     ERROR = ERROR
     SUBSTATE = SUBSTATE
     
@@ -205,33 +165,6 @@ class LampStatInterface(EltDevice.StatInterface):
         """  Alias node: True if lamp is on """
         return substate == self.SUBSTATE.OP_ON
 
-@record_class
-@buildproperty(EltDevice.Node.prop, 'parser')      
-class LampCfgInterface(EltDevice.CfgInterface):
-    class Config(EltDevice.CfgInterface.Config):
-        type: str = 'Lamp.Cfg'
-    
-    Data = LampCfgData    
-    # we can define the type to parse value directly on the class by annotation
-    analog_threshold : Int32
-    analog_range : UInt32
-    cooldown: UInt32
-    maxon : UInt32 
-    warmup : UInt32
-    timeout : UInt32
-
-@record_class
-@buildproperty(EltDevice.Rpc.prop, 'args_parser') 
-class LampRpcInterface(EltDevice.RpcInterface):   
-    class Config(EltDevice.RpcInterface.Config):
-        type: str = 'Lamp.Rpc'
-         
-    RPC_ERROR = RPC_ERROR
-    ##
-    # the type of rpcMethod argument can be defined by annotation
-    # All args types must be defined in a tuple
-    rpcSwitchOn : (float, UInt32)
-
 
 
 
@@ -242,20 +175,15 @@ class LampRpcInterface(EltDevice.RpcInterface):
 #  \__,_|\___| \_/ |_|\___\___|
 #
 @record_class
-class Lamp(EltDevice):    
+class Lamp(_Lamp):    
     SUBSTATE = SUBSTATE    
     ERROR = ERROR
     Config = LampConfig
-    Data = LampData
     
-    StatInterface = LampStatInterface
-    CfgInterface = LampCfgInterface
-    RpcInterface = LampRpcInterface
+    Stat= LampStatInterface
     
                 
-    stat = StatInterface.prop('stat')    
-    cfg  = CfgInterface.prop('cfg')
-    rpc  = RpcInterface.prop('rpc')
+    stat = Stat.prop('stat')    
     
     def switch_on(self, intensity, time_limit) -> EltDevice.Node:
  

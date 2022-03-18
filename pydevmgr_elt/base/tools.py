@@ -101,41 +101,54 @@ def _inc(i: Optional[int] = None) -> int:
     _enum = _enum+1 if i is None else i
     return _enum
 
-def map2interface_map(map):
+def map2interface_map(map, Node=None, Rpc=None, Interface=None):
     """ Convert an ESO map file to an interface_map as defined in pydevmgr """
     interface_map = {}
     for ikey, imap in map.items():
         if ikey == 'rpc':
-            interface_map[ikey] = {
-            "type": "Elt",
-            "rpc_map": map2rpc_map(imap)
-            }
-            #tp = "UaRpc"
+            if Interface is None:
+                interface_map['rpcs'] = map2rpc_map(imap, Rpc=Rpc)
+            else:
+                interface_map['rpcs'] = Interface.parse_obj( map2rpc_map(imap, Rpc=Rpc) )
+
         else:
-            interface_map[ikey] = {
-            "type": "Elt",
-            "node_map": map2node_map(imap)
-            }
-            #tp = "UaNode"
+            if Interface is None:
+
+                interface_map[ikey] = map2node_map(imap, Node=Node)
+            else:
+                interface_map[ikey] = Interface.parse_obj(map2node_map(imap, Node=Node))
+
+
+            # interface_map[ikey]['type'] = "Elt"
+            # interface_map[ikey]['kind'] = "Interface"
         
     return interface_map
 
-def map2node_map(map):
+def map2node_map(map, Node=None):
     node_map = {}
-    for nkey, suffix in map.items():
-        node_map[nkey] = {
-            "type": "Elt", 
-            "suffix": suffix
-        }
+    if Node is None:
+        for nkey, suffix in map.items():
+                    node_map[nkey] = {
+                "type": "Elt", 
+                "suffix": suffix
+            }
+    else:
+        for nkey, suffix in map.items():
+            node_map[nkey] = Node(suffix=suffix)
     return node_map
     
-def map2rpc_map(map):
+def map2rpc_map(map, Rpc=None):
     rpc_map = {}
-    for nkey, suffix in map.items():
-        rpc_map[nkey] = {
-            "type": "Elt", 
-            "suffix": suffix
-        }
+
+    if Rpc is None:
+        for nkey, suffix in map.items():
+            rpc_map[nkey] = {
+                "type": "Elt", 
+                "suffix": suffix
+            }
+    else:
+        for nkey, suffix in map.items():
+            rpc_map[nkey] = Rpc(suffix=suffix)
     return rpc_map
 
 def default_node_map(device_type, interface):

@@ -228,9 +228,9 @@ class AdcCfgInterface(EltDevice.CfgInterface):
     mot1_signphi:  Int32    
     mot2_signphi:  Int32    
 
-# This decorator convert annotation to RpcInterface properties  with the right 'args_parser', tuple of arg types 
+# This decorator convert annotation to RpcInterface properties  with the right 'arg_parsers', tuple of arg types 
 @record_class
-@buildproperty(EltRpc.prop, 'args_parser') 
+@buildproperty(EltRpc.prop, 'arg_parsers') 
 class AdcRpcInterface(EltDevice.RpcInterface):
     class Config(EltDevice.RpcInterface.Config):
         type: str = 'Adc.Rpc'

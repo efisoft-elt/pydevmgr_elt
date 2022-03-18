@@ -1,50 +1,15 @@
-from pydevmgr_core import NodeAlias, NodeAlias1, NodeVar, record_class, create_device, DeviceModel, Defaults
-from pydevmgr_ua import  UInt32
-from pydevmgr_elt.base.eltdevice import EltDevice, GROUP
+
+from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
-from pydevmgr_elt.base.eltnode import EltNode
 
 from enum import Enum
-from pydantic import Field
-from typing import Optional
-from pydevmgr_elt.devices._shutter_autobuilt import _Shutter
-
-
-
-Base = EltDevice # Base class for this device
+Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
 ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
-
-
-
-
-class ShutterCtrlConfig(EltDevice.Config.CtrlConfig):
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Data Structure (on top of CtrlConfig)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    low_closed:    Optional[bool] =  False
-    low_fault:     Optional[bool] =  False  # If T, signal is active low
-    low_open:      Optional[bool] =  False  # If T, signal is active low
-    low_switch:    Optional[bool] =  False  # If T, signal is active low
-    ignore_closed: Optional[bool] =  False  # If T, ignore the signal
-    ignore_fault:  Optional[bool] =  False  # If T, ignore the signal
-    ignore_open:   Optional[bool] =  False  # If T, ignore the signal
-    initial_state: Optional[bool] =  False
-    timeout:       Optional[int]  =  2000
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-class ShutterConfig(_Shutter.Config):
-    CtrlConfig = ShutterCtrlConfig
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Data Structure (redefine the ctrl_config)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    type: str = "Shutter"
-    ctrl_config : CtrlConfig = CtrlConfig()     
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
-
+NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
 #  / __/ _ \| '_ \/ __| __/ _` | '_ \| __|
@@ -93,8 +58,8 @@ enum_group ({
 
 
 class ERROR(EnumTool, int,  Enum):
-    OK				      = _inc(0)
-    HW_NOT_OP             = _inc()			
+    OK				      = _inc(0) # init the inc to zero 
+    HW_NOT_OP             = _inc()	# increment number  		
     INIT_FAILURE          = _inc()	
     UNEXPECTED_CLOSED     = _inc()	
     UNEXPECTED_NONE       = _inc()	
@@ -128,49 +93,37 @@ enum_txt ({
     ERROR.TIMEOUT_CLOSE:	   'ERROR: CLOSE timed out.',
     ERROR.TIMEOUT_OPEN:		   'ERROR: OPEN timed out.',
     ERROR.SIM_NOT_INITIALISED: 'ERROR: Shutter simulator not initialised.',
-    ERROR.SIM_NULL_POINTER:	   'ERROR: NULL pointer to Shutter.',
-    
-    ERROR.UNREGISTERED:        'ERROR: Unregistered Error'
-})
-
-class RPC_ERROR(EnumTool, int, Enum):
-    OK =  0
-    NOT_OP				= -1			
-    NOT_NOTOP_READY		= -2			
-    NOT_NOTOP_NOTREADY	= -3	
-    STILL_OPENING = -4
-    STILL_CLOSING = -5
-    LOCAL = -6
-    
-    UNREGISTERED = -9999
-    
-enum_txt ({ # copy past on MgetRpcErrorTxt in PLC
-        RPC_ERROR.OK:					 'OK',
-	    RPC_ERROR.NOT_OP:				 'Cannot control shutter. Not in OP state.',
-	    RPC_ERROR.NOT_NOTOP_READY:	     'Call failed. Not in NOTOP_READY.',
-	    RPC_ERROR.NOT_NOTOP_NOTREADY:	 'Call failed. Not in NOTOP_NOTREADY/ERROR.',
-	    RPC_ERROR.STILL_OPENING:		 'Not allowed to close the shutter while opening.',
-	    RPC_ERROR.STILL_CLOSING:		 'Not allowed to open the shutter while closing.',
-	    RPC_ERROR.LOCAL:				 'RPC calls not allowed in Local mode.',
+        ERROR.SIM_NULL_POINTER:	   'ERROR: NULL pointer to Shutter.',
         
-        RPC_ERROR.UNREGISTERED:          'Unregistered RPC Error',
-})
+        ERROR.UNREGISTERED:        'ERROR: Unregistered Error'
+    })
 
 
 
+    #  ____  _        _     ___       _             __                 
+    # / ___|| |_ __ _| |_  |_ _|_ __ | |_ ___ _ __ / _| __ _  ___ ___  
+    # \___ \| __/ _` | __|  | || '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \ 
+    #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
+    # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
-#  _       _             __                
-# (_)_ __ | |_ ___ _ __ / _| __ _  ___ ___ 
-# | | '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \
-# | | | | | ||  __/ |  |  _| (_| | (_|  __/
-# |_|_| |_|\__\___|_|  |_|  \__,_|\___\___|
-
-
-class ShutterStatInterface(_Shutter.Stat):
-     
-
+class ShutterStat(Base):
+    # Add the constants to this class 
     ERROR = ERROR
     SUBSTATE = SUBSTATE
+    
+    class Config(Base.Config):
+        # define all the default configuration for each nodes. 
+        # e.g. the suffix can be overwriten in construction (from a map file for instance)
+        # all configured node will be accessible by the Interface
+        error_code: ND = NC(suffix='stat.nErrorCode' )
+        local: Defaults[NC] = NC(suffix='stat.bLocal' )
+        state: ND = NC(suffix='stat.nState' )
+        status: ND = NC(suffix='stat.nStatus' )
+        substate: ND = NC(suffix='stat.nSubstate' )
+
+
+    # We can add some nodealias to compute some stuff on the fly 
+    # If they node to be configured one can set a configuration above 
     
     @NodeAlias1.prop("is_ready", "substate")
     def is_ready(self, substate):
@@ -187,7 +140,7 @@ class ShutterStatInterface(_Shutter.Stat):
         """ True if shutter is OPEN  """
         return substate in [self.SUBSTATE.OP_OPEN, self.SUBSTATE.NOT_OP_READY_OPEN]
     
-    @NodeAlias1.prop("is_closed", "substate")
+    @NodeAlias1.prop(node="substate")
     def is_closed(self, substate):
         return substate in [self.SUBSTATE.OP_CLOSED, self.SUBSTATE.NOT_OP_READY_CLOSED]
         
@@ -196,62 +149,18 @@ class ShutterStatInterface(_Shutter.Stat):
         """ -> True if device is in error state:  NOP_ERROR or OP_ERROR """
         return substate in [self.SUBSTATE.NOT_OP_FAILURE, self.SUBSTATE.OP_FAILURE]
             
-
-class ShutterRpcInterface(_Shutter.Rpc):
-    RPC_ERROR = RPC_ERROR
     
-
-#      _            _          
-#   __| | _____   _(_) ___ ___ 
-#  / _` |/ _ \ \ / / |/ __/ _ \
-# | (_| |  __/\ V /| | (_|  __/
-#  \__,_|\___| \_/ |_|\___\___|
-#
-
-@record_class
-class Shutter(EltDevice):
-    SUBSTATE = SUBSTATE
-    Config = ShutterConfig
-    
-    Stat  = ShutterStatInterface
-    Rpcs  = ShutterRpcInterface
-    
-    stat = Stat.prop('stat')    
-    rpcs  = Rpcs.prop('rpc')
-    
-    def open(self) -> EltNode:
-        """ open the shutter 
-        
-        Returns:
-            is_open:  the :class:`NodeAlias` .stat.is_open to check if the shutter is open
-        
-        Example:
-        
-            ::
-            
-                wait( shutter.open() )
-        """
-        self.rpc.rpcOpen.rcall()    
-        return self.stat.is_open 
-        
-    def close(self) -> EltNode:
-        """ close the shutter 
-        
-        Returns:
-            is_closed:  the :class:`NodeAlias` .stat.is_closed to check if the shutter is closed
-        
-        Example:
-        
-            ::
-            
-                wait( shutter.close() )
-        """
-        self.rpc.rpcClose.rcall()
-        return self.stat.is_closed 
-        
-    def stop(self):
-        """ stop any motion """
-        self.rpc.rpcStop.rcall()
-
+    # Build the Data object to be use with DataLink, the type and default are added here 
+    class Data(Base.Data):
+        error_code: NV[ERROR] = ERROR.OK
+        local: NV[bool] = False
+        state: NV[int] = 0
+        status: NV[int] = 0
+        substate: NV[int] = 0
+           
 if __name__ == "__main__":
-    Shutter()
+    s = ShutterStat( local=NC(parser=float) )
+    assert s.Data(local=1).local == True
+    assert s.config.local.suffix == "stat.bLocal" # this should not change because of the Default Type
+    assert isinstance(s.local, N)
+    s.is_closed

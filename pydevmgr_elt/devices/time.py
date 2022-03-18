@@ -159,7 +159,7 @@ class TimeCfgInterface(UaInterface):
     # we can define the type to parse value directly on the class by annotation
     Data = TimeCfgData
     
-@buildproperty(UaRpc.prop, 'args_parser') 
+@buildproperty(UaRpc.prop, 'arg_parsers') 
 class TimeRpcInterface(UaInterface):  
     RPC_ERROR = RPC_ERROR  
     rpcSetTime : (str,)

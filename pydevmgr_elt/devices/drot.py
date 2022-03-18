@@ -1,4 +1,4 @@
-from pydevmgr_core import buildproperty, NodeVar, record_class
+from pydevmgr_core import NodeVar, record_class, Defaults
 from pydevmgr_ua import Int16, Int32
 from ..base.tools import enum_group, enum_txt, EnumTool
 from ..base.eltdevice import EltDevice, GROUP
@@ -10,9 +10,8 @@ from .motor import Motor
 
 from pydantic import Field 
 
+from ._drot_autobuilt import _Drot
 
-class DrotConfig(Motor.Config):
-    type: str = "Drot"
 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -60,88 +59,69 @@ def mode_parser(mode):
 
 
 
-#  ____        _          __  __           _      _ 
-# |  _ \  __ _| |_ __ _  |  \/  | ___   __| | ___| |
-# | | | |/ _` | __/ _` | | |\/| |/ _ \ / _` |/ _ \ |
-# | |_| | (_| | || (_| | | |  | | (_) | (_| |  __/ |
-# |____/ \__,_|\__\__,_| |_|  |_|\___/ \__,_|\___|_|
-# 
-
-class DrotCfgData(Motor.Data.CfgData):
-    #Drot specific parameters
-    focus_sign:       NodeVar[int] = Field(-1 , description="Sign for the instrument focus Nasmyth A -> -1 cfg.nFocusSign")
-    dir_sign:         NodeVar[int] = Field(1  , description="Rotator Direction sign cfg.nDirSign")
-    stat_ref:         NodeVar[float] = Field(0.0, description="STAT mode reference position [UU] cfg.lrStatRef")
-    sky_ref:          NodeVar[float] = Field(0.0, description="SKY mode  reference position [UU] cfg.lrSkyRef")
-    elev_ref:         NodeVar[float] = Field(0.0, description="ELEV mode reference position [UU] cfg.lrElevRef")
-    user_ref:         NodeVar[float] = Field(0.0, description="USER mode reference position [UU] cfg.lrUserRef")
-    user_par1:        NodeVar[float] = Field(0.0, description="User Parameter, slot 1, cfg.lrUserPar1")
-    user_par2:        NodeVar[float] = Field(0.0, description="User Parameter, slot 2, cfg.lrUserPar2")
-    user_par3:        NodeVar[float] = Field(0.0, description="User Parameter, slot 3, cfg.lrUserPar3")
-    user_par4:        NodeVar[float] = Field(0.0, description="User Parameter, slot 4, cfg.lrUserPar4")
-    latitude:         NodeVar[float] = Field(-0.429833092  , description="cfg.site.latitude")
-    longitude:        NodeVar[float] = Field(1.228800386   , description="cfg.site.longitude")
-    trk_period:       NodeVar[int]   = Field(0  , description="cfg.nMinSkipCycles")
-    trk_threshold:    NodeVar[float] = Field(1.0, description="If maximum Error is <... traking is True [UU] cfg.lrTrkThreshold cfg.lrTrkThreshold")
-    
-class DrotStatData(Motor.Data.StatData, trk.TrkStatData):
-    alpha: NodeVar[float] = Field(0.0, description="Apparent alpha coordinate stat.apparent.alpha")
-    delta: NodeVar[float] = Field(0.0, description="Apparent delta coordinate stat.apparent.delta")
-    angle_on_sky: NodeVar[float] = Field(0.0, description="Angle on sky one in SKY or ELEV mode [UU]")
-    
-class DrotData(EltDevice.Data):    
-    StatData = DrotStatData
-    CfgData = DrotCfgData
-    
-    cfg: CfgData = CfgData()
-    stat: StatData = StatData()    
-
-
 #  _       _             __                
 # (_)_ __ | |_ ___ _ __ / _| __ _  ___ ___ 
 # | | '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \
 # | | | | | ||  __/ |  |  _| (_| | (_|  __/
 # |_|_| |_|\__\___|_|  |_|  \__,_|\___\___|
-@record_class
-class DrotStatInterface(trk.TrkStatInterface):
-    
-    class Config(trk.TrkStatInterface.Config):
-        type: str = 'Drot.Stat'
-    
-    Data = DrotStatData    
+
+
+N = EltDevice.Node
+RD = Defaults
+CN = EltDevice.Node.Config
+CI = EltDevice.Interface.Config
+CR = EltDevice.Rpc.Config
+
+
+
+
+class DrotStatInterface(trk.TrkStatInterface, Motor.Stat): 
     ERROR = ERROR
     MODE = MODE
-    SUBSTATE = SUBSTATE    
-
-@record_class    
-@buildproperty(EltDevice.Node.prop, 'parser')    
-class DrotCfgInterface(Motor.CfgInterface):
+    SUBSTATE = SUBSTATE   
     
-    class Config(Motor.CfgInterface.Config):
+    class Config(Motor.Stat.Config):
+        track_mode: RD[CN] = CN(suffix="stat.nMode")
+
+    class Data(Motor.Stat.Data, trk.TrkStatData):
+        pass
+
+
+class DrotCfgInterface(Motor.Cfg):
+    
+    class Config(Motor.Cfg.Config):
         type: str = 'Drot.Cfg'
-    
-    Data = DrotCfgData
-    # ################
-    focus_sign : Int32
-    dir_sign   : Int32
-    trk_period : Int32
+        dir_sign: RD[CN] = CN(suffix='cfg.nDirSign', parser='UaInt32')
+        focus_sign: RD[CN] = CN(suffix='cfg.nFocusSign', parser='UaInt32')
+        trk_period: RD[CN] = CN(suffix='cfg.nMinSkipCycles', parser='UaInt32')
 
-@record_class
-@buildproperty(EltDevice.Rpc.prop, 'args_parser')
-class DrotRpcInterface(EltDevice.RpcInterface):
+    class Data(Motor.Cfg.Data):
+        dir_sign: NodeVar[int] = 0
+        focus_sign: NodeVar[int] = 0
+        trk_period: NodeVar[int] = 0
+
+    # ################
+    dir_sign = N.prop()
+    focus_sign = N.prop()
+    trk_treshold = N.prop()
     
-    class Config(EltDevice.RpcInterface.Config):
-        type: str = 'Drot.Rpc'
+
+class DrotRpcInterface(Motor.Rpcs): 
+    class Config(Motor.Rpcs.Config):
+        
+        rpcMoveAngle : RD[CR] = CR(suffix="RPC_MoveAbs", arg_parsers=[float])
+        rpcStartTrack: RD[CR] = CR(suffix="RPC_StartTrack", arg_parsers=[mode_parser, float])
+        
         
     RPC_ERROR = RPC_ERROR
-    ##
-    # the type of rpcMethod argument can be defined by annotation
-    # All method args types must be defined in a tuple
-    rpcMoveAbs    : (float, float)
-    rpcMoveRel    : (float, float)
-    rpcMoveAngle  : (float,)
-    rpcMoveVel    : (float,)
-    rpcStartTrack : (mode_parser, float)
+    
+ 
+class DrotData(Motor.Data):
+    Cfg = DrotCfgInterface.Data
+    cfg: Cfg = Cfg()
+    
+    Stat = DrotStatInterface.Data
+    stat: Stat = Stat()
     
 #      _            _          
 #   __| | _____   _(_) ___ ___ 
@@ -149,6 +129,20 @@ class DrotRpcInterface(EltDevice.RpcInterface):
 # | (_| |  __/\ V /| | (_|  __/
 #  \__,_|\___| \_/ |_|\___\___|
 #
+
+
+
+class DrotConfig(Motor.Config, _Drot.Config):
+    type: str = "Drot"
+    Cfg =  DrotCfgInterface.Config 
+    Rpc =  DrotRpcInterface.Config 
+    Stat = DrotStatInterface.Config
+    cfg : RD[Cfg] = Cfg() 
+    rpc : RD[Rpc] = Rpc() 
+    stat : RD[Stat] = Stat() 
+   
+
+
 @record_class
 class Drot(Motor, trk.Trk):
     SUBSTATE = SUBSTATE
@@ -158,13 +152,13 @@ class Drot(Motor, trk.Trk):
     Config = DrotConfig
     Data = DrotData
     
-    StatInterface = DrotStatInterface
-    CfgInterface = DrotCfgInterface
-    RpcInterface = DrotRpcInterface
+    Stat = DrotStatInterface
+    Cfg  = DrotCfgInterface
+    Rpcs = DrotRpcInterface
     
-    stat = StatInterface.prop('stat')    
-    cfg  = CfgInterface.prop('cfg')
-    rpc  = RpcInterface.prop('rpc')
+    stat = Stat.prop('stat')    
+    cfg  = Cfg.prop('cfg')
+    rpc  = Rpcs.prop('rpcs')
     
     def init(self):
         # fix a feature unsude the FB_MA, the RPC_Init return silently zero even if the

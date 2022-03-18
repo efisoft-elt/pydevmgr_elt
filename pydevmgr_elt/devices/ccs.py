@@ -147,7 +147,7 @@ class CcsSimCtrlInterface(EltDevice.Interface):
 
 
 
-@buildproperty(EltDevice.Rpc.prop, 'args_parser') 
+@buildproperty(EltDevice.Rpc.prop, 'arg_parsers') 
 class CcsSimRpcInterface(EltDevice.Interface):   
     Data = CcsSimCtrlData 
     rpcSetCoordinates : (float, float, float)
@@ -174,16 +174,16 @@ class CcsSim(EltDevice):
     cfg  = CfgInterface.prop('cfg')
     rpc  = RpcInterface.prop('rpc')
     
-    def reset(self) -> EltDevice.Node:
+    def reset(self) -> None:
         raise ValueError('CcsSim has no reset capability')
 
-    def enable(self) -> EltDevice.Node:
+    def enable(self) -> None:
         raise ValueError('CcsSim has no enable capability')
         
-    def disable(self) -> EltDevice.Node:
+    def disable(self) -> None:
         raise ValueError('CcsSim has no disable capability')
     
-    def init(self) -> EltDevice.Node:
+    def init(self) -> None:
         raise ValueError('CcsSim has no init capability')
     
     def set_coordinates(self, ra: float, dec: float, equinox: float) -> None:

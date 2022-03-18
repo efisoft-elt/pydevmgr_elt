@@ -1,3 +1,9 @@
+
+0.3.4
+=====
+- exclude_unset=True  added to the get_configuration method 
+- Add the Position and Initialisation config Class to the Motor.Config class 
+
 0.3.3
 =====
 - fix motor gui 

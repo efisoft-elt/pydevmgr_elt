@@ -1,22 +1,18 @@
-from pydevmgr_core import NodeAlias, buildproperty, NodeVar, record_class
+from pydevmgr_core import NodeAlias, NodeVar, record_class
 from pydevmgr_ua import Int16, Int32
 from ..base.eltdevice import EltDevice, GROUP
 from ..base.tools import _inc, enum_group, enum_txt, EnumTool
 
 from pydantic import Field
 from enum import Enum
+from ._piezo_autobuilt import _Piezo 
+
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
 #  / __/ _ \| '_ \/ __| __/ _` | '_ \| __|
 # | (_| (_) | | | \__ \ || (_| | | | | |_ 
 #  \___\___/|_| |_|___/\__\__,_|_| |_|\__|
 # 
-
-class PiezoConfig(EltDevice.Config):
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Data Structure 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    type: str = "Piezo"
 
 ##### ############
 # SUBSTATE
@@ -101,80 +97,15 @@ enum_txt ({
 
 
 
-#  ____        _          __  __           _      _ 
-# |  _ \  __ _| |_ __ _  |  \/  | ___   __| | ___| |
-# | | | |/ _` | __/ _` | | |\/| |/ _ \ / _` |/ _ \ |
-# | |_| | (_| | || (_| | | |  | | (_) | (_| |  __/ |
-# |____/ \__,_|\__\__,_| |_|  |_|\___/ \__,_|\___|_|
-# 
-
-class PiezoCfgData(EltDevice.Data.CfgData):
-    max_on:               NodeVar[int] = Field(0 , description= "Maximum Time For Piezo to be active [s] cfg.nMaxOn")
-    num_axis:             NodeVar[int] = Field(3 , description= "Number of axis default is 3 cfg.nNumAxes")
-    full_range1:          NodeVar[int] = Field(2**15-1 , description= "Digital Full range for axis 1 [DN] default=2**15-1=32767 cfg.nFullRange[0].nValue")
-    full_range2:          NodeVar[int] = Field(2**15-1 , description= "Digital Full range for axis 2 [DN] default=2**15-1=32767 cfg.nFullRange[1].nValue")
-    full_range3:          NodeVar[int] = Field(2**15-1 , description= "Digital Full range for axis 3 [DN] default=2**15-1=32767 cfg.nFullRange[2].nValue")
-    home1:                NodeVar[int] = Field(0, description=" digital number for home pos, axis 1, cfg.nHome[0].nValue")
-    home2:                NodeVar[int] = Field(0, description=" digital number for home pos, axis 2, cfg.nHome[1].nValue")
-    home3:                NodeVar[int] = Field(0, description=" digital number for home pos, axis 3, cfg.nHome[2].nValue")
-    lower_limit1:         NodeVar[int] = Field(100, description= "digital number for  low operational limit, axis 1, cfg.nLimitLow[0].nValue")
-    lower_limit2:         NodeVar[int] = Field(100, description= "digital number for  low operational limit, axis 2, cfg.nLimitLow[1].nValue")
-    lower_limit3:         NodeVar[int] = Field(100, description= "digital number for  low operational limit, axis 3, cfg.nLimitLow[2].nValue")
-    upper_limit1:         NodeVar[int] = Field(32500, description= "digital number for high operational limit, axis 1, cfg.nLimitHigh[0].nValue")
-    upper_limit2:         NodeVar[int] = Field(32500, description= "digital number for high operational limit, axis 2, cfg.nLimitHigh[1].nValue")
-    upper_limit3:         NodeVar[int] = Field(32500, description= "digital number for high operational limit, axis 3, cfg.nLimitHigh[2].nValue")
-    user_to_bit_input1:   NodeVar[float] = Field(1.0 , description= "gain conversion factor from user unit to bits, axis 1, cfg.lrUser2Bit_Get[0].lrValue")
-    user_to_bit_input2:   NodeVar[float] = Field(1.0 , description= "gain conversion factor from user unit to bits, axis 2, cfg.lrUser2Bit_Get[1].lrValue")
-    user_to_bit_input3:   NodeVar[float] = Field(1.0 , description= "gain conversion factor from user unit to bits, axis 3, cfg.lrUser2Bit_Get[2].lrValue")
-    user_offset_input1:   NodeVar[int] = Field(0 , description= "digital number offset for user to bit convertion, axis 1, cfg.nUserOffsetBit_Get[0].nValue")
-    user_offset_input2:   NodeVar[int] = Field(0 , description= "digital number offset for user to bit convertion, axis 2, cfg.nUserOffsetBit_Get[1].nValue")
-    user_offset_input3:   NodeVar[int] = Field(0 , description= "digital number offset for user to bit convertion, axis 3, cfg.nUserOffsetBit_Get[2].nValue")
-    user_to_bit_output1:  NodeVar[float] = Field(1.0, description= "gain conversion factor from user unit to bits for feedback, axis 1, cfg.lrUser2Bit_Set[0].lrValue")
-    user_to_bit_output2:  NodeVar[float] = Field(1.0, description= "gain conversion factor from user unit to bits for feedback, axis 2, cfg.lrUser2Bit_Set[1].lrValue")
-    user_to_bit_output3:  NodeVar[float] = Field(1.0, description= "gain conversion factor from user unit to bits for feedback, axis 3, cfg.lrUser2Bit_Set[2].lrValue")
-    user_offset_output1:  NodeVar[int] = Field(0 , description= "digital number offset for user to bit convertion for feedback, axis 1, cfg.nUserOffsetBit_Set[0].nValue")
-    user_offset_output2:  NodeVar[int] = Field(0 , description= "digital number offset for user to bit convertion for feedback, axis 2, cfg.nUserOffsetBit_Set[1].nValue")
-    user_offset_output3:  NodeVar[int] = Field(0 , description= "digital number offset for user to bit convertion for feedback, axis 3, cfg.nUserOffsetBit_Set[2].nValue")
-    
-class PiezoStatData(EltDevice.Data.StatData):    
-    local:      NodeVar[bool] = Field(False, description="True if the device is local mode")
-    error_code: NodeVar[int] = 0 
-    actual_pos_bit1:      NodeVar[int]   =  Field(0, description="stat.nActPosBit[0].nValue")
-    actual_pos_bit2:      NodeVar[int]   =  Field(0, description="stat.nActPosBit[1].nValue")
-    actual_pos_bit3:      NodeVar[int]   =  Field(0, description="stat.nActPosBit[2].nValue")
-    actual_pos_user1:     NodeVar[float] =  Field(0.0, description="stat.lrActPosUsr[0].lrValue")
-    actual_pos_user2:     NodeVar[float] =  Field(0.0, description="stat.lrActPosUsr[1].lrValue")
-    actual_pos_user3:     NodeVar[float] =  Field(0.0, description="stat.lrActPosUsr[2].lrValue")
-    mon_act_pos_bit1:     NodeVar[int] =    Field(0 , description="stat.monSetPosBit_0")
-    mon_act_pos_bit2:     NodeVar[int] =    Field(0 , description="stat.monSetPosBit_1")
-    mon_act_pos_bit3:     NodeVar[int] =    Field(0 , description="stat.monSetPosBit_2")
-    mon_act_pos_usr1:     NodeVar[int] =    Field(0 , description="stat.monActPosUsr_0")
-    mon_act_pos_usr2:     NodeVar[int] =    Field(0 , description="stat.monActPosUsr_1")
-    mon_act_pos_usr3:     NodeVar[int] =    Field(0 , description="stat.monActPosUsr_2")
-
-class PiezoData(EltDevice.Data):
-    StatData = PiezoStatData
-    CfgData = PiezoCfgData
-        
-    cfg: CfgData = CfgData()
-    stat: StatData = StatData() 
-    
-
-
 
 #  _       _             __                
 # (_)_ __ | |_ ___ _ __ / _| __ _  ___ ___ 
 # | | '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \
 # | | | | | ||  __/ |  |  _| (_| | (_|  __/
 # |_|_| |_|\__\___|_|  |_|  \__,_|\___\___|
-@record_class
-class PiezoStatInterface(EltDevice.StatInterface):
+class PiezoStatInterface(_Piezo.Stat):
     
-    class Config(EltDevice.StatInterface.Config):
-        type: str = 'Piezo.Stat'
     
-    Data = PiezoStatData
-    # keys used by default by update_to
     ERROR = ERROR
     SUBSTATE = SUBSTATE
     
@@ -188,50 +119,8 @@ class PiezoStatInterface(EltDevice.StatInterface):
         """ -> True is axis is in pos mode """
         return substate == self.SUBSTATE.OP_POS
 
-@record_class    
-@buildproperty(EltDevice.Node.prop, 'parser')  
-class PiezoCfgInterface(EltDevice.CfgInterface):
-    class Config(EltDevice.CfgInterface.Config):
-        type: str = 'Piezo.Cfg'
-    
-    Data = PiezoCfgData
-    # we can define the type to parse value directly on the class by annotation
-    max_on : Int32 
-    num_axis : Int16
-    full_range1: Int16  
-    full_range2: Int16  
-    full_range3: Int16
-    home1: Int16  
-    home2: Int16  
-    home3: Int16
-    lower_limit1: Int16  
-    lower_limit2: Int16  
-    lower_limit3: Int16
-    upper_limit1: Int16  
-    upper_limit2: Int16  
-    upper_limit3: Int16
-    user_offset_input1: Int16  
-    user_offset_input2: Int16  
-    user_offset_input3: Int16
-    user_offset_output1: Int16  
-    user_offset_output2: Int16  
-    user_offset_output3: Int16
-    
-@record_class
-@buildproperty(EltDevice.Rpc.prop, 'args_parser')
-class PiezoRpcInterface(EltDevice.RpcInterface): 
-    class Config(EltDevice.RpcInterface.Config):
-        type: str = 'Piezo.Rpc'
-       
-    RPC_ERROR = RPC_ERROR
-    ##
-    # the type of rpcMethod argument can be defined by annotation
-    # All args types must be defined in a tuple
-    
-    rpcMoveBits : (Int16,)*3
-    rpcMoveUser : (float,)*3
 
-
+    
 
 
 #      _            _          
@@ -241,20 +130,14 @@ class PiezoRpcInterface(EltDevice.RpcInterface):
 #  \__,_|\___| \_/ |_|\___\___|
 #
 @record_class
-class Piezo(EltDevice):
-    Config = PiezoConfig
+class Piezo(_Piezo):
     SUBSTATE = SUBSTATE
     ERROR = ERROR
     
-    Data = PiezoData
     
-    StatInterface = PiezoStatInterface
-    CfgInterface = PiezoCfgInterface
-    RpcInterface = PiezoRpcInterface
+    Stat = PiezoStatInterface
     
-    stat = StatInterface.prop('stat')    
-    cfg  = CfgInterface.prop('cfg')
-    rpc  = RpcInterface.prop('rpc')
+    stat = Stat.prop('stat')    
          
     def auto(self) -> None:
         """ turn on auto mode 

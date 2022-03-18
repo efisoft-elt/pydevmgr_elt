@@ -63,7 +63,7 @@ RPC_ERROR = MotorRpcInterface.RPC_ERROR
 class MODE(int, Enum):
     pass
     
-class TrkStatInterface(EltDevice.StatInterface):    
+class TrkStatInterface(EltDevice.Stat):    
     ERROR = ERROR
     MODE = MODE
     SUBSTATE = SUBSTATE
@@ -100,7 +100,7 @@ class Trk:
         self.rpc.rpcStopTrack.rcall()
 
 
-class TrkStatData(EltDevice.Data.StatData):   
+class TrkStatData(EltDevice.Stat.Data):   
     track_mode: NodeVar[int] = 0  
     track_mode_txt: NodeVar[str] = ""
     is_moving: NodeVar[bool] = False

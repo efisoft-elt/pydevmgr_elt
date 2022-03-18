@@ -53,6 +53,8 @@ def find_map(dev_type, ioconfig=ioconfig):
         raise IOError('coud not find map file of device %r from pydevmgr_elt package'%(dev_type))        
     return pkg_resources.resource_filename(pkg_name, os.path.join(ioconfig.resources, resource))
 
+
+
 _default_map_cash = {}
 def load_default_map(dev_type, ioconfig=ioconfig):
     """ load a map file according to a device type 

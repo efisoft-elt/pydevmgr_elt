@@ -4,12 +4,15 @@ from .tools import fjoin
 from typing import Optional , Any
 
 
-@record_class
-class EltNode(UaNode):
-    class Config(UaNode.Config):
+
+class EltNodeConfig(UaNode.Config):
         type: str = "Elt"
         fits_prefix: str = ""
-    
+
+
+@record_class
+class EltNode(UaNode):
+    Config = EltNodeConfig
     def __init__(self, *args, fits_key: Optional[str] = None, **kwargs):
         super().__init__(*args, **kwargs)
         self.fits_key = fits_key or self._config.fits_prefix 

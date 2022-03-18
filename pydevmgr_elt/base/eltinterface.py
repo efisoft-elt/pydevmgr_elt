@@ -13,9 +13,10 @@ from pydantic import root_validator
 class EltInterface(UaInterface):
     Node = EltNode
     Rpc = EltRpc
-    class Config(UaInterface.Config):
+    class Config(UaInterface.Config, extra="allow"):
         type: str = "Elt"
-            
+        auto_build = True
+                
     def __init__(self, *args, fits_key: str = "", **kwargs):
         super().__init__(*args, **kwargs)
         self.fits_key = fits_key
