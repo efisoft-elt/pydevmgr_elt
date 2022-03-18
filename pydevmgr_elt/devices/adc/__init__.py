@@ -59,8 +59,6 @@ class AdcConfig(Base.Config):
             return cls.parse_obj(d)
         # patch to be copatible with ESO config files 
         ctrl = cls.Ctrl.parse_obj ( d.get('ctrl_config', {}))
-        print( ctrl )
-        print( d )
         if ctrl.axes:
             axis1, axis2 = ctrl.axes
             axis1_io = AxisIoConfig(**d[axis1])

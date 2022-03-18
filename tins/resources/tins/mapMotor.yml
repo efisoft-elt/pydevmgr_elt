@@ -1,4 +1,4 @@
-Elt:
+Motor:
   cfg:
     brake:              cfg.bUseBrake
     backlash:           cfg.lrBacklash

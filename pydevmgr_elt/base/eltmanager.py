@@ -1,5 +1,5 @@
-from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface, InterfaceProperty, 
-                           BaseManager, AllTrue, upload, get_device_class, open_object, get_class, record_class)
+from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
+                           BaseManager, AllTrue, upload,   get_class, record_class, GenDevice)
 
 from . import io
 from .eltdevice import EltDevice
@@ -34,6 +34,7 @@ class ManagerConfig(BaseManager.Config):
     scxml           : str =  ""
     dictionaries    : List[str] =  []    
     
+    device_map : Dict[str, GenDevice] = {} 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Config of BaseModel see pydantic 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -154,7 +155,7 @@ class SubstateNodeAlias(NodeAlias):
 
 
 def get_device_state_nodes(parent):
-    return sum( [[d.stat.state,d.ignored] for d in  parent.devices()], [])
+    return sum( [[d.stat.state,d.is_ignored] for d in  parent.devices() ], [])
 
 ##
 # The stat manager for stat interface will be build of NodeAliases only 
@@ -188,7 +189,7 @@ class ManagerStatInterface(BaseInterface):
         
         - the devices() method
         """        
-        return cls(kjoin(parent.key, name), parent.devices(),config=config, **cls.new_args(parent, config))
+        return cls(kjoin(parent.key, name), list(parent.devices), config=config, **cls.new_args(parent, config))
     
     # The nodes is a function with signature func(parent) it is called by the .new class method 
     @NodeAlias.prop('state', nodes=get_device_state_nodes)
@@ -253,9 +254,13 @@ class EltManager(BaseManager):
            **kwargs
         ) -> None:
         
+        if devices is None:
+            config = self.parse_config(config, **kwargs)
+            devices = config.device_map 
+        
         super().__init__(key, config=config, devices=devices, **kwargs)                
         self._extra = {} if extra is None else extra
-                    
+        self._device_attrs = list(devices)            
         
         
     # def __getattr__(self,attr):
@@ -288,6 +293,11 @@ class EltManager(BaseManager):
     # def prefix(self):
     #     return ksplit(self._key)[0]
     
+    @property
+    def devices(self):
+        # TODO: quick patch on devices iterator, beter solution needs to be found
+        return [getattr(self, dn) for dn in self._device_attrs]
+
     @property
     def name(self) -> str:
         return ksplit(self._key)[1]

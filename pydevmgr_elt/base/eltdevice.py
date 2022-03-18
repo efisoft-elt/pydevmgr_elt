@@ -198,19 +198,11 @@ class EltDevice(UaDevice):
     
     def __init__(self, *args, fits_key: str = "", **kwargs):
         super().__init__(*args, **kwargs)
-        self.fits_key = fits_key or self._config.fits_prefix 
+        self.fits_key = fits_key or self._config.fits_prefix
+        
         self.is_ignored.set( self.config.ignored )
         
-    @classmethod
-    def parse_config(cls, config, **kwargs):
-        if config is None:
-            # a little patch to open te device with a default mapping if config is None 
-            map_d = io.load_default_map(kwargs.get('type',cls.Config.__fields__['type'].default))            
-            map = next(iter(map_d.values())) 
-            interface_map =  map2interface_map(map)
-            kwargs.setdefault('interface_map', {}).update(interface_map)    
-        return super().parse_config(config, **kwargs)
-    
+   
     ## These RPC should be on all devices
     def init(self) -> EltNode:
         """ init the device 
