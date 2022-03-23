@@ -1,3 +1,7 @@
+0.4.2
+=====
+- the adc address was copied to its motor but not the namespac. Fixed.
+
 0.4.1
 =====
 Add a default motors config in Adc.Config so it can be built without motors as arguments 

@@ -9,7 +9,7 @@ if sys.version_info < (3, 0, 0, 'final', 0):
 
 setup(
     name= 'pydevmgr_elt',
-    version= '0.4.1', # https://www.python.org/dev/peps/pep-0440/
+    version= '0.4.2', # https://www.python.org/dev/peps/pep-0440/
     author='Sylvain Guieu',
     author_email='sylvain.guieu@univ-grenoble-alpes.fr',
     packages=find_packages(), 

@@ -117,8 +117,8 @@ class Adc(Base):
         for name, mc in [("motor1", self.config.motor1), ("motor2", self.config.motor2)]:
             if not mc.prefix:
                 mc.__dict__['prefix'] = kjoin( self.config.prefix, name)
-            mc.__dict__['address'] = self.config.address # For sure the address is the same we can force it !!!      
-        
+
+            mc.__dict__.update( address = self.config.address, namespace = self.config.namespace)   
     # @property
     # def motor1(self):
     #     return getattr(self, self.config.ctrl_config.axes[0])
