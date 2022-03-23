@@ -4,7 +4,7 @@ from pydevmgr_elt.devices.drot.rpcs import DrotRpcs as Rpcs
 
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.devices.motor import Motor
-from pydevmgr_core import record_class
+from pydevmgr_core import record_class, NegNode
 from typing import Optional
 
 
@@ -19,7 +19,7 @@ class DrotCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class DrotConfig(Base.Config):
-    Ctrl = DrotCtrlConfig
+    CtrlConfig = DrotCtrlConfig
     
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -28,7 +28,7 @@ class DrotConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Drot"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
@@ -67,7 +67,8 @@ class Drot(Base):
 
     def stop_track(self) -> None:
         self.rpcs.rpcStopTrack.rcall()
-
+        return NegNode(node=self.stat.is_tracking)
+    
     def start_track(self, mode, angle=0.0) -> Base.Node:
         """ Start drot tracking 
         

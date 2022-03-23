@@ -53,7 +53,7 @@ class MotorCtrlConfig(Base.Config.CtrlConfig):
 
     
 class MotorConfig(Base.Config):
-    Ctrl = MotorCtrlConfig
+    CtrlConfig = MotorCtrlConfig
     Positions= PositionsConfig
     Initialisation= InitialisationConfig
    
@@ -64,7 +64,7 @@ class MotorConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Motor"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     initialisation : Initialisation= Initialisation()
     positions      : Positions= Positions()
     
@@ -85,14 +85,7 @@ class Motor(Base):
     Stat = Stat
     Rpcs = Rpcs
     
-    ##
-    # bellow the stat function is decorated by the .prop
-    # It finalise the construction of the interface by adding 
-    # the _mot_position   
-    @Stat.prop('stat')    
-    def stat(self, interface):
-        interface._mot_positions = self.config.positions
-
+ 
     class Data(Base.Data):
         Cfg = Cfg.Data
         Stat = Stat.Data
@@ -119,12 +112,12 @@ class Motor(Base):
         # just update what is in ctrl_config, this should work for motor 
         # one may need to check parse some variable more carefully       
         values = ctrl_config.dict(exclude_none=True, exclude_unset=exclude_unset)
-        cfg_dict = {self.cfg.get_node(k):v for k,v in  values.items() }
-        cfg_dict[self.ignored] = self.config.ignored 
-        cfg_dict.update({self.cfg.get_node(k):v for k,v in  kwargs.items() })
+        cfg_dict = { getattr(self.cfg, k):v for k,v in  values.items() }
+        cfg_dict[self.is_ignored] = self.config.ignored 
+        cfg_dict.update({ getattr(self.cfg,k):v for k,v in  kwargs.items() })
         
-        init_cfg = init_sequence_to_cfg(config.initialisation, self.INITSEQ)
-        cfg_dict.update({self.cfg.get_node(k):v for k,v in init_cfg.items()})
+        init_cfg = init_sequence_to_cfg(config.initialisation, self.Cfg.INITSEQ)
+        cfg_dict.update({ getattr( self.cfg, k):v for k,v in init_cfg.items()})
         
         # transform axis type to number 
         if self.cfg.axis_type in cfg_dict:

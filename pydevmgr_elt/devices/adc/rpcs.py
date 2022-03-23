@@ -17,13 +17,22 @@ class AdcRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        rpcMoveAbs:       RD = RC(suffix="RPC_MoveAbs", arg_parsers=["UaInt16", float, float])
-        rpcMoveRel:       RD = RC(suffix="RPC_MoveRel", arg_parsers=["UaInt16", float, float])
-        rpcMoveVel:       RD = RC(suffix="RPC_MoveVel", arg_parsers=["UaInt16", float])
-        rpcMoveAngle:     RD = RC(suffix="RPC_MoveAngle", arg_parsers=[float])
-        rpcStartTrack:    RD = RC(suffix="RPC_StartTrack", arg_parsers=[float])
-        rpcStopTrack:     RD = RC(suffix="RPC_StopTrack")
-        rpcStop:          RD = RC(suffix="RPC_Stop")
+        rpcDisable:     RD  =  RC(suffix="RPC_Disable")
+        rpcEnable:      RD  =  RC(suffix="RPC_Enable")
+        rpcReset:       RD  =  RC(suffix="RPC_Reset")
+        rpcInit:        RD  =  RC(suffix="RPC_Init")
+        rpcMoveAbs:     RD  =  RC(suffix="RPC_MoveAbs",     arg_parsers=["UaInt16",  float,   float])
+        rpcMoveRel:     RD  =  RC(suffix="RPC_MoveRel",     arg_parsers=["UaInt16",  float,   float])
+        rpcMoveVel:     RD  =  RC(suffix="RPC_MoveVel",     arg_parsers=["UaInt16",  float])
+        rpcMoveAngle:   RD  =  RC(suffix="RPC_MoveAngle",   arg_parsers=[float])
+        rpcStartTrack:  RD  =  RC(suffix="RPC_StartTrack",  arg_parsers=[float])
+        rpcStopTrack:   RD  =  RC(suffix="RPC_StopTrack")
+        rpcStop:        RD  =  RC(suffix="RPC_Stop")
+        rpcReset:       RD  =  RC(suffix="RPC_Reset")
+        rpcInit:        RD  =  RC(suffix="RPC_Init")
+            
+        
+
 
 if __name__ == "__main__":
     AdcRpcs()

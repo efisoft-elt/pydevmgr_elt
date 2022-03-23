@@ -11,11 +11,15 @@ from pydantic import root_validator
 
 @record_class
 class EltInterface(UaInterface):
+    _auto_build_object = True
+
     Node = EltNode
     Rpc = EltRpc
     class Config(UaInterface.Config, extra="allow"):
+        Node = EltNode.Config
+        Rpc = EltRpc.Config
+        
         type: str = "Elt"
-        auto_build = True
                 
     def __init__(self, *args, fits_key: str = "", **kwargs):
         super().__init__(*args, **kwargs)
@@ -53,15 +57,15 @@ class EltInterface(UaInterface):
         return map    
      
     def get_nodes(self, node_names  = None):
-        raise DeprecationWarning('get_nodes is deprecated use the .nodes attribute instead')
+        raise DeprecationWarning('get_nodes is deprecated use the .find method instead')
     
     @property
     def all_nodes(self) -> list:    
-        raise DeprecationWarning('.all_nodes is deprecated use the .nodes attribute instead')
+        raise DeprecationWarning('.all_nodes is deprecated use the .find method instead')
     
     @property
     def all_native_nodes(self) -> list:
         """ deprecated  use the .nodes attribute instead """
-        raise DeprecationWarning('.all_native_nodes is deprecated use the .nodes attribute instead')
+        raise DeprecationWarning('.all_native_nodes is deprecated use the .find method instead')
         
      

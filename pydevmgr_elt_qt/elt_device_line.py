@@ -15,7 +15,7 @@ class EltDeviceData(BaseModel):
     StatData = EltDeviceStatData
     
     stat: StatData = StatData()
-    ignored: NodeVar[bool] = False
+    is_ignored: NodeVar[bool] = False
     name: str = "" # device name  
 
 class EltDeviceLineUi(QFrame):
@@ -45,8 +45,8 @@ class EltDeviceLine(BaseUiLinker):
         stat = data.stat 
         self.outputs.substate.set( (stat.substate, stat.substate_txt, stat.substate_group) )
         
-        if self.inputs.ignored.get() != data.ignored:
-            self.inputs.ignored.set_input(data.ignored)
+        if self.inputs.ignored.get() != data.is_ignored:
+            self.inputs.ignored.set_input(data.is_ignored)
     
     def setup_ui(self, device: EltDevice, data: EltDeviceData): 
         super().setup_ui(device, data)
@@ -74,8 +74,8 @@ class EltDeviceLine(BaseUiLinker):
         
                 
         w = self.widget.check
-        w.setChecked(not device.ignored.get())        
+        w.setChecked(not device.is_ignored.get())        
                 
-        self.actions.add(device.ignored.set, [self.inputs.ignored.get], feedback=self.feedback).connect_checkbox(w)
+        self.actions.add(device.is_ignored.set, [self.inputs.ignored.get], feedback=self.feedback).connect_checkbox(w)
         
 record_widget_factory("line", "Elt", EltDeviceLine)  

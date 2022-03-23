@@ -23,13 +23,7 @@ def read_config(file, ioconfig=ioconfig):
 def load_config(file_name, ioconfig=ioconfig):
     return cio.load_config(file_name, ioconfig=ioconfig)
     
-def load_extra_of(file_name, ioconfig=ioconfig):
-    root, ext = os.path.splitext(find_config(file_name, ioconfig=ioconfig))
-    
-    file_name = os.path.join(root+"_extra"+ext)
-    if not os.path.exists(file_name):
-        return None
-    return read_config(file_name)
+
 
 def load_map(file_name, ioconfig=ioconfig):
     return read_map(find_config(file_name, ioconfig=ioconfig))

@@ -1,9 +1,18 @@
 from .eltinterface import EltInterface
 from .eltnode import EltNode
-from pydevmgr_core import NodeVar, NodeAlias1
+from pydevmgr_core import NodeVar, NodeAlias1, Defaults, NodeAlias
 from enum import Enum 
 from .tools import enum_group, enum_txt, EnumTool
 from .config import GROUP
+
+
+Base = EltInterface
+
+N = Base.Node # Base Node
+NC = N.Config
+ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
+NV = NodeVar # used in Data 
+
 
 ########################
 ### STATE 
@@ -67,6 +76,81 @@ enum_txt({
 })
 
 class StatInterface(EltInterface):
+    
+    ERROR = ERROR # needed for error_txt alias 
+    SUBSTATE = SUBSTATE # needed for substate_txt node alias
+    STATE = STATE 
+    
+    class Config(EltInterface.Config):
+        state:             ND = NC(suffix="stat.nState")
+        substate:          ND = NC(suffix="stat.nSubstate") 
+        error_code:        ND = NC(suffix="stat.nErrorCode")
+
+    @NodeAlias1.prop(node="state")
+    def is_operational(self, state: int) -> bool:
+        """ True if device is operational """
+        return state == self.STATE.OP
+    
+    @NodeAlias1.prop(node="state")
+    def is_not_operational(self, state: int) -> bool:
+        """ True if device not operational """
+        return state == self.STATE.NOTOP
+    
+    @NodeAlias1.prop(node="substate")
+    def is_ready(self, substate: int) -> bool:
+        """ True if device is ready """
+        return substate == self.SUBSTATE.NOTOP_READY
+    
+    @NodeAlias1.prop(node="substate")
+    def is_not_ready(self, substate: int) -> bool:
+        """ True if device is not ready """
+        return substate == self.SUBSTATE.NOTOP_NOTREADY
+    
+    @NodeAlias1.prop(node="substate")
+    def is_in_error(self, substate: int) -> bool:
+        """ -> True is device is in error state:  NOP_ERROR or OP_ERROR """
+        return substate in [self.SUBSTATE.NOTOP_ERROR, self.SUBSTATE.OP_ERROR]
+    
+    @NodeAlias1.prop(node="substate")
+    def substate_txt(self, substate: int) -> str:
+        """ Return a text representation of the substate """
+        return self.SUBSTATE(substate).txt
+    
+    @NodeAlias1.prop(node="substate")
+    def substate_group(self, substate: int):
+        """ Return the afiliated group of the substate """
+        return self.SUBSTATE(substate).group
+
+    
+    @NodeAlias1.prop(node="state")
+    def state_txt(self, state: int) -> str:
+        """ Return a text representation of the state """
+        return self.STATE(state).txt
+
+    @NodeAlias1.prop(node="state")
+    def state_group(self, state: int):
+        """ Return the afiliated group of the state """
+        return self.STATE(state).group
+    
+    @NodeAlias1.prop(node="error_code")
+    def error_txt(self, error_code: int) -> str:
+        """ Return the text representation of an error or '' if no error """
+        return self.ERROR(error_code).txt
+    
+
+    @NodeAlias.prop(nodes=["error_code", "error_txt"])
+    def noerror_check(self, error_code, error_txt):
+        """ Return always True but raise a ValueError in case of a non zero error code """
+        if error_code:
+            raise ValueError(f"Error [{self.key}]  error={error_code}: {error_txt}")
+        return True
+
+    @NodeAlias1.prop(node="error_code")
+    def error_group(self, error_code: int) -> str:
+        """ Return the text representation of an error or '' if no error """
+        return GROUP.ERROR if error_code else GROUP.OK
+
+
     class Data(EltInterface.Data):
         """ Data Model class holding stat information of device """
         state : NodeVar[int] = 0
@@ -85,66 +169,4 @@ class StatInterface(EltInterface):
         state_txt: NodeVar[str]  = ""
         state_group: NodeVar[str] = ""
         error_txt: NodeVar[str]  = ""  
-    
-    ERROR = ERROR # needed for error_txt alias 
-    SUBSTATE = SUBSTATE # needed for substate_txt node alias
-    STATE = STATE 
-
-    @NodeAlias1.prop("is_operational", "state")
-    def is_operational(self, state: int) -> bool:
-        """ True if device is operational """
-        return state == self.STATE.OP
-    
-    @NodeAlias1.prop("is_not_operational", "state")
-    def is_not_operational(self, state: int) -> bool:
-        """ True if device not operational """
-        return state == self.STATE.NOTOP
-    
-    @NodeAlias1.prop("is_ready", "substate")
-    def is_ready(self, substate: int) -> bool:
-        """ True if device is ready """
-        return substate == self.SUBSTATE.NOTOP_READY
-    
-    @NodeAlias1.prop("is_not_ready", "substate")
-    def is_not_ready(self, substate: int) -> bool:
-        """ True if device is not ready """
-        return substate == self.SUBSTATE.NOTOP_NOTREADY
-    
-    @NodeAlias1.prop("is_in_error", "substate")
-    def is_in_error(self, substate: int) -> bool:
-        """ -> True is device is in error state:  NOP_ERROR or OP_ERROR """
-        return substate in [self.SUBSTATE.NOTOP_ERROR, self.SUBSTATE.OP_ERROR]
-    
-    @NodeAlias1.prop("substate_txt", "substate")
-    def substate_txt(self, substate: int) -> str:
-        """ Return a text representation of the substate """
-        return self.SUBSTATE(substate).txt
-    
-    @NodeAlias1.prop("substate_group", "substate")
-    def substate_group(self, substate: int):
-        """ Return the afiliated group of the substate """
-        return self.SUBSTATE(substate).group
-
-    
-    @NodeAlias1.prop("state_txt", "state")
-    def state_txt(self, state: int) -> str:
-        """ Return a text representation of the state """
-        return self.STATE(state).txt
-
-    @NodeAlias1.prop("state_group", "state")
-    def state_group(self, state: int):
-        """ Return the afiliated group of the state """
-        return self.STATE(state).group
-    
-    @NodeAlias1.prop("error_txt", "error_code")
-    def error_txt(self, error_code: int) -> str:
-        """ Return the text representation of an error or '' if no error """
-        return self.ERROR(error_code).txt
-    
-    @NodeAlias1.prop("error_group", "error_code")
-    def error_group(self, error_code: int) -> str:
-        """ Return the text representation of an error or '' if no error """
-        return GROUP.ERROR if error_code else GROUP.OK
-
-
 

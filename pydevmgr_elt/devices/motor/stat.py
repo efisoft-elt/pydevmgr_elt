@@ -2,7 +2,8 @@
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
-
+from pydevmgr_elt.devices.motor.positions import PositionsConfig
+from typing import Optional
 from enum import Enum
 Base = EltDevice.Stat
 
@@ -177,6 +178,8 @@ class MotorStat(Base):
     ERROR = ERROR
     SUBSTATE = SUBSTATE
     
+
+
     class Config(Base.Config):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
@@ -209,6 +212,26 @@ class MotorStat(Base):
         status: ND = NC(suffix='stat.nStatus' )
         substate: ND = NC(suffix='stat.nSubstate' )
         vel_actual: ND = NC(suffix='stat.lrVelActual' )
+    
+        mot_positions: Optional[PositionsConfig] = None
+        
+    # for this one we redefine the init so it does accept a mot_positions argument
+    def __init__(self, *args, mot_positions: Optional[dict] = None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.config.mot_positions = mot_positions or PositionsConfig()
+
+        
+    # we need the mot_position from te parent (a Motor Device)
+    # just add it to the dictionary create by  the super
+    @classmethod
+    def new_args(cls, parent, config):
+        d = super().new_args(parent, config)
+        try:
+            mot_positions = parent.config.positions
+        except AttributeError:
+            mot_positions = {}
+        d['mot_positions'] = mot_positions
+        return d
 
     @NodeAlias1.prop(node="substate")
     def is_moving(self, substate):
@@ -220,12 +243,11 @@ class MotorStat(Base):
         """ -> True is axis is standstill """
         return substate == self.SUBSTATE.OP_STANDSTILL
     
-    _mot_positions = None# will be overwriten by Motor
     
     @NodeAlias1.prop(node="pos_actual")
     def pos_name(self, pos_actual):
-        if not self._mot_positions: return ''
-        positions = self._mot_positions
+        if not self.config.mot_positions: return ''
+        positions = self.config.mot_positions
         tol = positions.tolerance
         for pname, pos in positions.positions.items():
             if abs( pos-pos_actual)<tol:
@@ -276,3 +298,4 @@ class MotorStat(Base):
 
 if __name__ == "__main__":
     MotorStat( local=NC(parser=float) )
+    print("OK")

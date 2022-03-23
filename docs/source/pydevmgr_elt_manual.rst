@@ -10,23 +10,23 @@ What is it ?
 **pydevmgr_elt** package has two modules : 
     
 - :mod:`pydevmgr_elt` detailed in this documentation. Tools dedicated for ELT low level framework devices communication. 
-        So far Motor,  Drot, Adc, Shutter, Lamp are natively included. 
+        So far Motor,  Drot, Adc, Shutter, Lamp are natively included with in addition the CcsSim and Time. 
 - :mod:`pydevmgr_elt_qt` provides simple Widgets and guis for some ELT devices
 
 .. note:: 
     
-   **About v0.2 vs v0.3**
+   **About v0.2 vs v0.4**
    The deprecated version 0.2 of this module was included in a pydevmgr package. Now, the package is independant and
-   using two other subpackage `pydevmgr_core`_ core engine for pydevmgr and `pydevmgr_ua`_  
+   using two other subpackages `pydevmgr_core`_ core engine for pydevmgr and `pydevmgr_ua`_ for generic OPC-UA com  
    
-   In its current version 0.3, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
+   In its current version 0.4, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
    to communicate with the OPC-UA server. The core engine can now be used for other purposes then communicating with 
    ELT devices or OPC-UA (e.g. serial com, custom websockets, etc ...)
    
    Compare to v0.2 Some base classes as been renamed, e.g.  UaDevice -> EltDevice.  UaDevice is now part of `pydevmgr_ua`_. 
-   For the end user who just want to move motors the change in version 0.3 should not realy matters with two exceptions:
+   For the end user who just want to move motors the change in version 0.4 should not realy matters with two exceptions:
 
-    - :func:`pydevmgr_elt.open_elt_device` is replacing `open_device`
+    - :func:`pydevmgr_elt.open_elt_device`  is replacing `open_device`
     - :func:`pydevmgr_elt.open_elt_manager` is replacing the `open_manager`
    
         
@@ -36,38 +36,39 @@ What is it ?
 If you do not know what is ELT software, this page is probably not for you.
 
 
-In short **pydevmgr_elt** provides auto-built python objects to communicate to PLCs ELT devices via OPC-UA. 
+In short **pydevmgr_elt** provides python objects to communicate directly to PLCs ELT devices via OPC-UA. 
 
 **pydevmgr_elt** is a Python module to be used as substitute of a real device manager running in a ELT-Software environment.
 The module is somehow in between a simple python opc-ua script client and a real integrated device manager.
 
-**pydevmgr_elt** is not intended to be ran under a ELT software devenv but instead to replace it for some use cases during ait test and lab activities. 
+**pydevmgr_elt** is not intended to be ran under a ELT software devenv but instead to replace it for some use cases during AIT test and lab activities. 
 Basically for intermediate hardware test for which it does not make sens to setup a full ELT instrument workstation. 
 It does basically replace the ELT software device manager python client when it is not available. It was designed to be
-used by non-software engineers in order to easily scrips sequences to integrate,tune and control hardwares. 
+used by non-software engineers in order to easily scrips sequences to integrate, tune and control hardwares. 
 
 **pydevmgr_elt** was mainly developed with the following goal in mind :
 
-- **Building AIT and integration scripts** when the ESO high level framework cannot be used or is not ready. For
-  instance, making sequence of movement of a motor with a lab serial temperatur sensor plugged on a computer.
-- **Build Engineering tools and small guis** which can be run from any computer and can be edited by non-software engineers.
+- **Building AIT and integration scripts** when the ESO high level framework cannot be used or is not ready.
+  Typicaly, for instance,  when one have a test bench with some motors ans wants to do some scripts in order to characterise the hardware. 
+- **Build Engineering tools and small guis** which can be run from any computer and can be edited by non-software engineers during hardware integration.
 - **Prototyping of special devices**  writing down the basic skeleton of special devices in a friendly python environment before being translated to a real ELT-Framework compatible special device. 
 - **Use simple GUIs** to drive standard or custom ESO devices from any computers. For instance, useful when electronics and PLC setup is done separately in an other institute but wants to script some motor movements. 
 
 
 **pydevmgr_elt** can use the `YAML`_ `configuration files`_ as defined by ESO (in ELT software version 2&3) to communicate with the PLC through OPC-UA. 
-This allows to reuse those configuration files directly in the ESO fcf software. 
+This allows to reuse those configuration files directly in the ESO fcf software. However the use of configuration file
+is not necessary.  
 
-Note that in future update of the ELT CII this configuration files will no longer be valid but it  
+Note that in future update of the ELT CII this configuration files will no longer be valid, I guess, but it  
 should not be a problem as long as low level software is unchanged, pydevmgr_elt will still work, 
-only the ability to copy past configuration files will be lost.  
+only the ability to copy past configuration files will be lost, not a big deal.  
 
 
 A `tins`_, a test instrument, is included in the source package. It contains the yaml files and a running 
 PLC project. The PLC project is not documented, see ESO FCS webpage for more information.  
 The Example in the documents are given for the "tins" but are adaptable to any configurations. 
 
-In the following doc Examples it is assumed that the `tins`_ is running on a OPC-UA server. One can easily
+In the following doc Examples, it is assumed that the `tins`_ is running on a OPC-UA server. One can easily
 adapt the Example from any working projects. Also it is assumed that the yml files of the `tins`_ are accessible through
 the ``$CFGPATH`` environment variable and they are edited to match the current hardware configuration (address,
 namespace, etc).  
@@ -165,20 +166,33 @@ Vocabulary
    located in a distant location (OPC-UA, A data base, a serial com ...). 
    In **pydevmgr_elt** :class:`pydevmgr_elt.EltNode` are dedicated for the communication through OPC-UA. 
 - ``Rpc``  
-   Remote Procedure Call object. In **pydevmgr_elt** :class:`pydevmgr_elt.EltRpc`
+   Remote Procedure Call object. In **pydevmgr_elt** :class:`pydevmgr_elt.EltRpc` is sending action request trhough
+   OPC-UA
 - ``Interface``  
-   This is just a groupment of Nodes or Rpcs. Interface object can create nodes on-the-fly based on the map file.
-   It hold a communication to the server and information to build Nodes. In **pydevmgr_elt** :class:`pydevmgr_elt.EltInterface`
-   is dedicated for grouping :class:`pydevmgr_elt.EltNode` by they  kind. e.g. ``stat`` nodes, ``cfg`` nodes etc ... 
-   :class:`pydevmgr_elt.EltRpcInterface` is the interface for :class:`pydevmgr_elt.EltRpc`. :class:`pydevmgr_elt.EltInterface`
-   and :class:`pydevmgr_elt.EltRpcInterface` uses a map dictionary of python attribute name/ OPC-UA suffix pairs 
-   to build nodes or rpcs. It has also an OPC-UA prefix and a client to communicate to OPC-UA.
+   This is just a groupment of Nodes and/or Rpcs. Interface object can create nodes on-the-fly based on the map file.
+   It hold a communication to the server and information to build Nodes. Most of the :class:`pydevmgr_elt.EltDevice`
+   objects have three interfaces: ``stat``, ``cfg`` and ``rpcs`` which are grouping status nondes, config nodes and RPCs
+   respectively. 
 - ``Device`` 
    Device is the object representation of an hardware (or software) entity. It holds **Interfaces**, 
-   eventually **nodes** and methods to send actions. It cat have also other Device instance (e.g. :class:`pydevmgr_elt.Adc` has
+   eventually **nodes** and methods to send actions. It can have also other Device instance (e.g. :class:`pydevmgr_elt.Adc` has
    two :class:`pydevmgr_elt.Motor` devices)
 - ``Manager``  
     Is a collection of devices. It can have also nodes, rpc and interfaces. See :class:`pydevmgr_elt.EltManager`   
+
+
+Engine 
+------
+
+The `pydevmgr_core`_ engine documentation is still missing but in short: 
+
+Each pydevmgr objects (see above) are made of a configuration and some runtime variables such as a ua-client that goes
+from the device to the nodes during creation. The configuration dictate how the Object should behave, instanciating two 
+ object (with similar classes) with the same configuration shall result to exactly the same behavior. 
+Each object has a ``.new`` method. Its role is to build the object within the context of its parent. For instance, when 
+creating an interface from a device the Ua communication object is transfered, as well as when creating a node from the
+interface. 
+
 
 
 Quick Start
@@ -202,33 +216,41 @@ And
 
 
 Each device class has its own ``.Config`` attribute  which basically contains what a yaml configuration 
-file (as defined by ESO) contains, this is  :class:`pydantic.BaseModel`.
+file (as defined by ESO) contains plus other stuff used by pydevmgr, those are  :class:`pydantic.BaseModel`.
 
-.. code-block:: python
-
-    from pydevmgr_elt import Motor 
-    m1_config = Motor.Config(address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')
-    motor1 = Motor("motor1", config=m1_config) 
-    
-    try:
-       motor1.connect()
-       print( "MOTOR1 POS", motor1.stat.pos_actual.get() )
-    finally:
-       motor1.disconnect()
-
-As a short-cut one can also use keyword parameters of the :class:`pydevmgr_elt.UaDevice` declaration (here is a :class:`pydevmgr_elt.Motor`) to define the configuration:
 
 .. code-block:: python
 
     from pydevmgr_elt import Motor 
     motor1 = Motor("motor1", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')
 
-    
-If no ``mapfile`` is given a default mapping is loaded. Two look at the list of accessible nodes for instance : 
+Above the keyword arguments are part of the configuration of the device. We can decompose the creation as follow  
 
 .. code-block:: python
 
-    >>> list(  motor1.nodes )                                                                                                                                                                   
+    from pydevmgr_elt import Motor 
+    m1_config = Motor.Config(address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')
+    motor1 = Motor("motor1", config=m1_config) 
+
+And then use it:
+
+.. code-block:: python
+   
+    try:
+       motor1.connect()
+       print( "MOTOR1 POS", motor1.stat.pos_actual.get() )
+    finally:
+       motor1.disconnect()
+
+    
+To now the list of 'children'  available on a device (or any pydevmgr object)  one can use the ``.find`` method :  
+
+.. code-block:: python
+
+    from pydevmgr_elt import Motor, BaseInterface, BaseNode 
+
+    motor1 = Motor("motor1", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')
+    list(  motors.find( BaseNode, -1 ) )                                                                                                                                                        
     
 The :class:`pydevmgr_elt.EltDevice.Config` configuration structure is used by the :meth:`pydevmgr_elt.EltDevice.configure`
 method which will send the proper configuration parameters to the PLC.   
@@ -237,9 +259,6 @@ If you are using a configuration file the simplest way is to use the :func:`open
 open a device with the right class according to the type defined inside the configuration file :
 
 
-.. warning:: 
-
-    Before v0.3 :func:`open_elt_device` was open_device 
 
 .. code-block:: python
 
@@ -257,8 +276,8 @@ An other use case, load a configuration and change some parameters:
     conf.initialisation.sequence = ['FIND_LHW']
     conf.initialisation.FIND_LHW.value1 = 3.0                                                    
     conf.initialisation.FIND_LHW.value2 = 1.0 
-    
-    motor1 = Motor('motor1', conf)
+   
+    motor1 = Motor('motor1', config=conf)
     try:
        motor1.connect()
        motor1.configure() # send all configuration parameters to PLC 
@@ -320,8 +339,8 @@ A manager (collection of several devices) can be also created without the need o
     from pydevmgr_elt import UaManager, Motor
     
     devices = {
-       'motor1' :   Motor("motor1", Motor.Config(address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')), 
-       'motor2' :   Motor("motor2", Motor.Config(address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor2'))
+       'motor1' :   Motor("motor1", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1'), 
+       'motor2' :   Motor("motor2", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor2')
        }   
     
     mgr = EltManager('', devices=devices)
@@ -361,15 +380,31 @@ states are correct to execute the next method(s).
 For instance :
 
 .. code-block:: python
-
+   
+   # Do not Do That 
    >>> tins.adc1.init()
    >>> tins.adc1.enable()
 
 **Will not work** because ``enable`` is called right after ``init``, before the hardware is finishing 
 its initialisation.
 
-The :func:`pydevmgr_core.wait` function is used to wait for some condition to be true, in the case above we should 
-wait that the device is initialised :  
+Instead: 
+
+.. code-block:: python
+   
+   # Do 
+   >>> wait( tins.adc1.init() )
+   >>> wait( tins.adc1.enable() )
+
+What does return the init and enable is a Node to be checked to figure out if the requested action has been finished.  
+
+E.g: In the exemple above ``init`` is returning the node ``tins.adc1.stat.initialised`` 
+
+
+The :func:`pydevmgr_elt.wait` accept also a list of Node (or callable). By default 
+it will wait that all input callables or node return ``True``. But the logic can be changed. 
+
+
 
 .. code-block:: python
 
@@ -379,82 +414,24 @@ wait that the device is initialised :
    mgr.connect()
    mgr.configure() # configure all devices
    
-   mgr.adc1.init()
-   mgr.drot1.init()
+   wait( [mgr.adc1.init(), mgr.drot1.init()])
+   wait( [mgr.adc1.enable(), mgr.dot1.enable()] 
+
+  
    
-   wait([mgr.adc1.stat.initialised, mgr.drot1.stat.initialised])
-   
-   mgr.adc1.enable()
-   mgr.drot1.enable()
    
 
-:func:`pydevmgr_elt.wait` accept a list of Nodes (node values are fetch from server) or callable, by default 
-it will wait that all callables or node return ``True``. But the logic can be changed. All nodes are requested 
-(in one call per server) at a configurable period (default is 0.1s).  
-
-One can mix regular function and boolean node, but if a function needs other nodes it is preferable to
-use a :class:`pydevmgr_core.NodeAlias` (more on this bellow): 
-
-.. code-block:: python
-
-    >>> inpos = lambda : abs(tins.adc1.motor1.stat.pos_actual.get()-4.34)<0.01
-    >>> wait( [inpos], timeout=60 )
-
-Shall be written instead :
-
-.. code-block:: python
-    
-    inpos = nodealias1( node=tins.adc1.motor1.stat.pos_actual)(lambda pos: abs(pos-4.34)<0.01)
-    >>> wait( [inpos], timeout=60 )
-
-
-The nodea lias can be also created using decorator
-
-.. code-block:: python
-    
-    @nodealias(nodes=[tins.adc1.motor1.stat.pos_actual])
-    def inpos(pos):
-        return abs(pos - 4.34)<0.01
-
-An other exemple in 2d :
-
-.. code-block:: python
-    
-    @nodealias(nodes=[tins.adc1.motor1.stat.pos_actual, tins.adc1.motor2.stat.pos_actual)
-    def is_centered(pos_x, poz_y):
-        return (pos_x-4.34)**2 + (pos_y-0.56)**2 < 0.01*2
-
+All 'check' nodes are requested (in one call per server) at a configurable period (default is 0.1s, 10Hz).  
 
 Wait has a timeout option. If time exceed timeout (in seconds) an exception is raised.
 
-An other keyword of ``wait`` is ``lag`` which add x seconds before starting to check nodes values.  
+An other keyword of ``wait`` is ``lag`` which add x seconds before starting to check nodes values. This can be usefull
+to make sure that the requested action had time to start, for instance when moving motors: 
 
-A nice feature of pydevmgr: action methods of devices are returning a valid object 
-(node, nodealias, None or a function) for the wait function. 
-For instance:
+.. code-block:: python 
+   
+    wait( mgr.motor.move_abs(8,1.0) , lag=0.1 )
 
-- ``mgr.motor1.move_ads(5.1,1.0)`` is returning a  ``is_standstill`` node to check if the motor finished is movement. 
-- ``init()`` method will return a ``is_ready`` node.
-- ``init()`` of a manager will return a node to check if all device init has been done.
-- etc ...
-
-So following the Example above one can do : 
-
-.. code-block:: python
-
-    from pydevmgr_elt import open_elt_manager, wait
-    tins = open_elt_manager("tins/tins.yml")
-    
-    try:
-        tins.connect()
-        tins.configure()
-        
-        wait( tins.reset() ) # reset all devices 
-        wait( tins.init() )  # init all devices       
-        wait( [tins.adc1.enable(), tins.drot1.enable()] )  #enable only adc1 and drot1
-        wait( [tins.adc1.start_track(), tins.drot1.start_track('SKY')], lag=0.5) # start adc1 and drot1 tracking 
-    finally:
-        tins.disconnect_all()
 
 When the logic of the expecting "end of action" is too embigous, None is returned (None is ignored by wait). 
 One Example is the ``move_vel`` method of a motor there is no end on this action. 
@@ -478,7 +455,19 @@ Note, one can also use the :class:`AllTrue` node alias to combine node logic :
     >>> from pydevmgr_elt import AllTrue
     >>> all_standstill = AllTrue(nodes=[tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill]) 
     >>> wait( [all_standstill] )
-    
+
+A good practice would be also to add a node which check any errors and raise an exception in case of error, pydevmgr as
+this (in v>0.4): 
+
+.. code-block:: python
+
+   from pydevmgr import NodeAlias
+   
+   wait (  [mgr.motor1.move_abs(4.5, 0.8), mgr.motor1.move_abs(4.5, 0.8),  mgr.motor1.stat.noerror_check,  mgr.motor2.stat.noerror_check ] )         
+
+The noerror_check is a :class:`pydevmgr_core.NodeAlias` returning always True but raise an exception in case of error
+(non zero error_code). This allow to interupt the wait with an exception raised. 
+
 
 .. _configuration files: http://www.eso.org/~eeltmgr/ICS/documents/IFW_HL/sphinx_doc/html/manuals/fcf/src/docs/devmgr.html#configuration
 .. _YAML: https://yaml.org   
@@ -515,7 +504,7 @@ Dictionary based
      <NodeAlias key='motor2.substate_txt'>: 'OP_STANDSTILL',
      <NodeAlias key='motor1.substate_txt'>: 'OP_STANDSTILL'}
 
-Note on the Example above ``substate_txt`` is a :class:`pydevmgr_core.NodeAlias` it transforms the in substate (from the PLC) into a text. 
+Note on the Example above ``substate_txt`` is a :class:`pydevmgr_core.NodeAlias` it transforms the substate number (from the PLC) into a text. 
 In consequence the substate node is downloaded from PLC and added as well in the data dictionary.  
 
 Items of the data dictionary are node/value pairs. One can access  values with e.g. ``data[tins.motor1.stat.pos_actual]``. 
@@ -550,22 +539,20 @@ So a DataView can be used by a function for instance :
 a :class:`DataView` object is reflecting any change made in the root data except when a new node is added inside the root data dictionary. 
  
  
-Each ``.cfg`` and ``.stat`` interface have a ``.nodes`` property returning all the nodes in a list
+Each manager, device, interface objects has a find method used to loock for and return children recursively 
 
-One can also build the full list of native nodes :
+One can also build the full list of nodes :
 
 .. code-block:: python
+   from pydevmgr_core import BaseNode
+   
+   data = {}     
+   download( tins.find(BaseNode,-1), data )
+   
+In the exemple above find is loocking for BaseNode object, the -1 argument is the depth, a negative depth is infinit. 
 
-   >>> data = {}
-   >>> all_nodes = sum( ( list(d.stat.nodes) for d in tins.devices), [])
-   >>> download( all_nodes, data)
-   >>> len(data)
-   255
-  
-At home, connected to a slow window computer running TwinCat on the home box wifi it takes ~30ms to download 
-the 255 node values. Which is more than enough to build smooth 10Hz refreshed Guis for instance.
+    
 
- 
 Structure Base Model
 --------------------
 
@@ -587,7 +574,7 @@ Data Structure are :class:`BaseModel` of the excellent `PYDANTIC`_ module (it is
     motor1 = Motor( address="tpc.op://127.0.0.1:4841", prefix="MAIN.Motor1")    
     my_data =  SomeStatData()   
     dl = DataLink( motor1.stat, my_data)
-    
+
 Above, a call of ``dl.download()`` will trigger an update of ``my_data`` instance:
 
 
@@ -613,7 +600,16 @@ Similary this should also work
  
     >>> mot_stat_data = Motor.Data.StatData() #  Motor.StatInterface.Data() gives the same results 
     >>> dl = DataLink(mgr.motor1.stat, mot_stat_data)
-    >>> dl.download()  
+    >>> dl.download() 
+
+In version v0.4 the manager has a ``create_data_class`` method to create a Data class dynamicaly: 
+
+.. code-block:: python
+
+   Data = tins.create_data_class( tins.children(BaseDevice) )
+   data = Data()
+   dl = DataLink( tins, data )
+   
     
     
 :class:`DataLink` understand a hierarchic data structure:
@@ -633,7 +629,7 @@ Similary this should also work
         brake: NodeVar[bool] = False
     
     class MotData(BaseModel):
-        stat: StatData = StatData()
+        stat: StatDada = StatData()
         cfg: CfgData = CfgData()
         name: str = ""
         

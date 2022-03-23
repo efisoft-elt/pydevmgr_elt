@@ -99,7 +99,7 @@ class AdcStat(Base):
     # Add the constants to this class 
     ERROR = ERROR
     SUBSTATE = SUBSTATE
-    
+    MODE = MODE 
     class Config(Base.Config):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
@@ -157,7 +157,6 @@ class AdcStat(Base):
         local:           NV[bool] =   False  
 
         track_mode: NV[int] = 0  
-        track_mode_txt: NV[str] = ""
         is_moving: NV[bool] = False
         is_standstill : NV[bool] = False 
         is_presetting : NV[bool] = False

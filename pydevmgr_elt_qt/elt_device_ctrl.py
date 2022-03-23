@@ -46,7 +46,7 @@ class EltDeviceData(BaseData):
     StatData = EltDeviceStatData # save StatData class here 
     
     stat: StatData = StatData()
-    ignored: NodeVar[bool] = False
+    is_ignored: NodeVar[bool] = False
     name: str = "" # device name  
                 
 class EltDeviceCtrlUi(QFrame):
@@ -84,8 +84,8 @@ class EltDeviceCtrl(BaseUiLinker):
         self.outputs.error.set( (stat.error_code, stat.error_txt, stat.error_group) )
         
         if self.config.show_ignore_check_box:
-            if self.inputs.ignored.get() != data.ignored:             
-                self.inputs.ignored.set_input(data.ignored)    
+            if self.inputs.ignored.get() != data.is_ignored:             
+                self.inputs.ignored.set_input(data.is_ignored)    
                 
         
     def setup_ui(self, device, data):   
@@ -102,8 +102,8 @@ class EltDeviceCtrl(BaseUiLinker):
             
     def setup_ignore_checkbox(self, device, data):
         w = self.widget.check
-        w.setChecked(not device.ignored.get())                
-        self.actions.add(device.ignored.set, [self.inputs.ignored.get]).connect_checkbox(w)
+        w.setChecked(not device.is_ignored.get())                
+        self.actions.add(device.is_ignored.set, [self.inputs.ignored.get]).connect_checkbox(w)
     
     def setup_actions(self, device, data):
         wa = self.widget.state_action

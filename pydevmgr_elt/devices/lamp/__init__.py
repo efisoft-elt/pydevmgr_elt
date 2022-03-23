@@ -22,7 +22,7 @@ class LampCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class LampConfig(Base.Config):
-    Ctrl = LampCtrlConfig
+    CtrlConfig = LampCtrlConfig
     
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -31,7 +31,7 @@ class LampConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Lamp"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()

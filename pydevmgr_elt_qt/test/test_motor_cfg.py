@@ -6,6 +6,7 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import  QtCore
 
+_online = True
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
@@ -14,16 +15,19 @@ if __name__=="__main__":
     downloader = Downloader()
     
     motor = Motor.from_cfgfile("tins/motor1.yml", path="motor1", key="motor1")
+    # motor = Motor(address="opc.tcp://ipag-plc1:4840", prefix="Motor1")
     
     ctrl = devLinker.connect(downloader, motor)
     
     # To refresh the gui we need a timer and connect the download method 
     timer = QtCore.QTimer()
     timer.timeout.connect(downloader.download)
-    # 10Hz GUI is nice
-    timer.start(100)
+
+    if _online:
+        # 10Hz GUI is nice
+        timer.start(100)
     
-    motor.connect()
+        motor.connect()
     try:
         app.exec_()
     finally:

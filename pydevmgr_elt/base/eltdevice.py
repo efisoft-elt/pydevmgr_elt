@@ -10,7 +10,8 @@ from .eltstat import StatInterface
 
 from enum import Enum
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
-from pydevmgr_core import KINDS, get_device_class, upload, NodeVar, open_device, record_class, get_class, NodeAlias, NodeAlias1, LocalNode
+from pydevmgr_core import (KINDS, get_device_class, upload, NodeVar, open_device, record_class, get_class, NodeAlias,
+NodeAlias1, LocalNode, GenInterface)
 from pydevmgr_ua import UaDevice
 from typing import Optional, Type
 import logging
@@ -45,7 +46,10 @@ class CtrlConfig(BaseModel):
         
 class EltDeviceConfig(UaDevice.Config):
     CtrlConfig = CtrlConfig
-    
+    Interface = EltInterface.Config
+    Node = EltNode.Config
+    Rpc = EltRpc.Config
+
     type: str = "Elt"
     address     : AnyUrl         = Field( default_factory = lambda : eltconfig.default_address)    
     fits_prefix : str            = ""    
@@ -54,20 +58,54 @@ class EltDeviceConfig(UaDevice.Config):
     mapfile: Optional[str] = ""
     
 
-    Stat = EltInterface.Config
+    Stat = StatInterface.Config # comes with some default   
     Cfg  = EltInterface.Config
     Rpcs = EltInterface.Config
     
 
-    stat : Stat = Stat()
-    cfg  : Cfg  = Cfg() 
-    Rpcs : Rpcs = Rpcs()
+    stat : GenInterface = Stat() # type is a generic interface so the Base EltDevice can almost function with any interfaces
+    cfg  : GenInterface = Cfg() 
+    Rpcs : GenInterface = Rpcs()
     
-    auto_build = True
     class Config: # BaseModel configuration of pydantic 
         # ignore/allow extra stuff for auto setup
         extra = 'allow'
     
+
+    @root_validator(pre=True)
+    def _convert_map_file(cls, values):
+        """ when a map file is set it is load to replace the defaults suffix of the associated node """
+        
+        # -------------------------------------------------- 
+        # Warning This is realy important to delete the mapfile from the dictionary 
+        # otherwhise at each attribute assignment of the model the mapfile will be evaluated ! 
+        mapfile = values.pop('mapfile', None)
+        # --------------------------------------------------
+        
+        if mapfile:
+
+            dtype = values.get('type', cls.__fields__['type'].default)
+
+    
+            map_d = io.load_map(mapfile)
+            try:
+                map = map_d[dtype]
+            except KeyError:
+                raise ValueError("The associated map file does not contain type %r"%dtype)
+            for k_i, d_i in map.items():
+                if k_i == "rpc":
+                    # rpcs = EltInterface.Config.parse_obj({ k:EltRpc.Config(suffix=s ) for k, s in d_i.items()  })
+                    rpcs = { k:{'suffix':s}   for k, s in d_i.items() }
+                    values['rpcs'] = rpcs
+                else:
+                    # interface =  EltInterface.Config.parse_obj( { k:EltNode.Config(suffix=s ) for k, s in d_i.items()} )
+                    interface = { k:{'suffix':s}   for k, s in d_i.items() }
+
+                    values[k_i] = interface
+
+        return values
+
+
     @validator('address', pre=True)
     def _map_host(cls, url):
         """ replace the address on-the-fly if any defined in host_mapping dictionary """
@@ -75,10 +113,7 @@ class EltDeviceConfig(UaDevice.Config):
     
     @classmethod 
     def from_cfgdict(cls, config_dict):
-        if config_dict.get('version', None) == 'pydevmgr':
-            return config_dict
-        config_dict = convert_eso_device_config(config_dict) 
-        return cls.parse_obj(config_dict)
+        return cls.parse_obj(config_dict) 
     
     def cfgdict(self, exclude=set()):
         if self.version == 'pydevmgr':
@@ -159,14 +194,18 @@ class CfgInterface(EltInterface):
 
 @record_class
 class EltDevice(UaDevice):
+    # allow wthe creation of chidren attribute from what is defined in config
+    _auto_build_object = True 
+
+
     Config = EltDeviceConfig
     class Data(UaDevice.Data):
-        StatData = StatInterface.Data
-        CfgData = CfgInterface.Data
+        Stat = StatInterface.Data
+        Cfg  = CfgInterface.Data
         
-        stat: StatData = StatData()
-        cfg: CfgData = CfgData()
-        ignored: NodeVar[bool] = False
+        stat: Stat = Stat()
+        cfg: Cfg = Cfg()
+        is_ignored: NodeVar[bool] = False
      
     Node = EltNode
     Rpc = EltRpc
@@ -307,9 +346,9 @@ class EltDevice(UaDevice):
         # get values from the ctrl_config Config Model
         # do not include the default values, if they were unset, the PLC will use the default ones
         values = self.config.ctrl_config.dict(exclude_none=True, exclude_unset=exclude_unset)
-        cfg_dict = {self.cfg.get_node(k):v for k,v in values.items()}
-        cfg_dict[self.ignored] = self.config.ignored 
-        cfg_dict.update({self.cfg.get_node(k):v for k,v in kwargs.items()})
+        cfg_dict = {getattr(self.cfg,k):v for k,v in values.items()}
+        cfg_dict[self.is_ignored] = self.config.ignored 
+        cfg_dict.update({ getattr(self.cfg,k):v for k,v in kwargs.items()})
         return cfg_dict
 
     def configure(self, exclude_unset=True, **kwargs):

@@ -3,10 +3,11 @@ from pydevmgr_elt.devices.adc.cfg  import AdcCfg as Cfg
 from pydevmgr_elt.devices.adc.rpcs import AdcRpcs as Rpcs
 
 from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class, Defaults, RpcError, ksplit
+from pydevmgr_core import record_class, Defaults, RpcError, kjoin, BaseDevice
 from typing import Optional, Any, Dict, List
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt import io
+from pydevmgr_core import path_walk_item , NegNode
 from pydantic import BaseModel 
 
 Base = EltDevice
@@ -14,12 +15,19 @@ Base = EltDevice
 
 class AxisIoConfig(BaseModel):
     """ Configuration for one Axis """
+    Motor = Motor.Config
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Data Structure 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     prefix  : str = ""
     cfgfile : str = ""
-    
+    path: Optional[str] = None
+    def load(self):
+        cfg = io.load_config(self.cfgfile)
+        if self.path is not None:
+            cfg = path_walk_item(cfg, self.path)
+            
+        return Motor.Config.parse_obj(cfg)
 
 class AdcCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,7 +40,7 @@ class AdcCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class AdcConfig(Base.Config):
-    Ctrl = AdcCtrlConfig
+    CtrlConfig = AdcCtrlConfig
     
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -41,41 +49,48 @@ class AdcConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Adc"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
     rpcs: Rpcs = Rpcs()
     
-    # Add the motors here 
-    motor1: Defaults[Motor.Config] = Motor.Config()
-    motor2: Defaults[Motor.Config] = Motor.Config()
-
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
     @classmethod
-    def from_cfgdict(cls, d):
-        if d.get("version", None)=="pydevmgr":
-            return cls.parse_obj(d)
-        # patch to be copatible with ESO config files 
-        ctrl = cls.Ctrl.parse_obj ( d.get('ctrl_config', {}))
-        if ctrl.axes:
-            axis1, axis2 = ctrl.axes
-            axis1_io = AxisIoConfig(**d[axis1])
-            axis2_io = AxisIoConfig(**d[axis2])
-            # d['motor1'] = io.load_config(axis1_io.cfgfile)[axis1_io.prefix]
-            # d['motor2'] = io.load_config(axis2_io.cfgfile)[axis2_io.prefix]
-            # seems that it the rules that the name in this file is the name in the 
-            # motor config file 
-            d['motor1'] = io.load_config(axis1_io.cfgfile)[axis1]
-            d['motor2'] = io.load_config(axis2_io.cfgfile)[axis2]
+    def validate_extra(cls, name, extra, values):
+        ctrl = values['ctrl_config']
+        if name in ctrl.axes:
+            if "cfgfile" in extra:
+                axis_io = AxisIoConfig( path=name, **extra )
+                # extra = cls.Motor.parse_obj( io.load_config(axis_io.cfgfile)[name] )
+                # extra = cls._Motor.parse_obj( io.load_config(axis_io.cfgfile)[name]  )
+                extra = axis_io.load()
 
+            else:
+                extra = super().validate_extra(name, extra, values)
+                if not isinstance(extra, BaseDevice.Config):
+                    raise ValueError(f"axis {name} is not a device")
+        return extra   
+    
+    @property
+    def motor1(self):
+        axis =  self.ctrl_config.axes[0]
+        try:
+            return self.__dict__[axis]
+        except KeyError:
+            raise ValueError(f"The axis refered as {axis!r} is not in configuration")
+    
+    
+    @property
+    def motor2(self):
+        axis =  self.ctrl_config.axes[1]
+        try:
+            return self.__dict__[axis]
+        except KeyError:
+            raise ValueError(f"The axis refered as {axis!r} is not in configuration")
 
-
-            del d[axis1]
-            del d[axis2]    
-        return d
-
+    
 @record_class(overwrite=True)
 class Adc(Base):
     """ ELt Standard Adc device """
@@ -95,15 +110,24 @@ class Adc(Base):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        #return 
         # at minima we can copy the IP address to the motor if empty 
         self.config.motor1.address = self.config.address
         self.config.motor2.address = self.config.address
         # add set some default prefix if they are empty 
-        if not self.config.motor1.prefix:
-            self.config.motor1.prefix = ksplit( self.config.prefix,"motor1")
+        # using __dict__ here so assignment is not checked 
+        if not self.motor1.config.prefix:
+            self.motor1.config.__dict__['prefix'] = kjoin( self.config.prefix,"motor1")
         if not self.config.motor2.prefix:
-            self.config.motor2.prefix = ksplit(self.config.prefix, "motor2")
+            self.motor2.config.__dict__['prefix'] = kjoin(self.config.prefix, "motor2")
+        
+    # @property
+    # def motor1(self):
+    #     return getattr(self, self.config.ctrl_config.axes[0])
 
+    # @property
+    # def motor2(self):
+    #     return getattr(self, self.config.ctrl_config.axes[1])
         
 
     @property
@@ -131,8 +155,8 @@ class Adc(Base):
         
         ctrl_config = config.ctrl_config
         # just update what is in ctrl_config, except axes      
-        cfg_dict.update( {self.cfg.get_node(k):v for k,v in ctrl_config.dict().items() if k not in ["axes"]} ) 
-        cfg_dict.update( {self.cfg.get_node(k):v for k,v in  kwargs.items() } )
+        cfg_dict.update( {getattr(self.cfg, k):v for k,v in ctrl_config.dict().items() if k not in ["axes"]} ) 
+        cfg_dict.update( {getattr(self.cfg, k):v for k,v in  kwargs.items() } )
         return cfg_dict
     
     def init(self) -> Base.Node:
@@ -148,6 +172,10 @@ class Adc(Base):
         """ Stop all ADC motions """
         self.rpcs.rpcStop.rcall()
     
+    def stop_track(self) -> None:
+        self.rpcs.rpcStopTrack.rcall()
+        return NegNode(node=self.stat.is_tracking)
+
     def start_track(self, angle=0.0) -> Base.Node:
         """ Start tracking (AUTO mode)
         
@@ -234,10 +262,10 @@ class Adc(Base):
 
 
 if __name__ == "__main__":
-    adc = Adc('adc')
-    
+    adc = Adc('adc')    
     from pydevmgr_elt import open_elt_device
     
     adc = open_elt_device('tins/adc1.yml', 'adc1')
     print(adc.motor1.config.address)
+    
     print("OK")

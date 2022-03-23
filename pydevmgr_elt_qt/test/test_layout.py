@@ -93,7 +93,7 @@ if __name__=="__main__":
     downloader = Downloader()
     
     ctrl = mvl.connect( downloader, 
-                        list(d for d in manager.devices() if d.config.type!="Piezo" ),
+                        list(d for d in manager.devices if d.config.type!="Piezo" ),
                         data
                     )
     

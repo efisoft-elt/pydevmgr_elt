@@ -99,10 +99,15 @@ class DrotStat(Base):
         # all configured node will be accessible by the Interface
 
         # All other nodes are similar to Drot
-        dir_sign: ND = NC(suffix='cfg.nDirSign', parser='UaInt32')
-        focus_sign: ND = NC(suffix='cfg.nFocusSign', parser='UaInt32')
-        trk_period: ND = NC(suffix='cfg.nMinSkipCycles', parser='UaInt32')
-       
+        state:            ND = NC (suffix="sm.nState")
+        substate:         ND = NC (suffix="sm.nSubstate")
+        initialised:      ND = NC (suffix="bInitialised")
+        track_mode:       ND = NC (suffix="nMode")
+        alpha:            ND = NC (suffix="apparent.alpha")
+        delta:            ND = NC (suffix="apparent.delta")
+        angle_on_sky:     ND = NC (suffix="lrAngleOnSky")
+        
+
 
     # We can add some nodealias to compute some stuff on the fly 
     # If they node to be configured one can set a configuration above 
@@ -124,10 +129,10 @@ class DrotStat(Base):
     # Node Alias here     
     # Build the Data object to be use with DataLink, the type and default are added here 
     class Data(Base.Data):
-        dir_sign: NV[int] = 1
-        focus_sign: NV[int] = 1
-        trk_period: NV[int] = 10
-        pass
-
+        track_mode: NV[int] = 0
+        alpha: NV[float] = 0.0
+        delta: NV[float] = 0.0 
+        angle_on_sky: NV[float] = 0.0 
+        
 if __name__ == "__main__":
     DrotStat( )

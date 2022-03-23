@@ -26,7 +26,7 @@ class ShutterCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class ShutterConfig(Base.Config):
-    Ctrl = ShutterCtrlConfig
+    CtrlConfig = ShutterCtrlConfig
     
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -35,7 +35,7 @@ class ShutterConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Shutter"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     
     cfg: Defaults[Cfg] = Cfg()
     stat: Defaults[Stat] = Stat()

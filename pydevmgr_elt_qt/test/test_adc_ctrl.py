@@ -13,7 +13,7 @@ if __name__=="__main__":
     devLinker.widget.show()
     downloader = Downloader()
     
-    device = open_device("tins/adc1.yml", key="adc1")
+    device = open_device("tins/adc1.yml", "adc1")
     
     ctrl = devLinker.connect(downloader, device)
     

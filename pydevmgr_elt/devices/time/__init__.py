@@ -20,7 +20,7 @@ class TimeCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class TimeConfig(Base.Config):
-    Ctrl = TimeCtrlConfig
+    CtrlConfig = TimeCtrlConfig
     
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -29,7 +29,7 @@ class TimeConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Time"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()

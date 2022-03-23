@@ -18,7 +18,7 @@ class PiezoCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class PiezoConfig(Base.Config):
-    Ctrl = PiezoCtrlConfig
+    CtrlConfig = PiezoCtrlConfig
     
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -27,7 +27,7 @@ class PiezoConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Piezo"
-    ctrl_config : Ctrl= Ctrl()
+    ctrl_config : CtrlConfig= CtrlConfig()
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()

@@ -8,9 +8,9 @@ from .elt_device_cfg import EltDeviceCfg
 import math 
 
 class MotorCfgData(EltDeviceCfg.Data):
-    CfgData = Motor.Data.CfgData
+    Cfg = Motor.Data.Cfg
     
-    cfg: CfgData = CfgData()     
+    cfg: Cfg = Cfg()     
 
 
 
@@ -52,7 +52,7 @@ class InitSeq(InputOutputs.Base):
                 v1 = math.nan
             
             try:
-                v2 = float(input_value1.text())
+                v2 = float(input_value2.text())
             except (TypeError, ValueError):
                 v2 = math.nan
  
@@ -105,14 +105,14 @@ class MotorCfg(EltDeviceCfg):
             self.io.keys[k]  = self.io.Int(get("in_"+k), get(k))
             
         
-        self.io.keys['axis_type'] = self.io.Enum(Motor.AXIS_TYPE, self.widget.in_axis_type, self.widget.axis_type)
+        self.io.keys['axis_type'] = self.io.Enum(Motor.Cfg.AXIS_TYPE, self.widget.in_axis_type, self.widget.axis_type)
         
         self.io.sequences = {}
-        names = [a.name for a in Motor.INITSEQ]
+        names = [a.name for a in Motor.Cfg.INITSEQ]
         for i in range(1,11):
             wa = get(f"init{i}_action")
             wa.addItems(names)
-            self.io.sequences[i] = InitSeq(Motor.INITSEQ, 
+            self.io.sequences[i] = InitSeq(Motor.Cfg.INITSEQ, 
                                            wa,
                                            get(f"init{i}_value1"),
                                            get(f"init{i}_value2"),

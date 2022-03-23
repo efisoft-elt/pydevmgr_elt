@@ -1,5 +1,7 @@
 from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
-                           BaseManager, AllTrue, upload,   get_class, record_class, GenDevice)
+                           BaseManager, AllTrue, upload,   get_class, record_class, GenDevice, 
+                            BaseDevice, NodeVar
+                           )
 
 from . import io
 from .eltdevice import EltDevice
@@ -13,16 +15,10 @@ from warnings import warn
 from pydantic import BaseModel, root_validator, validator, AnyUrl
 from typing import List, Type, Optional, Dict, Union, Iterable
 import warnings
-                        
-class ManagerConfig(BaseManager.Config):
-    """ Manager Configuration Model """
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Data Structure 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    type: str = "Elt"
-    server_id: str = "" # for the record
-    name: str = "" # if None takes the server_id 
-    
+
+
+
+class ManagerServerConfig(BaseModel):
     fits_prefix: str = ""
     devices : List[str] = [] # list of device names for the record 
     cmdtout : int = 60000    # not yet used in pydevmgr 
@@ -34,27 +30,74 @@ class ManagerConfig(BaseManager.Config):
     scxml           : str =  ""
     dictionaries    : List[str] =  []    
     
-    device_map : Dict[str, GenDevice] = {} 
+
+
+class DeviceIoConfig(BaseModel):
+    type: str
+    cfgfile: str
+    path: Optional[str] = None
+    
+    def load(self):
+        DeviceClass = get_class(KINDS.DEVICE, self.type)
+        
+        cfg = io.load_config(self.cfgfile)
+        if self.path is not None:
+            cfg = cfg[self.path]
+        return DeviceClass.Config.parse_obj(cfg)
+
+
+class ManagerConfig(BaseManager.Config):
+    """ Manager Configuration Model """
+    Server = ManagerServerConfig
+    
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Data Structure 
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    type: str = "Elt"
+    server_id: str = "" # for the record
+    name: str = "" # if None takes the server_id 
+    
+    server: ManagerServerConfig = ManagerServerConfig()
+
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Config of BaseModel see pydantic 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     class Config:
-        extra = "ignore"
+        extra = "allow"
+
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # root validator 
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # first load the server on the fly if server_id is defined 
+    # then, at the end, load the devices
     
+    @root_validator(pre=True)
+    def _pre_root_validator(cls, values):
+        # load the server dictionary by loadding from the server_id keyword and its attached 
+        # dictionary. As it was defined in eso software <v3
+        if not "server" in values and "server_id" in values:
+            server_id = values["server_id"]
+            values["server"] = values.pop(server_id)
+        return values  
+    
+
+     
     @classmethod
-    def from_cfgdict(cls, d):
-        if d.get("version", None)=="pydevmgr":
-            return cls.parse_obj(d)
-        sid = d['server_id']
-        ds = d[sid]
-        device_map = {}
-        for device in ds.get("devices", []):
-            dio = d[device]
-            Device = get_class( KINDS.DEVICE, dio['type'])
-            device_map[device] = Device.Config.from_cfgfile(dio['cfgfile'], path=device)
-        
-        ds['device_map'] = device_map
-        return cls.parse_obj(ds)
+    def validate_extra(cls, name, extra, values):
+        server = values['server']
+        if name in server.devices:
+            if "cfgfile" in extra:
+                device_io = DeviceIoConfig( path = name, **extra )
+                extra = device_io.load()
+            else:
+                extra = super().validate_extra(name, extra, values)
+                if not isinstance(extra, BaseDevice.Config):
+                    raise ValueError(f"{name} children is not a device")
+        else:
+            extra =  super().validate_extra(name, extra, values)         
+        return extra
+
         
            
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -94,8 +137,6 @@ class ManagerIOConfig(BaseModel):
     name      : str = ""
     cfgfile   : Optional[str] = None
     config    : ManagerConfig = None # built from cfgfile if None
-    extrafile : Optional[str] = None # extra is a pydevmgr thing. Used to defined guis layout for instance
-    extra     : Dict = None # extracted from extrafile 
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Data Validator Functions
@@ -110,19 +151,7 @@ class ManagerIOConfig(BaseModel):
                 return ManagerConfig(name=values['name'])
         return config
     
-    @validator('extra', always=True, pre=True)
-    def load_extra(cls, extra, values):
-        if extra is None:
-            extrafile = values['extrafile']
-            if extrafile:
-                return io.load_config(extrafile)
-            else:
-                cfgfile = values['cfgfile']
-                if cfgfile:
-                    return io.load_extra_of(cfgfile) or {}
-                return {}
-        return extra
-    
+
 
 def load_manager_config(file_name: str, extrafile: Optional[str] =None) -> ManagerIOConfig:
     """ load a manager configuration from its yml file 
@@ -155,7 +184,7 @@ class SubstateNodeAlias(NodeAlias):
 
 
 def get_device_state_nodes(parent):
-    return sum( [[d.stat.state,d.is_ignored] for d in  parent.devices() ], [])
+    return sum( [[d.stat.state,d.is_ignored] for d in  parent.devices ], [])
 
 ##
 # The stat manager for stat interface will be build of NodeAliases only 
@@ -171,7 +200,8 @@ class ManagerStatInterface(BaseInterface):
         # config is a place holder
         super().__init__(key, config=config, **kwargs)
         self._devices = devices        
-        
+    
+    @property
     def devices(self) -> Iterable:
         return self._devices
     
@@ -213,6 +243,11 @@ class ManagerStatInterface(BaseInterface):
         """ group of the state """
         return self.STATE(state).group
 
+    class Data(BaseInterface.Data):
+        state: NodeVar[int] = 0 
+        state_txt: NodeVar[str] = ""
+        state_group: NodeVar[str] = ""
+
 @record_class            
 class EltManager(BaseManager):
     """ UaManager object, handling several devices 
@@ -239,7 +274,7 @@ class EltManager(BaseManager):
         extra (dict, Optional): extra configuration for GUI layout definition. a pydevmgr feature (not ESO)            
                 If None can be extracted from  ``devices`` if it is a class:`ManagerIOConfig`          
     """
-    
+    _auto_build_object = True 
     Device = EltDevice # default device class
     Config = ManagerConfig    
     
@@ -250,29 +285,18 @@ class EltManager(BaseManager):
           key : Optional[str] = None, 
           config : Union[ManagerConfig,ManagerIOConfig, Dict] = None, 
           devices: Optional[Union[Dict[str, EltDevice.Config], Dict[str, EltDevice]]] = None, 
-          extra : Optional[Dict] =None,
            **kwargs
         ) -> None:
-        
-        if devices is None:
-            config = self.parse_config(config, **kwargs)
-            devices = config.device_map 
-        
-        super().__init__(key, config=config, devices=devices, **kwargs)                
-        self._extra = {} if extra is None else extra
-        self._device_attrs = list(devices)            
-        
-        
-    # def __getattr__(self,attr):
-    #     """ whatever is defined in __dict__ if failed try for a device name """
-    #     try:
-    #         return self.__dict__[attr]
-    #     except KeyError:
-    #         try:
-    #             return self.get_device(attr)
-    #         except ValueError:
-    #             raise AttributeError("%r"%attr)
+       
+        super().__init__(key, config=config, **kwargs)    
+        if devices is not None:                                       
+            for name, d in BaseDevice.Dict(devices, __parent__=self).items():
+                self.__dict__[name] = d
+            self.server.devices = list(devices)
     
+
+        
+
     def __dir__(self):
         lst = [d.name for d in self.devices]
         for sub in self.__class__.__mro__:
@@ -296,16 +320,13 @@ class EltManager(BaseManager):
     @property
     def devices(self):
         # TODO: quick patch on devices iterator, beter solution needs to be found
-        return [getattr(self, dn) for dn in self._device_attrs]
+        return [getattr(self, dn) for dn in self.config.server.devices]
 
     @property
     def name(self) -> str:
         return ksplit(self._key)[1]
     
-    @property
-    def extra(self) -> dict:
-        return self._extra
-    
+     
     def active_devices(self):
         """ return an iterator on active, aka, not-ignored devices """
         for d in self.devices:
@@ -348,7 +369,7 @@ class EltManager(BaseManager):
            
                wait( mgr.init() )
         """
-        nodes = [device.init() for device in self.devices if not device.ignored.get()]
+        nodes = [device.init() for device in self.devices if not device.is_ignored.get()]
         return AllTrue('init_all_finished', nodes)
         
     def enable(self) -> NodeAlias:
@@ -367,7 +388,7 @@ class EltManager(BaseManager):
                wait( mgr.enable() )        
         
         """
-        nodes = [device.enable() for device in self.devices if not device.ignored.get()]
+        nodes = [device.enable() for device in self.devices if not device.is_ignored.get()]
         return AllTrue('enable_all_finished', nodes)
         
     def disable(self) -> NodeAlias:
@@ -385,7 +406,7 @@ class EltManager(BaseManager):
            
                wait( mgr.disable_all() )   
         """
-        nodes = [device.disable() for device in self.devices if not device.ignored.get()]
+        nodes = [device.disable() for device in self.devices if not device.is_ignored.get()]
         return AllTrue('disable_all_finished', nodes)        
 
     def reset(self) -> NodeAlias:
@@ -404,7 +425,7 @@ class EltManager(BaseManager):
                wait( mgr.reset() )   
         
         """
-        nodes = [device.reset() for device in self.devices if not device.ignored.get()]
+        nodes = [device.reset() for device in self.devices if not device.is_ignored.get()]
         return AllTrue('reset_all_finished', nodes)        
     
     def configure(self) -> None:
@@ -414,7 +435,7 @@ class EltManager(BaseManager):
         """
         conf = {}
         for device in self.devices:
-            if not device.ignored.get():
+            if not device.is_ignored.get():
                 conf.update( device.get_configuration() )
         upload(conf)
     
@@ -422,12 +443,12 @@ class EltManager(BaseManager):
     def ignore_all(self):
         """ set ignored flag to True for  all devices """
         for device in self.devices:
-            device.ignored.set(True)
+            device.is_ignored.set(True)
     
     def unignore_all(self):
         """ set ignored flag to False for  all devices """
         for device in self.devices:
-            device.ignored.set(False)
+            device.is_ignored.set(False)
     
     ### deprecated 
     def connect_all(self) -> None:
