@@ -35,13 +35,13 @@ class AdcCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     latitude  : Optional[float] = -0.429833092 
     longitude : Optional[float] = 1.228800386
-    axes : List[str] = [] # name of axes 
+    axes : List[str] = ['default_motor1', 'default_motor2'] # name of axes 
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
 class AdcConfig(Base.Config):
     CtrlConfig = AdcCtrlConfig
-    
+    Motor = Motor.Config 
     Cfg = Cfg.Config
     Stat = Stat.Config
     Rpcs = Rpcs.Config
@@ -55,6 +55,9 @@ class AdcConfig(Base.Config):
     stat: Stat = Stat()
     rpcs: Rpcs = Rpcs()
     
+    # add some default motor configuration
+    default_motor1: Motor = Motor()
+    default_motor2: Motor = Motor()
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @classmethod
@@ -110,16 +113,11 @@ class Adc(Base):
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #return 
-        # at minima we can copy the IP address to the motor if empty 
-        self.config.motor1.address = self.config.address
-        self.config.motor2.address = self.config.address
-        # add set some default prefix if they are empty 
-        # using __dict__ here so assignment is not checked 
-        if not self.motor1.config.prefix:
-            self.motor1.config.__dict__['prefix'] = kjoin( self.config.prefix,"motor1")
-        if not self.config.motor2.prefix:
-            self.motor2.config.__dict__['prefix'] = kjoin(self.config.prefix, "motor2")
+        
+        for name, mc in [("motor1", self.config.motor1), ("motor2", self.config.motor2)]:
+            if not mc.prefix:
+                mc.__dict__['prefix'] = kjoin( self.config.prefix, name)
+            mc.__dict__['address'] = self.config.address # For sure the address is the same we can force it !!!      
         
     # @property
     # def motor1(self):
