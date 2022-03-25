@@ -7,7 +7,7 @@ from pydevmgr_core import record_class, Defaults, RpcError, kjoin, BaseDevice
 from typing import Optional, Any, Dict, List
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt import io
-from pydevmgr_core import path_walk_item , NegNode
+from pydevmgr_core import path_walk_item , NegNode, KINDS, get_class
 from pydantic import BaseModel 
 
 Base = EltDevice
@@ -39,7 +39,7 @@ class AdcCtrlConfig(Base.Config.CtrlConfig):
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-class AdcConfig(Base.Config):
+class AdcConfig(Base.Config, extra="allow"):
     CtrlConfig = AdcCtrlConfig
     Motor = Motor.Config 
     Cfg = Cfg.Config
@@ -69,6 +69,9 @@ class AdcConfig(Base.Config):
                 # extra = cls.Motor.parse_obj( io.load_config(axis_io.cfgfile)[name] )
                 # extra = cls._Motor.parse_obj( io.load_config(axis_io.cfgfile)[name]  )
                 extra = axis_io.load()
+            elif "type" in extra:
+                ExtraClass = get_class( KINDS.DEVICE, extra['type'] ).Config
+                extra = ExtraClass.parse_obj(extra)
 
             else:
                 extra = super().validate_extra(name, extra, values)

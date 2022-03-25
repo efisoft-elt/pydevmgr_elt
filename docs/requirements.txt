@@ -1,1 +1,1 @@
-pydevmgr_elt==0.3.2
+pydevmgr_elt>=0.4.1

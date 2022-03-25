@@ -1,6 +1,7 @@
 0.4.2
 =====
 - the adc address was copied to its motor but not the namespac. Fixed.
+- in EltManager and ADC the default kind if set to Device for device children 
 
 0.4.1
 =====

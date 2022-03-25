@@ -1,7 +1,7 @@
 
-************
-pydevmgr_elt
-************
+******
+Manual
+******
 
 
 What is it ?
@@ -188,10 +188,11 @@ The `pydevmgr_core`_ engine documentation is still missing but in short:
 
 Each pydevmgr objects (see above) are made of a configuration and some runtime variables such as a ua-client that goes
 from the device to the nodes during creation. The configuration dictate how the Object should behave, instanciating two 
- object (with similar classes) with the same configuration shall result to exactly the same behavior. 
+objects (with similar classes) with the same configuration shall result to exactly the same behavior.
 Each object has a ``.new`` method. Its role is to build the object within the context of its parent. For instance, when 
 creating an interface from a device the Ua communication object is transfered, as well as when creating a node from the
-interface. 
+interface.
+
 
 
 
@@ -544,6 +545,7 @@ Each manager, device, interface objects has a find method used to loock for and 
 One can also build the full list of nodes :
 
 .. code-block:: python
+   
    from pydevmgr_core import BaseNode
    
    data = {}     

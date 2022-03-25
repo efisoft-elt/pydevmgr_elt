@@ -90,6 +90,9 @@ class ManagerConfig(BaseManager.Config):
             if "cfgfile" in extra:
                 device_io = DeviceIoConfig( path = name, **extra )
                 extra = device_io.load()
+            elif "type" in extra:
+                ExtraClass = get_class( KINDS.DEVICE, extra['type'] ).Config
+                extra = ExtraClass.parse_obj(extra)
             else:
                 extra = super().validate_extra(name, extra, values)
                 if not isinstance(extra, BaseDevice.Config):

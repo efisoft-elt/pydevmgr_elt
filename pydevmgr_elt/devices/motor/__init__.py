@@ -6,7 +6,7 @@ from pydevmgr_elt.devices.motor.positions import PositionsConfig
 from pydevmgr_elt.devices.motor.axis_type import AXIS_TYPE
 
 from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class
+from pydevmgr_core import record_class, Defaults
 from typing import Any, Optional, Dict, Union
 from pydantic import validator
 Base = EltDevice
@@ -64,7 +64,7 @@ class MotorConfig(Base.Config):
     # Data Structure (redefine the ctrl_config)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Motor"
-    ctrl_config : CtrlConfig= CtrlConfig()
+    ctrl_config :    CtrlConfig = CtrlConfig()
     initialisation : Initialisation= Initialisation()
     positions      : Positions= Positions()
     

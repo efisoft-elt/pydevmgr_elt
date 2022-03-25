@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 Welcome to pydevmgr_elt's documentation!
-========================================
+****************************************
 
 
 .. image:: https://img.shields.io/pypi/v/pydevmgr_elt
@@ -21,9 +21,10 @@ Welcome to pydevmgr_elt's documentation!
    :caption: Contents:
 
    pydevmgr_elt_manual
+   exemples/index
    
 Indices and tables
-==================
+******************
 
 * :ref:`genindex`
 * :ref:`modindex`
