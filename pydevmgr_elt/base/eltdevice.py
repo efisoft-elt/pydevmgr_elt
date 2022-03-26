@@ -1,5 +1,5 @@
 from . import io
-from .tools import map2interface_map, enum_group, enum_txt, EnumTool
+from .tools import  enum_group, enum_txt, EnumTool
 from enum import Enum
 from .config import eltconfig, GROUP
 
@@ -16,22 +16,6 @@ from pydevmgr_ua import UaDevice
 from typing import Optional, Type
 import logging
 
-
-def convert_eso_device_config(confdic : dict) -> dict:
-    """ Convert a eso config file (v2) to a pydevmgr Device Config file """
-    dtype = confdic['type']
-    mapfile = confdic.get('mapfile', None)
-    if mapfile is None:
-        pass
-    else:
-        map_d = io.load_map(mapfile)
-        try:
-            map = map_d[dtype]
-        except KeyError:
-            raise ValueError("The associated map file does not contain type %r"%dtype)
-    interface_map =  map2interface_map(map, Node=EltNode.Config, Rpc=EltRpc.Config, Interface=EltInterface.Config)
-    confdic.update(interface_map)
-    return confdic               
 
 
 class CtrlConfig(BaseModel):
@@ -131,58 +115,7 @@ class EltDeviceConfig(UaDevice.Config):
 def open_elt_device(cfgfile, key=None, path=0, prefix=""):
     return open_device(cfgfile, key=key, path=path, prefix=prefix) 
 
-def load_device_config(
-      file_name : str, 
-      type: str = None, 
-      name: str = None, 
-      Config: Optional[Type[EltDeviceConfig]] = None
-    ) ->  EltDeviceConfig:
-    """ load a device configuration 
-    
-    Args:
-        file_name (str): relative path to a configuration file 
-                  The path is relative to one of the directory defined in the
-                  $CFGPATH environment variable
-        type (str, optional): Type of the device, if not given look into the loaded file
-        name (str, None): The device name in the config file. 
-                        If None the first device in the loaded configuration file is taken 
-    """
-    
-    allconfig = io.load_config(file_name)
-    
-    if name is None:
-        # get the first key 
-        name = next(iter(allconfig))
-        config = allconfig[name]
-    else:
-        try:
-            config = allconfig[name]
-        except KeyError:
-            raise ValueError(f"Device {name!r} does not exists on device definition file {file_name!r}")    
-    
-    config = convert_eso_device_config(config)
-            
-    if Config is None:    
-        if type is None:
-            try:
-                type = config['type']
-            except KeyError:
-                raise ValueError('type is missing')
-        try:
-            Dev = get_device_class(type)            
-        except (KeyError, ValueError):
-            logging.warning(f'type {type!r} is unknown landing to a standard, empty device')                
-            Dev = EltDevice
-        Config = Dev.Config
-    
-    return Config(**config)    
 
-
-
-
-
-    
-    
 class RpcInterface(EltInterface):
     pass      
 

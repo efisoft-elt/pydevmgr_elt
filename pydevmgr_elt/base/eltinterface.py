@@ -2,7 +2,7 @@ from pydevmgr_ua import UaInterface
 from pydevmgr_core import record_class, ksplit, get_class
 
 from typing import Dict, Any, Optional
-from .tools import fjoin , default_node_map
+from .tools import fjoin 
 from .eltnode import EltNode
 from .eltrpc import EltRpc
 from . import io
@@ -30,32 +30,7 @@ class EltInterface(UaInterface):
         d = super().new_args(parent, config)
         d.update(fits_key = parent.fits_key)
         return d
-    
-    @classmethod
-    def default_node_map(cls):
-        dev, it = ksplit(cls.Config.__fields__['type'].default)
-        it = it.lower()
-        if it == "rpc": return {}
-        try:
-            map = default_node_map( dev, it)
-        except (ValueError, OSError):
-            return {}
-        
-        #map = {k:EltNode.Config.parse_obj(n) for k,n in map.items()  }
-        return map
-        
-    @classmethod
-    def default_rpc_map(cls):
-        dev, it = ksplit(cls.Config.__fields__['type'].default)
-        it = it.lower()
-        if it != "rpc": return {}
-        try:
-            map = default_node_map( dev, it)
-        except (ValueError, OSError):
-            return {}        
-        #map = {k:EltRpc.Config.parse_obj(r) for k,r in map.items()  }        
-        return map    
-     
+         
     def get_nodes(self, node_names  = None):
         raise DeprecationWarning('get_nodes is deprecated use the .find method instead')
     
