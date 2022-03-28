@@ -1,3 +1,8 @@
+0.4.3
+=====
+- remove the __init__ of Adc, handling of prefix is done on the configuration 
+- Their is now no need to correct address and namespace because they are ignored since fix in pydevmgr_ua v0.4.2
+
 0.4.2
 =====
 - the adc address was copied to its motor but not the namespac. Fixed.

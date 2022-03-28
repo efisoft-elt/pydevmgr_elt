@@ -56,14 +56,17 @@ class AdcConfig(Base.Config, extra="allow"):
     rpcs: Rpcs = Rpcs()
     
     # add some default motor configuration
-    default_motor1: Motor = Motor()
-    default_motor2: Motor = Motor()
+    default_motor1: Motor = Motor(prefix="motor1")
+    default_motor2: Motor = Motor(prefix="motor2")
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     @classmethod
     def validate_extra(cls, name, extra, values):
         ctrl = values['ctrl_config']
         if name in ctrl.axes:
+            if isinstance(extra, BaseModel ):
+                return extra 
+            prefix = extra.get('prefix', None)
             if "cfgfile" in extra:
                 axis_io = AxisIoConfig( path=name, **extra )
                 # extra = cls.Motor.parse_obj( io.load_config(axis_io.cfgfile)[name] )
@@ -77,6 +80,8 @@ class AdcConfig(Base.Config, extra="allow"):
                 extra = super().validate_extra(name, extra, values)
                 if not isinstance(extra, BaseDevice.Config):
                     raise ValueError(f"axis {name} is not a device")
+            if prefix is not None:
+                extra.prefix = prefix
         return extra   
     
     @property
@@ -114,22 +119,6 @@ class Adc(Base):
         stat: Stat = Stat()
         rpcs: Rpcs = Rpcs()
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        
-        for name, mc in [("motor1", self.config.motor1), ("motor2", self.config.motor2)]:
-            if not mc.prefix:
-                mc.__dict__['prefix'] = kjoin( self.config.prefix, name)
-
-            mc.__dict__.update( address = self.config.address, namespace = self.config.namespace)   
-    # @property
-    # def motor1(self):
-    #     return getattr(self, self.config.ctrl_config.axes[0])
-
-    # @property
-    # def motor2(self):
-    #     return getattr(self, self.config.ctrl_config.axes[1])
-        
 
     @property
     def motors(self) -> list:
