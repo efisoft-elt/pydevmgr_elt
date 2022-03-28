@@ -1,9 +1,9 @@
 from pydevmgr_ua import UaRpc
 from pydevmgr_core import record_class
-from .tools import enum_txt, EnumTool
+from .tools import enum_txt, get_txt
 from enum import Enum
 
-class RPC_ERROR(EnumTool, int, Enum):
+class RPC_ERROR(int, Enum):
     OK =  0
     NOT_OP =  -1
     NOT_NOTOP_READY =  -2
@@ -37,5 +37,5 @@ class EltRpc(UaRpc):
         Args:
             rpc_error (int): rpc error code  
         """
-        return self.RPC_ERROR(rpc_error).txt
+        return get_txt( self.RPC_ERROR(rpc_error) )
         

@@ -1,5 +1,5 @@
 from . import io
-from .tools import  enum_group, enum_txt, EnumTool
+from .tools import  enum_group, enum_txt, get_txt
 from enum import Enum
 from .config import eltconfig, GROUP
 
@@ -250,11 +250,11 @@ class EltDevice(UaDevice):
     
     def get_error_txt(self, errcode: int) -> str:
         """ Get a text description of the given error code number """
-        return self.ERROR(errcode).txt
+        return get_txt(self.ERROR(errcode))
     
     def get_rpc_error_txt(self, rpc_errcode: int) -> str:
         """ Get a text description of the given rpc error code number """
-        return self.RpcInterface.RPC_ERROR(rpc_errcode).txt
+        return get_txt( self.RpcInterface.RPC_ERROR(rpc_errcode) )
    
 
     def get_configuration(self, exclude_unset=True, **kwargs):

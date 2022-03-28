@@ -1,7 +1,7 @@
 
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 
 from enum import Enum
 Base = EltDevice.Stat
@@ -19,7 +19,7 @@ NV = NodeVar # used in Data
 
 
 
-class SUBSTATE(EnumTool, int, Enum):
+class SUBSTATE(int, Enum):
     OFF = 0
     NOT_OP = 1
     OP = 2
@@ -57,7 +57,7 @@ enum_group ({
     
 
 
-class ERROR(EnumTool, int,  Enum):
+class ERROR(int,  Enum):
     OK				      = _inc(0) # init the inc to zero 
     HW_NOT_OP             = _inc()	# increment number  		
     INIT_FAILURE          = _inc()	

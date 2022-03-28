@@ -1,7 +1,7 @@
 
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_elt.devices.motor import Motor
 
 from enum import Enum
@@ -20,7 +20,7 @@ NV = NodeVar # used in Data
 
 ##### ############
 # SUBSTATE
-class SUBSTATE(EnumTool, int, Enum):
+class SUBSTATE(int, Enum):
     NONE =  0
 
     NOTOP_NOTREADY =  100
@@ -74,7 +74,7 @@ class AXIS(int, Enum):
 
 ### ############# 
 # Mode 
-class MODE(EnumTool, int, Enum):
+class MODE(int, Enum):
     """ The three ADC modes """
     ENG   = 0 
     OFF   = 1

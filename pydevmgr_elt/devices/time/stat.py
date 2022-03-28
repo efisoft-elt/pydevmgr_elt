@@ -1,7 +1,7 @@
 
 from pydevmgr_core import  NodeAlias1, NodeAlias, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, get_txt
 from pydevmgr_ua import UaInterface
 
 from enum import Enum
@@ -20,18 +20,18 @@ NV = NodeVar # used in Data
 
 ##### ###########
 # SUBSTATE
-class MODE(EnumTool, int, Enum):
+class MODE(int, Enum):
     LOCAL                  =   0    
     UTC                    =   1
     SIMULATION             =   2
     
     UNREGISTERED = -9999
 
-class STATUS(EnumTool, int, Enum):
+class STATUS(int, Enum):
     CONNECTED = 0
     NOT_CONNECTED = 1
 
-class QOS(EnumTool, int, Enum):
+class QOS(int, Enum):
     NOT_VALID = 0
     NOT_SYNCHRONIZED = 1
     VALID = 2
@@ -85,17 +85,17 @@ class TimeStat(Base):
     @NodeAlias1.prop(node="mode")
     def mode_txt(self, mode: int) -> str:
         """ Return a text representation of the mode """
-        return self.MODE(mode).txt
+        return get_txt(self.MODE(mode))
     
     @NodeAlias1.prop(node="qos")    
     def qos_txt(self, qos: int) -> str:
         """ Return a text representation of the qos """
-        return self.QOS(qos).txt
+        return get_txt( self.QOS(qos))
         
     @NodeAlias1.prop(node="status")
     def status_txt(self, status: int) -> str:
         """ Return a text representation of the status """
-        return self.QOS(status).txt    
+        return get_txt(self.QOS(status))
 
 
 

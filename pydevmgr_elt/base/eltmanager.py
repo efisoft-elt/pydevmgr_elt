@@ -6,7 +6,7 @@ from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterf
 from . import io
 from .eltdevice import EltDevice
 
-from .tools import fsplit, fjoin
+from .tools import  get_txt, get_group
 import logging
 
 from collections import OrderedDict
@@ -239,12 +239,12 @@ class ManagerStatInterface(BaseInterface):
     @NodeAlias.prop("state_txt", ["state"])
     def state_txt(self, state: int) -> str:
         """ text representation of the state """        
-        return self.STATE(state).txt
+        return get_txt(self.STATE(state))
     
     @NodeAlias.prop("state_group", ["state"])
     def state_group(self, state: int) -> state:
         """ group of the state """
-        return self.STATE(state).group
+        return get_group(self.STATE(state))
 
     class Data(BaseInterface.Data):
         state: NodeVar[int] = 0 

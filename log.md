@@ -1,3 +1,9 @@
+
+0.4.4
+=====
+- The EnumTool failed in python 3.6 because of a problem when mixing type with Enum. This was fixed in python 3.7.1 
+But I prefered to remove EnumTool class. So the Enum are pure 
+
 0.4.3
 =====
 - remove the __init__ of Adc, handling of prefix is done on the configuration 

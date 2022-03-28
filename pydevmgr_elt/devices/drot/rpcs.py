@@ -2,7 +2,7 @@ from pydevmgr_core import  NodeAlias1, Defaults
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt.devices.drot.stat import MODE
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_ua import Int16
 
 from enum import Enum

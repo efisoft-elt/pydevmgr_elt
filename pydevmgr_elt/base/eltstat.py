@@ -2,7 +2,7 @@ from .eltinterface import EltInterface
 from .eltnode import EltNode
 from pydevmgr_core import NodeVar, NodeAlias1, Defaults, NodeAlias
 from enum import Enum 
-from .tools import enum_group, enum_txt, EnumTool
+from .tools import enum_group, enum_txt, get_txt, get_group
 from .config import GROUP
 
 
@@ -16,7 +16,7 @@ NV = NodeVar # used in Data
 
 ########################
 ### STATE 
-class STATE(EnumTool, int, Enum):
+class STATE(int, Enum):
     """ constant holder for device STATEs """
     NONE = 0
     NOTOP = 1
@@ -33,7 +33,7 @@ STATE.OP    :  GROUP.OK,
 
 ########################
 ### SUBSTATE 
-class SUBSTATE(EnumTool, int, Enum):
+class SUBSTATE(int, Enum):
     """ constant holder for device SUBSTATEs """
     # SUBSTATE are specific to each device
     # :TODO: is their common SUBSTATE for each device ? NOTOP_NOTREADY =  100
@@ -59,7 +59,7 @@ enum_group({
     
 ########################
 ### ERROR  
-class ERROR(EnumTool, int, Enum):
+class ERROR(int, Enum):
     """ constant holder for device ERRORs """
     OK	                   = 0
     HW_NOT_OP              = 1
@@ -114,28 +114,28 @@ class StatInterface(EltInterface):
     @NodeAlias1.prop(node="substate")
     def substate_txt(self, substate: int) -> str:
         """ Return a text representation of the substate """
-        return self.SUBSTATE(substate).txt
+        return get_txt( self.SUBSTATE(substate) )
     
     @NodeAlias1.prop(node="substate")
     def substate_group(self, substate: int):
         """ Return the afiliated group of the substate """
-        return self.SUBSTATE(substate).group
+        return get_group(self.SUBSTATE(substate))
 
     
     @NodeAlias1.prop(node="state")
     def state_txt(self, state: int) -> str:
         """ Return a text representation of the state """
-        return self.STATE(state).txt
+        return get_txt( self.STATE(state) )
 
     @NodeAlias1.prop(node="state")
     def state_group(self, state: int):
         """ Return the afiliated group of the state """
-        return self.STATE(state).group
+        return get_group( self.STATE(state) )
     
     @NodeAlias1.prop(node="error_code")
     def error_txt(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
-        return self.ERROR(error_code).txt
+        return get_txt( self.ERROR(error_code) )
     
 
     @NodeAlias.prop(nodes=["error_code", "error_txt"])

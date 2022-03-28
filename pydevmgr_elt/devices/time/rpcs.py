@@ -1,6 +1,6 @@
 from pydevmgr_core import  NodeAlias1, Defaults 
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 
 from enum import Enum
 Base = EltDevice.Interface
@@ -10,7 +10,7 @@ RC = R.Config
 RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
 
-class RPC_ERROR(EnumTool, int, Enum):
+class RPC_ERROR(int, Enum):
     OK = 0
     NO_SIMULATION_MODE = 1
     DC2TC_OFFSET_NOT_MAPPED = 2

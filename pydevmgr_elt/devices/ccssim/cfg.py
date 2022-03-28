@@ -1,6 +1,6 @@
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 
 from enum import Enum
 Base = EltDevice.Interface

@@ -10,7 +10,6 @@ class GROUP:
     
     An application if for widget styling for instance : one style per group
     
-        SUBSTATE.group[SUBSTATE.NOTOP_NOTREADY] == GROUP.NOK
     """
     # for substate 
     IDL      = "IDL"

@@ -1,7 +1,7 @@
 
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from typing import Any
 from enum import Enum
 
@@ -21,7 +21,7 @@ NV = NodeVar # used in Data
 
 ##### ############
 # SUBSTATE
-class SUBSTATE(EnumTool, int, Enum):
+class SUBSTATE(int, Enum):
     NONE                  =   0
     NOTOP_NOTREADY		  = 100
     NOTOP_READY		      = 101
@@ -48,7 +48,7 @@ enum_group ( {
 
 ### ##############
 # ERROR
-class ERROR(EnumTool, int, Enum):
+class ERROR(int, Enum):
     OK		      = 0
     HW_NOT_OP     = 1			
     ON_FAILURE    = 2

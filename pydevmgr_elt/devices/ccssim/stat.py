@@ -1,7 +1,7 @@
 
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, EnumTool
+from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, get_txt
 
 from enum import Enum
 Base = EltDevice.Interface
@@ -19,7 +19,7 @@ NV = NodeVar # used in Data
 
 ##### ###########
 # SUBSTATE
-class TIME_MODE(EnumTool, int, Enum):
+class TIME_MODE(int, Enum):
     LOCAL                  =   0    
     UTC                    =   1
     
@@ -70,7 +70,7 @@ class CcsSimStat(Base):
     @NodeAlias1.prop(node="time_mode")
     def time_mode_txt(self, time_mode: int) -> str:
         """ Return a text representation of the time_mode """
-        return self.TIME_MODE(time_mode).txt
+        return get_txt( self.TIME_MODE(time_mode) )
     
 
 
