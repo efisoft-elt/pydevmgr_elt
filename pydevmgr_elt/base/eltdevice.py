@@ -58,7 +58,7 @@ class EltDeviceConfig(UaDevice.Config):
 
     @root_validator(pre=True)
     def _convert_map_file(cls, values):
-        """ when a map file is set it is load to replace the defaults suffix of the associated node """
+        """ when a map file is set it is loaded to replace the defaults suffix of the associated node """
         
         # -------------------------------------------------- 
         # Warning This is realy important to delete the mapfile from the dictionary 
@@ -113,6 +113,7 @@ class EltDeviceConfig(UaDevice.Config):
 
 
 def open_elt_device(cfgfile, key=None, path=0, prefix=""):
+    """ open a device """
     return open_device(cfgfile, key=key, path=path, prefix=prefix) 
 
 
