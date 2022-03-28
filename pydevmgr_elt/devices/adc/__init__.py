@@ -124,17 +124,6 @@ class Adc(Base):
     def motors(self) -> list:
         return (self.motor1, self.motor2)
     
-    def connect(self) -> None:
-        """ Connect all opc-ua client to servers """
-        super(Adc, self).connect()
-        for m in self.motors:
-            m.connect()
-    
-    def disconnect(self) -> None:
-        """ Disconnect client from their servers """
-        super(Adc, self).disconnect()
-        for m in self.motors:
-            m.disconnect()
             
     def get_configuration(self, exclude_unset=True, **kwargs) -> Dict[Base.Node,Any]:
         cfg_dict = {}
