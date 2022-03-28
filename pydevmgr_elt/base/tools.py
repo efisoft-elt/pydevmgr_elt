@@ -22,7 +22,7 @@ class EnumTool:
            
            UNREGISTERED = 999
     
-          assert COLORS(4).txt == 'UNREGISTERED'
+        assert COLORS(4).txt == 'UNREGISTERED'
     """
     _txt_ = None
     _group_ = GROUP.UNKNOWN
@@ -92,7 +92,7 @@ def _name_attr(cl: Type) -> Type:
 
 _enum = -1 
 def _inc(i: Optional[int] = None) -> int:
-    """ number increment to use in frontend 
+    """ number increment to use in frontend for easy implementation
     
     _inc(0) # reset increment to 0 and return 0 
     _inc()  # increment and return incremented number 
