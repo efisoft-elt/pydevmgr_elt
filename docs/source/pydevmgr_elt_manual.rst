@@ -15,11 +15,11 @@ What is it ?
 
 .. note:: 
     
-   **About v0.2 vs v0.4**
+   **About v0.2 vs v0.4.X**
    The deprecated version 0.2 of this module was included in a pydevmgr package. Now, the package is independant and
    using two other subpackages `pydevmgr_core`_ core engine for pydevmgr and `pydevmgr_ua`_ for generic OPC-UA com  
    
-   In its current version 0.4, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
+   In its current version 0.4.X, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
    to communicate with the OPC-UA server. The core engine can now be used for other purposes then communicating with 
    ELT devices or OPC-UA (e.g. serial com, custom websockets, etc ...)
    
@@ -39,9 +39,8 @@ If you do not know what is ELT software, this page is probably not for you.
 In short **pydevmgr_elt** provides python objects to communicate directly to PLCs ELT devices via OPC-UA. 
 
 **pydevmgr_elt** is a Python module to be used as substitute of a real device manager running in a ELT-Software environment.
-The module is somehow in between a simple python opc-ua script client and a real integrated device manager.
 
-**pydevmgr_elt** is not intended to be ran under a ELT software devenv but instead to replace it for some use cases during AIT test and lab activities. 
+**pydevmgr_elt** is not intended to be ran under a ELT software devenv but instead to replace it for some use cases during AIT, test and lab activities. 
 Basically for intermediate hardware test for which it does not make sens to setup a full ELT instrument workstation. 
 It does basically replace the ELT software device manager python client when it is not available. It was designed to be
 used by non-software engineers in order to easily scrips sequences to integrate, tune and control hardwares. 
@@ -50,7 +49,7 @@ used by non-software engineers in order to easily scrips sequences to integrate,
 
 - **Building AIT and integration scripts** when the ESO high level framework cannot be used or is not ready.
   Typicaly, for instance,  when one have a test bench with some motors ans wants to do some scripts in order to characterise the hardware. 
-- **Build Engineering tools and small guis** which can be run from any computer and can be edited by non-software engineers during hardware integration.
+- **Build Engineering tools and small guis** which can be run from any computer and can be edited by non-software engineers during hardware integration or lab experiments.
 - **Prototyping of special devices**  writing down the basic skeleton of special devices in a friendly python environment before being translated to a real ELT-Framework compatible special device. 
 - **Use simple GUIs** to drive standard or custom ESO devices from any computers. For instance, useful when electronics and PLC setup is done separately in an other institute but wants to script some motor movements. 
 
@@ -176,9 +175,10 @@ Vocabulary
 - ``Device`` 
    Device is the object representation of an hardware (or software) entity. It holds **Interfaces**, 
    eventually **nodes** and methods to send actions. It can have also other Device instance (e.g. :class:`pydevmgr_elt.Adc` has
-   two :class:`pydevmgr_elt.Motor` devices)
+   two :class:`pydevmgr_elt.Motor` devices). The Device is responsible to create the communictaiotn protocal and pass it
+   to children (Interface, Node, Rpc). 
 - ``Manager``  
-    Is a collection of devices. It can have also nodes, rpc and interfaces. See :class:`pydevmgr_elt.EltManager`   
+    Is a collection of devices. See :class:`pydevmgr_elt.EltManager`   
 
 
 Engine 
@@ -187,12 +187,17 @@ Engine
 The `pydevmgr_core`_ engine documentation is still missing but in short: 
 
 Each pydevmgr objects (see above) are made of a configuration and some runtime variables such as a ua-client that goes
-from the device to the nodes during creation. The configuration dictate how the Object should behave, instanciating two 
-objects (with similar classes) with the same configuration shall result to exactly the same behavior.
-Each object has a ``.new`` method. Its role is to build the object within the context of its parent. For instance, when 
-creating an interface from a device the Ua communication object is transfered, as well as when creating a node from the
-interface.
+from the device to the nodes during creation. 
 
+The configuration dictate how the Object should behave, instanciating two 
+objects (with similar classes) with the same configuration shall result to exactly the same behavior.
+
+Each object has a ``.new`` method. Its role is to build the object within the context of its parent. For instance, when 
+creating an interface from a device the Ua communication client object is transfered from device to interface, 
+as well as when creating a node from the interface. Some other information as the OPC-UA node id is built.
+
+After creating an object (Manager, Device, Interface, Node, Rpc) it is not garanty that changing its configuration
+instance will have any effect. All configuration change must be done before creating the object. 
 
 
 
@@ -216,8 +221,9 @@ And
 - :class:`pydevmgr_elt.CcsSim` for FB_CCS_SIM
 
 
-Each device class has its own ``.Config`` attribute  which basically contains what a yaml configuration 
-file (as defined by ESO) contains plus other stuff used by pydevmgr, those are  :class:`pydantic.BaseModel`.
+Each device class has its own ``.Config`` (a class) and ``config`` (instance of ``.Config``) attribute  which basically
+contains what a yaml configuration file (as defined by ESO) contains plus other stuff used by pydevmgr, 
+those are  :class:`pydantic.BaseModel`.
 
 
 .. code-block:: python
@@ -244,7 +250,7 @@ And then use it:
        motor1.disconnect()
 
     
-To now the list of 'children'  available on a device (or any pydevmgr object)  one can use the ``.find`` method :  
+To know the list of 'children'  available on a device (or any pydevmgr object)  one can use the ``.find`` method :  
 
 .. code-block:: python
 
@@ -274,6 +280,7 @@ An other use case, load a configuration and change some parameters:
     
     from pydevmgr_elt import Motor
     conf = Motor.Config.from_cfgfile('tins/motor1.yml', path="motor1")
+    conf.address = "opc.tcp://192.167.34.5:4840"
     conf.initialisation.sequence = ['FIND_LHW']
     conf.initialisation.FIND_LHW.value1 = 3.0                                                    
     conf.initialisation.FIND_LHW.value2 = 1.0 
@@ -285,7 +292,7 @@ An other use case, load a configuration and change some parameters:
     finally:
        motor1.disconnect()
 
-Also configuration can be changed on a instance of a :class:`pydevmgr_elt.EltDevice` :
+ctrl_config configuration can be changed on a instance of a :class:`pydevmgr_elt.EltDevice` :
 
 .. code-block:: python
 
@@ -293,7 +300,7 @@ Also configuration can be changed on a instance of a :class:`pydevmgr_elt.EltDev
    motor1.config.ctrl_config.tout_move = 120000
    motor1.configure() # send (or re-send) the full configuration to PLC 
 
-The last script will make what is in ``motor1.config`` and what is configured in the PLC synchronized. However one can
+The last script will make what is in ``motor1.config.ctrl_config`` and what is configured in the PLC synchronized. However one can
 directly change the value inside the PLC. Follows the two ways to do it : 
 
 .. code-block:: python
@@ -361,6 +368,7 @@ A manager (collection of several devices) can be also created without the need o
 One important aspect of pydevmgr are Nodes (more bellow). Nodes in pydevmgr point to one 
 single value (inside the PLC for the case of UaNode), they have the method :meth:`pydevmgr_elt.EltNode.get`, :func:`pydevmgr_elt.EltNode.set`
 and the attribute `.key` which is a single identifier for the node in the context of the manager (e.i. python namespace). 
+
 We will see that  :func:`pydevmgr_elt.EltNode.get`, `.set()` shall be rarely used, :func:`pydevmgr_core.download` and :func:`pydevmgr_core.upload` 
 function shall be used instead because they allow to retrieve values in one call per server. 
 
@@ -672,8 +680,8 @@ use the node attribute to determine the node path inside a tuple :
 
 
     class Data(BaseModel):
-        m1_pos: NodeVar[float] = Field(0.0, node=("motor1", "stat", "pos_actual")) 
-        m2_pos: NodeVar[float] = Field(0.0, node=("motor2", "stat", "pos_actual"))
+        m1_pos: NodeVar[float] = Field(0.0, node="motor1.stat.pos_actual")) 
+        m2_pos: NodeVar[float] = Field(0.0, node="motor2.stat.pos_actual"))
 
     data = Data()
     dl = DataLink( mgr, data )
@@ -745,8 +753,53 @@ To generate a :class:`pydevmgr_core.NodeAlias` one can use a :func:`pydevmgr_cor
     >>> is_centered.get() 
     True
 
+Within a parent class one can use the ``NodeAlias.prop`` (for property) to create a NodeAlias instanciated in the
+context of its parent: 
+
+.. code-block:: python
+
+   from pydevmgr_elt import NodeAlias1, Motor
+
+   class MyMotor(Motor):
+        
+      @NodeAlias1.prop( node="stat.pos_error")
+      def is_in_target(self, pos_serro): 
+          return abs(pos_error)<0.03 
             
-    
+
+You can also define your how NodeAlias Class easely with som configuration: 
+
+.. code-block:: python 
+
+   from pydevmgr_elt import Motor, NodeAlias1 
+
+   class IsInTarget(NodeAlias1,  sigma=(float, 0.03)): 
+        def fget(self, pos_error): 
+            return abs(pos_error)<0.03
+
+And include it to your Motor class configuration so it can be configured from a configuration payload :
+
+.. code-block:: python 
+
+    class MyMotor(Motor): 
+        class Config(Motor.Config): 
+            is_in_target : IsInTarget.Config = IsInTarget.Config( node="stat.pos_error", sigma=0.05 )
+            
+    m = MyMotor(address="opc.tcp://localos:4840", prefix="MAIN.Motor1")
+    m.connect()
+    m.is_in_target.get()
+
+
+Or if this is not suposed to be configurable one can include the property directly inside the class  : 
+
+.. code-block:: python
+
+   class MyMotor(Motor):
+        is_in_target = IsInTarget.prop( node="stat.pos_error", sigma=0.05 )
+
+
+
+
 Some usefull alias node are buitl-in like : 
 
 - :class:`pydevmgr_core.DequeNode` which allow to fifo values of several nodes at each download. Usefull for plot for instance.
