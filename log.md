@@ -1,3 +1,7 @@
+0.4.7
+=====
+- Bug fiex on EltManager when created from devices={}
+
 0.4.6
 =====
 - Fix the problem of connection deconection in adc, it now shares the same UA connection since 0.4.3 !
