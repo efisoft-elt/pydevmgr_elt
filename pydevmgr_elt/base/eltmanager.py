@@ -295,7 +295,7 @@ class EltManager(BaseManager):
         if devices is not None:                                       
             for name, d in BaseDevice.Dict(devices, __parent__=self).items():
                 self.__dict__[name] = d
-            self.server.devices = list(devices)
+            self.config.server.devices = list(devices)
     
 
         
