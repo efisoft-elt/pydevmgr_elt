@@ -143,6 +143,7 @@ adc:
         axes: [motor1, motor2]
     motor1:
         type: Motor
+        prefix: motor1
         initialisation:
               sequence: ['FIND_LHW', 'FIND_UHW', 'CALIB_ABS', 'END']
               FIND_LHW:
@@ -160,6 +161,7 @@ adc:
 
     motor2:
         type: Motor
+        prefix: motor2
         ctrl_config:
             backlash: 0.02 
         # etc ....

@@ -1014,8 +1014,8 @@ Auto generated Indexes
 ======================
 
 .. automodule:: pydevmgr_elt
-    :members:  GROUP,  Motor,  Drot, Adc, Shutter, Lamp, Piezo, Time, CcsSim, EltManager, 
-               open_elt_manager, open_elt_device,nodealias, RpcError, EltRpc,  NodeAlias,  
+    :members:  GROUP,  Motor,  Drot, Adc, Shutter, Lamp, Piezo, Sensor, Time, CcsSim, EltManager, EltDevice 
+               open_elt_manager, open_elt_device, nodealias, RpcError, EltRpc,  NodeAlias,  
                AllTrue , AllFalse , AnyTrue , AnyFalse , InsideIntervalNode , PosNameNode ,
                Int16, Int32, Int64, UInt16, UInt32, UInt64, Float, Double, 
                INT  , DINT , LINT , UINT  , UDINT , ULINT  , REAL, LREAL, 

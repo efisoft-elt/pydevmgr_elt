@@ -2,6 +2,9 @@
 =====
 - Add Sensor base device
 - Fix some bug on Time and clean the time formating for Plc (new parser PlcTime)
+- Fix a bug (bad Node Id) for CCS motion_x & y 
+- Add environment data into CcsSimConfig.CtrlConfig
+
 
 0.4.7
 =====

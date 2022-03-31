@@ -10,3 +10,4 @@ pydevmgr_elt Exemples
    starting_and_configuration
    data_structure
    motor_sequence
+   adc_movement
