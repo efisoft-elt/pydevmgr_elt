@@ -14,10 +14,11 @@ For this tutorial we considers:
 
 
 Main Device
-===========
+***********
 
 As everything appear on the same PLC we can start from a UaDevice instead of e UaManger or EltManager as it is done 
-in the :ref:`A Sequence and measurement Script`. 
+in other examples.
+
 The advantage is that OPC-UA communication parameters are entered in one single place. A  "Child" device will share 
 the same OPC-UA client than its master (so address, namespace, ... of a child device will be ignored). 
 
