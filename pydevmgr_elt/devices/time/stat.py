@@ -3,7 +3,7 @@ from pydevmgr_core import  NodeAlias1, NodeAlias, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, get_txt
 from pydevmgr_ua import UaInterface
-
+import datetime
 from enum import Enum
 
 Base = EltDevice.Interface # not the .Stat
@@ -81,7 +81,16 @@ class TimeStat(Base):
     def time(self, mode: int, utc:str, dc:str) -> str:        
         """ Return a text representation of the mode """
         return dc if mode == self.MODE.LOCAL else utc 
-            
+    
+    @NodeAlias1.prop(node="utc_time")
+    def utc_datetime(self, utc):
+        """ Convert the UTC returned by timer (which is not ISO) to a datetime 
+        
+        The returned datetime object is at nanosec precision 
+        """
+        return datetime.datetime.strptime( utc[:26] , '%Y-%m-%d-%H:%M:%S.%f')
+
+
     @NodeAlias1.prop(node="mode")
     def mode_txt(self, mode: int) -> str:
         """ Return a text representation of the mode """

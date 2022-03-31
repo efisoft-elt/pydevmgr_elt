@@ -4,10 +4,16 @@ A Sequence and measurement Script
 The goal here is to build a script to move a motor in several positions and check its true position with a position
 sensor. 
 
-The position sensor is a Tesa plugged into the local computer with a serial communication 
+The position sensor is a Tesa plugged into the  computer (not the PLC) with a serial communication.  
 
 To complicate just a bit we will read some values directly on the PLC (not related to any ELT device). They are two
 temperature sensors and they are just LREAL values inside the OPC-UA server (PLC).
+
+This example is base on a real AIT hardware characterisation script where the goal was to move motor between two
+position and check the repeatability of the positioning.
+
+Typically, building a full integrated FCS for this purpose only would be over kill. 
+ 
 
 
 Tesa device 

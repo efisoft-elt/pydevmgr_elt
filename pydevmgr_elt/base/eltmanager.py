@@ -257,25 +257,84 @@ class EltManager(BaseManager):
     
     .. note::
     
-        Most likely the UaManager will be initialized by :meth:`UaManager.from_config` or its alias :func:`open_elt_manager`
+        Most likely the UaManager will be initialized by :meth:`UaManager.from_cfgfile` or its alias :func:`open_elt_manager`
     
-    If :meth:`UaManager.from_config` or :func:`open_elt_manager` is used all the device prefixes will be
-    the key of the device manager.  
-    
+       
     Args:
-        key (str): the key (prefix of all devices) of the manager
-                   If None key is the 'server_id' defined inside the config dictionary
-        config (dict, :class:`ManagerConfig`, :class:`ManagerIOConfig`): if dictionary it is 
-        
-        com_manager (:class:`UaComManager`, optional)
+        key (str, optional): the key (prefix of all devices) of the manager
+                   If None key is the 'server_id' defined inside the config dictionary or a random one is generated
+        config (dict, :class:`ManagerConfig`, :class:`ManagerIOConfig`):  tion for the manager        
         
         devices (dict, optional) pairs of 
                     - name/ :class:`UaDevice` pairs 
                     - or  name/ :class:`DeviceConfig` pairs 
-                    - or  name/ :class:`UaDeviceIOConfig` pairs 
-                    
-        extra (dict, Optional): extra configuration for GUI layout definition. a pydevmgr feature (not ESO)            
-                If None can be extracted from  ``devices`` if it is a class:`ManagerIOConfig`          
+                Used when the manager is built without configuration file
+
+    Exemples:
+
+    ::
+
+        from pydevmgr_elt import EltManager, Motor, Lamp
+         
+        devices = dict(
+            motor = Motor('motor', address="opc.tcp://localhost:4840", prefix="MAIN.Motor1" ), 
+            lamp = Lamp( 'lamp', address="opc.tcp://localhost:4840", prefix="MAIN.Lamp1"  )
+        )
+        mgr = EltManager('mgr',  devices )
+
+        mgr.connect()
+        mgr.motor.stat.pos_actual.get()
+        # etc ...
+        
+
+    Or one can subclass the EltManager to configure the device layout configuration in the class 
+    
+    ::
+        
+         from pydevmgr_elt import EltManager, Motor, Lamp, Defaults, wait 
+        
+         class AitBench(EltManager):
+            class Config( EltManager.Config, extra="forbid" ):
+                motor: Defaults[Motor.Config] = Motor.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1" )
+                lamp: Defaults[Lamp.Config] = Lamp.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1" )
+                server =  EltManager.Config.Server( devices=['motor', 'lamp'] )
+                
+                
+
+         mgr = AitBench('mgr')
+         mgr.connect()
+         wait( mgr.init() )
+         # etc ... 
+
+    Above the devices list is the list of device names used in any function of mgr (like connect, init, reset etc...).
+    For compatibility with ESO config file   this `device`` parameter is inside a ``server`` structure (pydandic model). This is not
+    convenient but you can do whatever you want in your Config file and add the devices property of your class.  
+
+    ::
+
+         from pydevmgr_elt import EltManager, Motor, Lamp, CcsSim, Defaults, wait, BaseManager
+         from typing import List    
+         class AitBench(EltManager):
+            class Config( BaseManager.Config, extra="forbid" ):
+                motor: Defaults[Motor.Config] = Motor.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1" )
+                lamp: Defaults[Lamp.Config] = Lamp.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1" )
+                ccs: CcsSim.Config = CcsSim.Config(address="opc.tcp://myplc.local:4840", prefix="MAIN.ccs_sim")
+                devices: List[str] = ['lamp', 'motor']
+             
+            @property
+            def devices(self):
+                return [getattr(self, name) for name in self.config.devices]
+
+         mgr = AitBench('mgr')
+         mgr.devices
+    
+    Note, above I have added a ccs to show that even if it is not part of the devices list (used in connect, init,
+    reset, enable, disable function) the ccs is still part of the manager :
+
+    ::
+        
+        mgr.ccs.set_coordinates( 044534.0, -244567.0, 2000 )
+        
     """
     _auto_build_object = True 
     Device = EltDevice # default device class
@@ -322,8 +381,8 @@ class EltManager(BaseManager):
     
     @property
     def devices(self):
-        # TODO: quick patch on devices iterator, beter solution needs to be found
         return [getattr(self, dn) for dn in self.config.server.devices]
+
 
     @property
     def name(self) -> str:
@@ -346,12 +405,7 @@ class EltManager(BaseManager):
         except KeyError:
             raise ValueError('Unknown device %r'%name)
     
-    # @property
-    # def devices(self) -> Iterable:
-    #     """ an Iterable object of children :class:`UaDevice` like object """
-    #     return DeviceIterator(self._devices)
-    #     #return list(self._devices.values())
-
+  
     def device_names(self) -> list:
         """ return a list of child device names """
         return self.devices.names()

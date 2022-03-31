@@ -44,7 +44,7 @@ class CcsSimConfig(Base.Config):
 
 @record_class
 class CcsSim(Base):
-    """ ELt Standard CcsSim device """
+    """ ELt Standard CcsSim device  as in IFW v3.0 (this may change)"""
     Config = CcsSimConfig
     Cfg = Cfg
     Stat = Stat
@@ -60,18 +60,28 @@ class CcsSim(Base):
         rpcs: Rpcs = Rpcs()
 
     def reset(self) -> None:
-        raise ValueError('CcsSim has no reset capability')
+        """ Do nothing for CcsSim (here for compatibility) """
+        pass
 
     def enable(self) -> None:
-        raise ValueError('CcsSim has no enable capability')
-        
+        """Do Nothing for CcsSim (here for compatibility) """
+        pass
+
     def disable(self) -> None:
-        raise ValueError('CcsSim has no disable capability')
-    
+        """ Do nothing for CcsSim (here for compatibility) """
+        pass
+
     def init(self) -> None:
-        raise ValueError('CcsSim has no init capability')
+        """ Do Nothing for CcsSim (here for compatibility)  """
     
-    def set_coordinates(self, ra: float, dec: float, equinox: float) -> None:
+    def set_coordinates(self, ra: float, dec: float, equinox: float = 2000.0) -> None:
+        """ Set coordinates in CcsSim 
+
+        Args:
+            ra (float): hhmmss.xxx
+            dec (float): ddmmss.xxx
+            equinox (float, optional): Default is 2000  
+        """
         self.rpc.rpcSetCoordinates.rcall(ra, dec, equinox)
     
     def set_environment(self, 
@@ -82,10 +92,11 @@ class CcsSim(Base):
             wavelength: Optional[float] = None, 
             dut: Optional[float] = None                              
         ):
-        """ set environmnent data to the CCS Simulator 
+        """ set environmnent data to the Ccs Simulator 
         
-        Each settings arguments are potional: 
-          temperature, pressure, humidity, lapserate, wavelength, dut   
+        Each settings arguments are potionals: 
+        temperature, pressure, humidity, lapserate, wavelength, dut
+        They are taken into account if not None
         
         """
         nodes = {}

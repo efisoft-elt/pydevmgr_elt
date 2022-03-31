@@ -1,4 +1,4 @@
-from pydevmgr_elt.devices.time.stat import TimeStat as Stat
+from pydevmgr_elt.devices.time.stat import TimeStat as Stat, MODE
 from pydevmgr_elt.devices.time.cfg  import TimeCfg as Cfg
 from pydevmgr_elt.devices.time.rpcs import TimeRpcs as Rpcs
 
@@ -56,6 +56,8 @@ class Time(Base):
     Stat = Stat
     Rpcs = Rpcs
     
+    MODE = MODE
+
     class Data(Base.Data):
         Cfg = Cfg.Data
         Stat = Stat.Data
@@ -87,9 +89,10 @@ class Time(Base):
         Before setting time the mode is automaticaly switched to simulation 
         """        
         time = isodate(datetime.datetime.now() if time is None else time)
-        self.set_mode(self.Stat.MODE.LOCAL) # patch to clear any error 
-        self.set_mode(self.Stat.MODE.SIMULATION)
-        self.rpc.rpcSetTime.rcall(time)        
+        self.set_mode(self.MODE.LOCAL) # patch to clear any error 
+        self.set_mode(self.MODE.SIMULATION)
+        # self.cfg.user_time
+        self.rpcs.rpcSetTime.rcall(time)        
 
 if __name__ == "__main__":
     Time()

@@ -1,7 +1,7 @@
-from pydevmgr_core import  NodeAlias1, Defaults 
+from pydevmgr_core import  NodeAlias1, Defaults, BaseParser, record_class   
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
-
+from datetime import datetime 
 from enum import Enum
 Base = EltDevice.Interface
 
@@ -29,17 +29,20 @@ enum_txt ( {
    RPC_ERROR.PTP_NOT_SYNCHRONIZED:      'WARNING: PTP not synchronized',
 })
 
-
-
-
+@record_class
+class PlcTime(BaseParser, fmt='%Y-%m-%d-%H:%M:%S.%f', type="PlcTime"):
+    @staticmethod
+    def parse(value, config):
+        if isinstance(value, datetime):
+            return value.strftime( config.fmt)
+        return str(value).replace('T','-')
 
 class TimeRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        pass   
-    rpcSetTime: RD = RC(suffix="RPC_SetTime", arg_parsers=[str])
-    rpcSetMode: RD = RC(suffix="RPC_SetMode", arg_parsers=["UaInt32"])
+        rpcSetTime: RD = RC(suffix="RPC_SetTime", arg_parsers=[PlcTime])
+        rpcSetMode: RD = RC(suffix="RPC_SetMode", arg_parsers=["UaInt32"])
 
 if __name__ == "__main__":
     TimeRpcs()

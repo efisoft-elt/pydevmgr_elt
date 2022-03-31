@@ -1,4 +1,4 @@
-from pydevmgr_elt.devices.drot.stat import DrotStat as Stat
+from pydevmgr_elt.devices.drot.stat import DrotStat as Stat, MODE
 from pydevmgr_elt.devices.drot.cfg  import DrotCfg as Cfg
 from pydevmgr_elt.devices.drot.rpcs import DrotRpcs as Rpcs
 
@@ -46,6 +46,8 @@ class Drot(Base):
     Cfg = Cfg
     Stat = Stat
     Rpcs = Rpcs
+
+    MODE = MODE
     
     class Data(Base.Data):
         Cfg = Cfg.Data

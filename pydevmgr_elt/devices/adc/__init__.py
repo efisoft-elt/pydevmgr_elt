@@ -1,4 +1,4 @@
-from pydevmgr_elt.devices.adc.stat import AdcStat as Stat
+from pydevmgr_elt.devices.adc.stat import AdcStat as Stat, AXIS, MODE
 from pydevmgr_elt.devices.adc.cfg  import AdcCfg as Cfg
 from pydevmgr_elt.devices.adc.rpcs import AdcRpcs as Rpcs
 
@@ -109,7 +109,9 @@ class Adc(Base):
     Cfg = Cfg
     Stat = Stat
     Rpcs = Rpcs
-    
+    AXIS = AXIS
+    MODE = MODE 
+
     class Data(Base.Data):
         Cfg = Cfg.Data
         Stat = Stat.Data
@@ -174,8 +176,8 @@ class Adc(Base):
             angle (float, optional): target angle default = 0.0 
             
         Returns:
-            is_standstill:  the :class:`NodeAlias` .stat.is_standstill to check if the device is 
-                            in standstill. (e.i. movement finished)
+            is_standstill (Node):  the :class:`NodeAlias` .stat.is_standstill to check if the device is 
+                                      in standstill. (e.i. movement finished)
         
         Example:
         
@@ -195,7 +197,7 @@ class Adc(Base):
             vel (float): target velocity 
         
         Returns:
-            is_standstill:  the :class:`NodeAlias` .stat.is_standstill to check if the device is in standstill
+            is_standstill (Node):  the :class:`NodeAlias` self.stat.is_standstill to check if the device is in standstill
         
         Example:
         
@@ -215,7 +217,7 @@ class Adc(Base):
             vel (float): target velocity 
         
         Returns:
-            is_standstill:  the :class:`NodeAlias` .stat.is_standstill to check if the device is in standstill
+            is_standstill (Node):  the :class:`NodeAlias` .stat.is_standstill to check if the device is in standstill
         
         Example:
         

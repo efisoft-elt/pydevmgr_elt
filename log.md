@@ -1,6 +1,11 @@
+0.4.8
+=====
+- Add Sensor base device
+- Fix some bug on Time and clean the time formating for Plc (new parser PlcTime)
+
 0.4.7
 =====
-- Bug fiex on EltManager when created from devices={}
+- Bug fix on EltManager when created from devices={}
 
 0.4.6
 =====

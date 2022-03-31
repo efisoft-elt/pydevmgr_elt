@@ -263,16 +263,16 @@ class EltDevice(UaDevice):
         The node/value dictionary represent the device configuration. 
         This is directly use by :func:`Device.configure` method. 
         
-        This is a generic configuration dictionary and may not work on all devices. 
-        This method need to be updated for special devices for instance.   
-        
+               
         Args:
             exclude_unset (optional, bool): Default is True. If True value that was left unset in 
                 the config will not be included in the configuration
-            \**kwargs : name/value pairs pointing to cfg.name node
+            \**kwargs : name/value pairs pointing to self.cfg.<name> node
                       This allow to change configuration on the fly
                       without changing the config file.             
         
+        Exemples
+
         ::
         
             >>> upload( {**motor1.get_configuration(), **motor2.get_configuration()} ) 
@@ -289,8 +289,8 @@ class EltDevice(UaDevice):
         """ Configure the whole device in the PLC according to what is defined in the config dictionary 
         
         Quick changes on configuration value can be done by keywords where each key must point to a 
-        .cfg.name node. Note that the configuration (as written in file) is always used first before being 
-        overwritten by \**kwargs. In other word kwargs are not changing the default configuration  
+        self.cfg.<name> node. Note that the configuration (as written in file) is always used first before being 
+        overwritten by \**kwargs. In other words kwargs are not changing the default configuration in self.config.ctrl_config  
         
         Args:
             exclude_unset (optional, bool): Default is True. If True value that was left unset in 

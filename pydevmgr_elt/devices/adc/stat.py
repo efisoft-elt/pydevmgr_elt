@@ -100,6 +100,7 @@ class AdcStat(Base):
     ERROR = ERROR
     SUBSTATE = SUBSTATE
     MODE = MODE 
+    AXIS = AXIS
     class Config(Base.Config):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
