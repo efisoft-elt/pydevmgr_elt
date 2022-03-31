@@ -116,7 +116,7 @@ class Main(UaDevice):
          
         
 
-        while data.time < end_time:
+        while self.time.stat.utc_datetime.get() < end_time:
            tic = time.time()
            callback()
            tac= time.time()
@@ -138,9 +138,11 @@ targets:
       end_time: 2032-09-11T02:00:00.0000
 
 adc:
+    prefix: adc1
     ctrl_config:
         axes: [motor1, motor2]
     motor1:
+        type: Motor
         initialisation:
               sequence: ['FIND_LHW', 'FIND_UHW', 'CALIB_ABS', 'END']
               FIND_LHW:
@@ -156,6 +158,21 @@ adc:
                  value1: 0.0
                  value2: 0.0
 
+    motor2:
+        type: Motor
+        ctrl_config:
+            backlash: 0.02 
+        # etc ....
+
+ccs:
+    prefix: ccs_sim
+    ctrl_config:
+        pressure: 720.0
+        temperature: 12.0
+        wavelength: 720.0
+
+
+
 """
 
 
@@ -165,7 +182,11 @@ if __name__ == "__main__":
     #m = Main('', adc={'prefix':'adc1'}, time={'prefix':'timer'}, ccs={'prefix':'ccs_sim'})
     
     m = Main( config=yaml.load(cfg))
-
+    try:
+        m.connect()
+        m.adc.motor1.configure()
+    finally:
+        m.disconnect()
     # try:
     #     m.connect()
     #     m.config.targets[0].end_time = "2032-09-11T01:15:00.0000"

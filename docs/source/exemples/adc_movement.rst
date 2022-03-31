@@ -108,7 +108,7 @@ Here is the script:
         def configure(self):
             for d in self.devices:
                 d.configure()
-        
+            self.ccs.configure()
 
         def run_target_sequence(self):
             
@@ -172,9 +172,11 @@ This exemple can than be ran from a configuration file as defined by ``Main.Conf
           end_time: 2032-09-11T02:00:00.0000
 
 
-Or you can configure more deeply, e.i. if you want to check the influance of the init function for instance
+Or you can configure more deeply, e.g. if you want to check the influance of the init function for instance, temp,
+wavelength pressure, etc ...
 
 .. code-block:: yaml
+
     targets: 
         - name: Target1 
           ra: 163553.00
@@ -193,7 +195,8 @@ Or you can configure more deeply, e.i. if you want to check the influance of the
         ctrl_config:
             axes: [motor1, motor2]
         motor1:
-            type: Motor # mendatory  
+            type: Motor # mendatory 
+            prefix: motor1
             initialisation:
                   sequence: ['FIND_LHW', 'FIND_UHW', 'CALIB_ABS', 'END']
                   FIND_LHW:
@@ -208,6 +211,18 @@ Or you can configure more deeply, e.i. if you want to check the influance of the
                   END:
                      value1: 0.0
                      value2: 0.0
+        motor2:
+            type: Motor
+            prefix: motor2
+            ctrl_config:
+                backlash: 0.02 
+            # etc ....
 
 
+    ccs:
+        ctrl_config:
+            pressure: 720.0
+            temperature: 12.0
+            wavelength: 720.0
+                
 

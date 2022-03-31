@@ -18,6 +18,13 @@ class CcsSimCtrlConfig(Base.Config.CtrlConfig):
     latitude  : Optional[float] = -0.429833092 
     longitude : Optional[float] = 1.228800386
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    temperature: float = 20.0 
+    pressure: float = 750 
+    humidity: float = 50.0
+    lapserate: float = 0.0065
+    wavelength: float = 600.0
+
+    
     
 class CcsSimConfig(Base.Config):
     CtrlConf = CcsSimCtrlConfig
@@ -74,6 +81,18 @@ class CcsSim(Base):
     def init(self) -> None:
         """ Do Nothing for CcsSim (here for compatibility)  """
     
+    def get_configuration(self,  exclude_unset=True, **kwargs) -> dict: 
+        cfgdict = {}
+        d ={**self.config.ctrl_config.dict(exclude_none=True, exclude_unset=exclude_unset ), **kwargs}
+        for k,v in d.items():
+            if k  in ['latitude', 'longitude']:
+                cfgdict[ getattr(self.cfg, k)] = v
+            else:
+                cfgdict[ getattr(self.ctrl, k)] = v
+        
+        return cfgdict
+
+
     def set_coordinates(self, ra: float, dec: float, equinox: float = 2000.0) -> None:
         """ Set coordinates in CcsSim 
 
@@ -83,7 +102,7 @@ class CcsSim(Base):
             equinox (float, optional): Default is 2000  
         """
         self.rpc.rpcSetCoordinates.rcall(ra, dec, equinox)
-    
+
     def set_environment(self, 
             temperature: Optional[float] = None, 
             pressure: Optional[float] =None, 

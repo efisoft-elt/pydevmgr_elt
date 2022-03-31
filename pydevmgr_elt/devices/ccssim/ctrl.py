@@ -30,8 +30,8 @@ class CcsSimCtrl(Base):
         radvel :   ND= NC(suffix="ctrl.meanCoordinates.radvel", parser=float)
         parallax : ND= NC(suffix="ctrl.meanCoordinates.parallax", parser=float)
         
-        motion_x :   ND= NC(suffix="ctrl.motion_x", parser=float)
-        motion_y :  ND= NC(suffix="ctrl.motion_y", parser=float)
+        motion_x :   ND= NC(suffix="ctrl.motion.x", parser=float)
+        motion_y :  ND= NC(suffix="ctrl.motion.y", parser=float)
 
 
  
