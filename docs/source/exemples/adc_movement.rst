@@ -148,8 +148,8 @@ Here is the script:
             wait( self.adc.start_track() ) # changing coordinate will send ADC in preset, wait for tracking 
              
             
+            while self.time.stat.utc_datetime.get() < end_time:
 
-            while data.time < end_time:
                tic = time.time()
                callback()
                tac= time.time()
