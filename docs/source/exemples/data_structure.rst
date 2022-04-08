@@ -5,12 +5,13 @@ In this tutorial we will see how to use data models (pydantic models) to retriev
 applications. 
 
 In pydevmgr_elt the data is completly separated to the engine to retrieve data from server. For instance 
-in a  :class:`pydevmgr_elt.Motor` class their is no last_data or default_data or whatsoever in the Motor nodes. 
+in a  :class:`pydevmgr_elt.Motor` class their is no last_data or default_data or whatsoever instead the Motor has a 
+Data class which can be instanciated and linked to the Motor device. 
 
 Native Data structure
 ---------------------
 
-The devices have all a Data class attached, this Data class can be instancied and use normaly : 
+The devices have all a Data class attached, this Data class can be instancied and used normaly : 
 
 .. code-block:: python 
 
@@ -24,8 +25,8 @@ The devices have all a Data class attached, this Data class can be instancied an
    # 0
 
 At creation the data is filled with default values, one need to link the data to a motor instance with a
-:class:`pydevmgr_elt.DataLink`. A call of the ``.download`` method will fill the data field to live values from the
-OPC-UA 
+:class:`pydevmgr_elt.DataLink`. A call of the ``.download`` method will fill the data field to real values 
+taken from the OPC-UA server
 
 .. code-block:: python 
 
@@ -43,8 +44,8 @@ OPC-UA
         # This will update all values of data from the OPC-UA
         data_link.download()
         
-        print( f"motor is at {data.stat.pos_actual}mm wit a position error of {data.stat.pos_error}") 
-        print( f"the configured backlash is  {data.cfg.backlash}" )
+        print( f"motor is at {data.stat.pos_actual}mm with a position error of {data.stat.pos_error}mm") 
+        print( f"the configured backlash is  {data.cfg.backlash} mm" )
     
     finally:
         motor.disconnect()
@@ -53,9 +54,10 @@ OPC-UA
 This is a great way to separate the function/application dealing with the data informations (plot, logging, gui,
 tunning, ... ) to the way to retrieve it. 
 
-Note that the `.download` method of the data_link will ask node values in one single OPC-UA call. 
+Note that the `.download` method of the data_link will ask node values in one single OPC-UA call per server. 
 
-If you are dealing with several Data classes you can add them to a Downloader : 
+If you are dealing with several Data classes you can add them to a Downloader and call the download method of the
+Downloader. This way you assure the one request per OPC-UA server : 
 
 .. code-block:: python
 
@@ -82,6 +84,45 @@ If you are dealing with several Data classes you can add them to a Downloader :
         
         motor.disconnect()
         lamp.disconnect()
+
+
+The following script will give the same results : 
+
+.. code-block:: python 
+
+   from pydevmgr_elt import Motor, Lamp, DataLink, EltManager
+   from pydantic import BaseModel
+
+   class MyData(BaseModel):
+        
+        motor: Motor.Data = Motor.Data()
+        lamp: Lamp.Data = Lamp.Data()
+    
+   manager = EltManager('',  devices = dict(
+                 motor = Motor('my_motor',  address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1"), 
+                 lamp = Lamp('my_lamp',  address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1") 
+                ))
+   data = MyData()
+   dl = DataLink( manager, data)
+   
+
+   try:
+        manager.connect()    
+         
+        # tHe following will update the motor_data and the lamp_data in one single call 
+        dl.download()
+        my_function_using_data( data )
+   finally:
+        
+        manager.disconnect()
+
+
+
+
+
+
+  
+
 
 
 Manager
