@@ -9,7 +9,7 @@ if sys.version_info < (3, 6, 0, 'final', 0):
 
 setup(
     name= 'pydevmgr_elt',
-    version= '0.4.8', # https://www.python.org/dev/peps/pep-0440/
+    version= '0.4.9', # https://www.python.org/dev/peps/pep-0440/
     author='Sylvain Guieu',
     author_email='sylvain.guieu@univ-grenoble-alpes.fr',
     packages=find_packages(), 
@@ -17,7 +17,7 @@ setup(
     #data_files=data_files,
     license='CeCILL Free Software License Agreement v2.1',
     long_description=open('README.md').read(),
-    install_requires=["pydevmgr_ua>=0.4.4", 
+    install_requires=["pydevmgr_ua>=0.4.5", 
 
                     'jinja2' # For templating the configuration files (see dump)
                     ],
