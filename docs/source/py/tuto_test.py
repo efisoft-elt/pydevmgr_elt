@@ -136,11 +136,11 @@ class TestNode(BaseNode):
     
 
     @classmethod
-    def new_args(cls, parent, config):
+    def new_args(cls, parent, name, config):
         # This method is used when the node is created from a parent object 
         # in our case the parent (a Device or Interface) will need to pass the 
         # client object and the targeted device prefix
-        d = super().new_args(parent, config)
+        d = super().new_args(parent, name, config)
         d.update(
             client =  parent.client, 
             prefix =  parent.remote_key 
@@ -184,11 +184,11 @@ class TestRpc(BaseRpc):
         self.prefix = prefix
 
     @classmethod
-    def new_args(cls, parent, config):
+    def new_args(cls, parent, name, config):
         # This method is used when the node is created from a parent object 
         # in our case the parent (a Device or Interface) will need to pass the 
         # client object and the targeted device prefix
-        d = super().new_args(parent, config)
+        d = super().new_args(parent, name, config)
         d.update(
             client =  parent.client, 
             prefix =  parent.remote_key 

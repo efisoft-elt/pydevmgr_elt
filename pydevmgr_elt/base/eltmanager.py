@@ -222,7 +222,7 @@ class ManagerStatInterface(BaseInterface):
         
         - the devices() method
         """        
-        return cls(kjoin(parent.key, name), list(parent.devices), config=config, **cls.new_args(parent, config))
+        return cls(kjoin(parent.key, name), list(parent.devices), config=config, **cls.new_args(parent, name, config))
     
     # The nodes is a function with signature func(parent) it is called by the .new class method 
     @NodeAlias.prop('state', nodes=get_device_state_nodes)

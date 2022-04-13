@@ -224,8 +224,8 @@ class MotorStat(Base):
     # we need the mot_position from te parent (a Motor Device)
     # just add it to the dictionary create by  the super
     @classmethod
-    def new_args(cls, parent, config):
-        d = super().new_args(parent, config)
+    def new_args(cls, parent, name, config):
+        d = super().new_args(parent, name,  config)
         try:
             mot_positions = parent.config.positions
         except AttributeError:

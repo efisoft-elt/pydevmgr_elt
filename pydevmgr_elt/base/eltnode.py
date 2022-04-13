@@ -18,7 +18,7 @@ class EltNode(UaNode):
         self.fits_key = fits_key or self._config.fits_prefix 
         
     @classmethod
-    def new_args(cls, parent, config):
-        d = super().new_args(parent, config)
+    def new_args(cls, parent, name, config):
+        d = super().new_args(parent, name, config)
         d.update(fits_key = fjoin(parent.fits_key, config.fits_prefix))
         return d
