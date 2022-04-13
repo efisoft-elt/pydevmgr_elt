@@ -10,7 +10,7 @@ from .eltstat import StatInterface
 
 from enum import Enum
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
-from pydevmgr_core import (KINDS, get_device_class, upload, NodeVar, open_device, record_class, get_class, NodeAlias,
+from pydevmgr_core import (KINDS,  upload, NodeVar, open_device, record_class, get_class, NodeAlias,
 NodeAlias1, LocalNode, GenInterface)
 from pydevmgr_ua import UaDevice
 from typing import Optional, Type
@@ -128,10 +128,7 @@ class CfgInterface(EltInterface):
 
 @record_class
 class EltDevice(UaDevice):
-    # allow wthe creation of chidren attribute from what is defined in config
-    _auto_build_object = True 
-
-
+    
     Config = EltDeviceConfig
     class Data(UaDevice.Data):
         Stat = StatInterface.Data

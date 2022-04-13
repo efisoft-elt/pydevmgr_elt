@@ -11,7 +11,6 @@ from pydantic import root_validator
 
 @record_class
 class EltInterface(UaInterface):
-    _auto_build_object = True
 
     Node = EltNode
     Rpc = EltRpc

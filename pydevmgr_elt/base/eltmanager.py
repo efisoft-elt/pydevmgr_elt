@@ -1,6 +1,6 @@
 from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
                            BaseManager, AllTrue, upload,   get_class, record_class, GenDevice, 
-                            BaseDevice, NodeVar
+                            BaseDevice, NodeVar, ObjectFactory
                            )
 
 from . import io
@@ -336,7 +336,6 @@ class EltManager(BaseManager):
         mgr.ccs.set_coordinates( 044534.0, -244567.0, 2000 )
         
     """
-    _auto_build_object = True 
     Device = EltDevice # default device class
     Config = ManagerConfig    
     
@@ -351,13 +350,11 @@ class EltManager(BaseManager):
         ) -> None:
        
         super().__init__(key, config=config, **kwargs)    
-        if devices is not None:                                       
-            for name, d in BaseDevice.Dict(devices, __parent__=self).items():
-                self.__dict__[name] = d
-            self.config.server.devices = list(devices)
-    
-
-        
+        if devices is not None:
+            factory = ObjectFactory(EltDevice)
+            for name, obj in devices.items():
+                self.__dict__[name] = factory.build(self, name, obj)
+            self.config.server.devices = list(devices)    
 
     def __dir__(self):
         lst = [d.name for d in self.devices]
