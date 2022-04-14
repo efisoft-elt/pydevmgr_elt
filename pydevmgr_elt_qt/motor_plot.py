@@ -6,7 +6,7 @@ from .io import find_ui
 from pydevmgr_core import NodeVar
 from .elt_device_ctrl import EltDeviceCtrl
 from pydevmgr_core_qt import record_widget_factory, BaseUiLinker
-from pydevmgr_core import DequeNode, UnixTimeNode
+from pydevmgr_core.nodes import Time, DequeList
 from pydantic import Field
 import pyqtgraph as pg
 import numpy as np 
@@ -18,7 +18,7 @@ from enum import IntEnum
 
 
 # create a node returning the unix  time 
-time = UnixTimeNode('time')
+time = Time('time')
 
 
 plot_nodes = [time, "pos_actual", "pos_error", "vel_actual"]
@@ -29,7 +29,7 @@ class MotorPlotStatData(EltDeviceCtrl.Data.StatData):
     
     pos_actual: NodeVar[float] = 0.0
     pos_error: NodeVar[float]  = 0.0
-    plot_data: NodeVar[list] = Field([], node=DequeNode.prop('plot_data' , nodes=plot_nodes, trigger_index=-1))
+    plot_data: NodeVar[list] = Field([], node=DequeList.prop('plot_data' , nodes=plot_nodes, trigger_index=-1))
 
 
 ###

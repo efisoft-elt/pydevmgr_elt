@@ -4,7 +4,8 @@ from pydevmgr_elt.devices.drot.rpcs import DrotRpcs as Rpcs
 
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.devices.motor import Motor
-from pydevmgr_core import record_class, NegNode
+from pydevmgr_core import record_class
+from pydevmgr_core.nodes import Opposite
 from typing import Optional
 
 
@@ -69,7 +70,7 @@ class Drot(Base):
 
     def stop_track(self) -> None:
         self.rpcs.rpcStopTrack.rcall()
-        return NegNode(node=self.stat.is_tracking)
+        return Opposite(node=self.stat.is_tracking)
     
     def start_track(self, mode, angle=0.0) -> Base.Node:
         """ Start drot tracking 

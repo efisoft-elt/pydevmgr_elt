@@ -1,7 +1,8 @@
 from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
-                           BaseManager, AllTrue, upload,   get_class, record_class, GenDevice, 
+                           BaseManager, upload,   get_class, record_class, GenDevice, 
                             BaseDevice, NodeVar, ObjectFactory
                            )
+from pydevmgr_core.nodes import AllTrue
 
 from . import io
 from .eltdevice import EltDevice

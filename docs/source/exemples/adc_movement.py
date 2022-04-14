@@ -1,4 +1,5 @@
-from pydevmgr_elt import Adc, CcsSim, Time, NodeVar, DataLink, wait, AllTrue
+from pydevmgr_elt import Adc, CcsSim, Time, NodeVar, DataLink, wait
+from pydevmgr_core.nodes import AllTrue
 from pydevmgr_ua import UaDevice, UaNode
 from pydantic import BaseModel, Field, AnyUrl 
 from datetime import datetime 

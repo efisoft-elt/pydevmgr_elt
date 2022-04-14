@@ -103,7 +103,8 @@ We want to make the position movement configurable, the number of cycles and may
 
 .. code-block:: python
 
-   from pydevmgr_core import BaseManager, DequeNode, LocalUtcNode, wait, NodeVar
+   from pydevmgr_core import BaseManager,wait, NodeVar
+   from pydevmgr_core.nodes import UtcTime, DequeList
    from pydevmgr_elt import Motor
    from pydantic import Field
    from typing import List 
@@ -114,12 +115,12 @@ We want to make the position movement configurable, the number of cycles and may
             n_cycle: int = 1
             velocity: float = 3.0 
             
-            time: LocalUtcNode.Config = LocalUtcNode.Config()
+            time: UtcTime.Config = UtcTime.Config()
             tesa: Tesa.Config = Tesa.Config()
             motor: Motor.Config = Motor.Config()
             sensors: Sensors.Config = Sensors.Config()
             
-            seq_data: DequeNode.Config = DequeNode.Config( nodes=['time', 'motor.stat.pos_actual', 'motor.stat.pos_error', 'tesa.position', 'sensors.temp1', 'sensors.temp2'] ) 
+            seq_data: DequeList.Config = DequeList.Config( nodes=['time', 'motor.stat.pos_actual', 'motor.stat.pos_error', 'tesa.position', 'sensors.temp1', 'sensors.temp2'] ) 
 
         class Data(BaseManager.Data): 
             seq_data: NodeVar[list] = []
@@ -223,7 +224,8 @@ Just the copy / past of everything above
     from pydevmgr_serial import BaseSerialNode, SerialDevice
     from pydevmgr_ua import UaNode, UaDevice
     from pydevmgr_core import NodeAlias1, Defaults, DataLink
-    from pydevmgr_core import BaseManager, DequeNode, LocalUtcNode, wait, NodeVar
+    from pydevmgr_core import BaseManager,  wait, NodeVar
+    from pydevmgr_core.nodes import DequeList, UtcTime
     from pydantic import Field
     from pydevmgr_elt import Motor
     from typing import List 
@@ -301,12 +303,12 @@ Just the copy / past of everything above
             n_cycle: int = 1
             velocity: float = 3.0 
             
-            time: LocalUtcNode.Config = LocalUtcNode.Config()
+            time: UtcTime.Config = UtcTime.Config()
             tesa: Tesa.Config = Tesa.Config()
             motor: Motor.Config = Motor.Config()
             sensors: Sensors.Config = Sensors.Config()
             
-            seq_data: DequeNode.Config = DequeNode.Config( nodes=['time', 'motor.stat.pos_actual', 'motor.stat.pos_error', 'tesa.position', 'sensors.temp1', 'sensors.temp2'] ) 
+            seq_data: DequeList.Config = DequeList.Config( nodes=['time', 'motor.stat.pos_actual', 'motor.stat.pos_error', 'tesa.position', 'sensors.temp1', 'sensors.temp2'] ) 
 
         class Data(BaseManager.Data): 
 

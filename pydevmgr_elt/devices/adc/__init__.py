@@ -7,7 +7,8 @@ from pydevmgr_core import record_class, Defaults, RpcError, kjoin, BaseDevice
 from typing import Optional, Any, Dict, List
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt import io
-from pydevmgr_core import path_walk_item , NegNode, KINDS, get_class
+from pydevmgr_core import path_walk_item , KINDS, get_class
+from pydevmgr_core.nodes import Opposite 
 from pydantic import BaseModel 
 
 Base = EltDevice
@@ -155,7 +156,7 @@ class Adc(Base):
     
     def stop_track(self) -> None:
         self.rpcs.rpcStopTrack.rcall()
-        return NegNode(node=self.stat.is_tracking)
+        return Opposite(node=self.stat.is_tracking)
 
     def start_track(self, angle=0.0) -> Base.Node:
         """ Start tracking (AUTO mode)

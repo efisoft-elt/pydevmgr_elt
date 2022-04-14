@@ -11,7 +11,8 @@ from .eltstat import StatInterface
 from enum import Enum
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
 from pydevmgr_core import (KINDS,  upload, NodeVar, open_device, record_class, get_class, NodeAlias,
-NodeAlias1, LocalNode, GenInterface)
+NodeAlias1,  GenInterface)
+from pydevmgr_core.nodes import Local
 from pydevmgr_ua import UaDevice
 from typing import Optional, Type
 import logging
@@ -162,7 +163,7 @@ class EltDevice(UaDevice):
         return self.rpcs
     
 
-    is_ignored = LocalNode.prop(default=False)
+    is_ignored = Local.prop(default=False)
     
     _devices = None # some device can have child devices (e.g. ADC)
     

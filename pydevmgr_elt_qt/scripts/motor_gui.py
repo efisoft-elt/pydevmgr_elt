@@ -1,5 +1,6 @@
 
-from pydevmgr_elt import Motor, Downloader, NodeVar, DequeNode, LocalTimeNode, UnixTimeNode, open_elt_device
+from pydevmgr_elt import Motor, Downloader, NodeVar,  open_elt_device
+from pydevmgr_core.nodes import Time, DequeList
 from pydevmgr_elt_qt import MotorCtrl, MotorCfg
 
 from pydevmgr_core_qt import BaseUiLinker
@@ -26,13 +27,13 @@ usage = "pydevmgr_motor_gui relative/path/to/motor.yml"
                                                          
 
 # create a node returning the unix  time 
-time = UnixTimeNode('time')
+time = Time('time')
 
 
 class MotorPlotStatData(BaseModel):
     """ a Data Model defining what we need for the plot widget """
     substate_txt : NodeVar[int] = 0
-    plotdata: NodeVar[list] = Field([], node=DequeNode.prop('plotdata', [time, 'pos_actual', 'pos_error', 'is_moving'], maxlen=100, trigger_index=-1)) 
+    plotdata: NodeVar[list] = Field([], node=DequeList.prop('plotdata', [time, 'pos_actual', 'pos_error', 'is_moving'], maxlen=100, trigger_index=-1)) 
     
 class MotorPlotData(BaseModel):
     StatData = MotorPlotStatData

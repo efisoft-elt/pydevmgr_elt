@@ -256,7 +256,8 @@ class TestMotor2(TestMotor):
 
 
 
-from pydevmgr_core import BaseDevice, NodeAlias1, NodeVar, LocalUtcNode, DequeNode1
+from pydevmgr_core import BaseDevice, NodeAlias1, NodeVar
+from pydevmgr_core.nodes import UtcTime, Deque
 from pydantic import Field 
 from collections import deque 
 
@@ -264,9 +265,9 @@ class TestMotor3(TestMotor):
     class Data(TestMotor.Data):
         position: NodeVar[float] = 0.0
         position_mm: NodeVar[float] = 0.0
-        time: NodeVar[str] = Field(  '2000-01-01T00:00:00.000000', node=LocalUtcNode() )
+        time: NodeVar[str] = Field(  '2000-01-01T00:00:00.000000', node=UtcTime() )
 
-        position_buffer: NodeVar[deque] = Field( deque(), node = DequeNode1.prop( node="position", maxlen=100 ) )
+        position_buffer: NodeVar[deque] = Field( deque(), node = Deque.prop( node="position", maxlen=100 ) )
 
     @NodeAlias1.prop('position_mm', node="position")
     def position_mm(self, position):

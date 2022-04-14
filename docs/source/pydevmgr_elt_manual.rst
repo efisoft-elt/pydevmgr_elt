@@ -461,7 +461,7 @@ Note, one can also use the :class:`AllTrue` node alias to combine node logic :
 
 .. code-block:: python 
 
-    >>> from pydevmgr_elt import AllTrue
+    >>> from pydevmgr_core.nodes import AllTrue
     >>> all_standstill = AllTrue(nodes=[tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill]) 
     >>> wait( [all_standstill] )
 
@@ -802,12 +802,12 @@ Or if this is not suposed to be configurable one can include the property direct
 
 Some usefull alias node are buitl-in like : 
 
-- :class:`pydevmgr_core.DequeNode` which allow to fifo values of several nodes at each download. Usefull for plot for instance.
-- :class:`pydevmgr_core.LocalTimeNode`, :class:`pydevmgr_elt.LocalUtcNode` to deal with time stamps
-- :class:`pydevmgr_core.AllTrue`, :class:`pydevmgr_core.AnyTrue`, :class:`pydevmgr_core.AllFalse`, :class:`pydevmgr_core.AnyFalse` to combine 
+- :class:`pydevmgr_core.nodes.DequeList` which allow to fifo values of several nodes at each download. Usefull for plot for instance.
+- :class:`pydevmgr_core.nodes.DateTime`, :class:`pydevmgr_elt.nodes.UtcTime` to deal with time stamps
+- :class:`pydevmgr_core.nodes.AllTrue`, :class:`pydevmgr_core.nodes.AnyTrue`, :class:`pydevmgr_core.nodes.AllFalse`, :class:`pydevmgr_core.nodes.AnyFalse` to combine 
   the logic of several nodes. 
-- :class:`pydevmgr_core.InsideIntervalNode` To check if a value is inside a given interval
-- :class:`pydevmgr_core.PosNameNode`  return names for given position
+- :class:`pydevmgr_core.nodes.InsideInterval` To check if a value is inside a given interval
+- :class:`pydevmgr_core.nodes.PosName`  return names for given position
 
  
 GUIS
@@ -1016,15 +1016,16 @@ Auto generated Indexes
 .. automodule:: pydevmgr_elt
     :members:  GROUP,  Motor,  Drot, Adc, Shutter, Lamp, Piezo, Sensor, Time, CcsSim, EltManager, EltDevice 
                open_elt_manager, open_elt_device, nodealias, RpcError, EltRpc,  NodeAlias,  
-               AllTrue , AllFalse , AnyTrue , AnyFalse , InsideIntervalNode , PosNameNode ,
                Int16, Int32, Int64, UInt16, UInt32, UInt64, Float, Double, 
                INT  , DINT , LINT , UINT  , UDINT , ULINT  , REAL, LREAL, 
                wait, Waiter,  
-               local_time, DequeNode, LocalTimeNode , LocalUtcNode ,
                Downloader, Uploader, DataView,
                download, upload, 
                open_elt_manager , 
                nodealias ,   kjoin , ksplit, 
                NodeVar , DataLink, 
-               DataView , io    
- 
+               DataView , io,    
+               nodes.DateTime, nodes.UtcTime,
+               nodes.AllTrue , nodes.AllFalse , nodes.AnyTrue , nodes.AnyFalse
+               nodes.DequeList, nodes.Deque, 
+               nodes.InsideInterval , nodes.PosName
