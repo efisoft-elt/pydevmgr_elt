@@ -25,7 +25,7 @@ def mode_parser(mode):
 class DrotRpcs(Base):
 
     class Config(Base.Config):
-        rpcMoveAngle : RD = RC(suffix="RPC_MoveAbs", arg_parsers=[float])
+        rpcMoveAngle : RD = RC(suffix="RPC_MoveAngle", arg_parsers=[float])
         rpcStartTrack: RD = RC(suffix="RPC_StartTrack", arg_parsers=[mode_parser, float])
          
         rpcStopTrack: RD = RC(suffix="RPC_StopTrack")
