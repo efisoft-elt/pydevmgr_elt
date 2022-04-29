@@ -1,3 +1,7 @@
+0.4.10
+======
+- Big bug in drot mapping fixed 
+
 0.4.9
 =====
 - align to version 0.4.5 of pydevmgr_ua (some minor cleanup) 
