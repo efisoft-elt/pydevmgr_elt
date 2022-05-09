@@ -55,7 +55,7 @@ class SensorConfig(Base.Config):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-
+@record_class
 class AiChannel(BaseNodeAlias1):
     """ NodeAlias1 to a analog input node iddentified from a number 
 
@@ -85,6 +85,7 @@ class AiChannel(BaseNodeAlias1):
     def _new_source_node(cls, parent, config):
         return getattr(parent.aiChannels, f"ai{config.channel_number}")
 
+@record_class
 class AoChannel(BaseNodeAlias1):
     """ NodeAlias1 to a analog output node iddentified from a number 
 
@@ -111,12 +112,14 @@ class AoChannel(BaseNodeAlias1):
     """
 
     class Config(BaseNodeAlias1.Config):
+        type = "AoChannel"
         channel_number: int = 0
     @classmethod
     def _new_source_node(cls, parent, config):
         return getattr(parent.aoChannels, f"ao{config.channel_number}")
 
 
+@record_class
 class DiChannel(BaseNodeAlias1):
     """ NodeAlias1 to a digital input node iddentified from a number 
 
@@ -136,13 +139,14 @@ class DiChannel(BaseNodeAlias1):
         
     """
     class Config(BaseNodeAlias1.Config):
+        type = "DiChannel"
         channel_number: int = 0
     @classmethod
     def _new_source_node(cls, parent, config):
         return getattr(parent.diChannels, f"di{config.channel_number}")
 
 
-
+@record_class
 class DoChannel(BaseNodeAlias1):
     """ NodeAlias1 to a analog output node iddentified from a number 
 
@@ -169,6 +173,7 @@ class DoChannel(BaseNodeAlias1):
     """
 
     class Config(BaseNodeAlias1.Config):
+        type = "DoChannel"
         channel_number: int = 0
     @classmethod
     def _new_source_node(cls, parent, config):

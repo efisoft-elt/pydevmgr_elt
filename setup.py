@@ -17,7 +17,7 @@ setup(
     #data_files=data_files,
     license='CeCILL Free Software License Agreement v2.1',
     long_description=open('README.md').read(),
-    install_requires=["pydevmgr_ua>=0.4.5", 
+    install_requires=["pydevmgr_ua>=0.5.0", 
 
                     'jinja2' # For templating the configuration files (see dump)
                     ],
