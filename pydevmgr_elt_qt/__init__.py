@@ -1,3 +1,5 @@
+from pydevmgr_core_qt import get_widget_factory
+
 from .elt_device_ctrl import EltDeviceCtrl
 from .elt_device_line import EltDeviceLine
 from .elt_manager import EltManagerLinker

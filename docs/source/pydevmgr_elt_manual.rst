@@ -50,7 +50,7 @@ used by non-software engineers in order to easily scrips sequences to integrate,
 - **Building AIT and integration scripts** when the ESO high level framework cannot be used or is not ready.
   Typicaly, for instance,  when one have a test bench with some motors ans wants to do some scripts in order to characterise the hardware. 
 - **Build Engineering tools and small guis** which can be run from any computer and can be edited by non-software engineers during hardware integration or lab experiments.
-- **Prototyping of special devices**  writing down the basic skeleton of special devices in a friendly python environment before being translated to a real ELT-Framework compatible special device. 
+- **Prototyping and testing of special devices**  writing down the basic skeleton of special devices at early development phase in a friendly python environment before being translated to a real ELT-Framework compatible special device. 
 - **Use simple GUIs** to drive standard or custom ESO devices from any computers. For instance, useful when electronics and PLC setup is done separately in an other institute but wants to script some motor movements. 
 
 
@@ -168,36 +168,39 @@ Vocabulary
    Remote Procedure Call object. In **pydevmgr_elt** :class:`pydevmgr_elt.EltRpc` is sending action request trhough
    OPC-UA
 - ``Interface``  
-   This is just a groupment of Nodes and/or Rpcs. Interface object can create nodes on-the-fly based on the map file.
+   This is just a groupment of Nodes and/or Rpcs. Interface object can create nodes on-the-fly based on a default
+   mapping or a custom map file.
    It hold a communication to the server and information to build Nodes. Most of the :class:`pydevmgr_elt.EltDevice`
    objects have three interfaces: ``stat``, ``cfg`` and ``rpcs`` which are grouping status nondes, config nodes and RPCs
    respectively. 
 - ``Device`` 
    Device is the object representation of an hardware (or software) entity. It holds **Interfaces**, 
-   eventually **nodes** and methods to send actions. It can have also other Device instance (e.g. :class:`pydevmgr_elt.Adc` has
-   two :class:`pydevmgr_elt.Motor` devices). The Device is responsible to create the communictaiotn protocal and pass it
-   to children (Interface, Node, Rpc). 
+   eventually **nodes** and methods to send actions. It can have also other Device instances (e.g. :class:`pydevmgr_elt.Adc` has
+   two :class:`pydevmgr_elt.Motor` devices as child). The Device is responsible to create the communictaiotn protocal and pass it
+   to children Interface, Node, and Rpc. 
 - ``Manager``  
-    Is a collection of devices. See :class:`pydevmgr_elt.EltManager`   
+    Is a collection of devices. See :class:`pydevmgr_elt.EltManager`, the devices can be inside different PLCs
+    (different OPC-UA servers).   
 
 
 Engine 
 ------
 
-The `pydevmgr_core`_ engine documentation is still missing but in short: 
+The `pydevmgr_core`_ documentation is still missing but in short: 
 
-Each pydevmgr objects (see above) are made of a configuration and some runtime variables such as a ua-client that goes
-from the device to the nodes during creation. 
+Each pydevmgr objects (see above) are made of a configuration and some runtime variables such as a ua-client object that goes
+from device to interface to nodes during creation. 
 
-The configuration dictate how the Object should behave, instanciating two 
+The configuration dictate how the Object should behave. Instantiating two 
 objects (with similar classes) with the same configuration shall result to exactly the same behavior.
 
 Each object has a ``.new`` method. Its role is to build the object within the context of its parent. For instance, when 
-creating an interface from a device the Ua communication client object is transfered from device to interface, 
-as well as when creating a node from the interface. Some other information as the OPC-UA node id is built.
+creating an interface from a device the Ua communication client object is transferred from device to interface, 
+similar when creating a node from the interface. Some other information as the OPC-UA node id is built at run time
+thanks to parent and config informations.
 
-After creating an object (Manager, Device, Interface, Node, Rpc) it is not garanty that changing its configuration
-instance will have any effect. All configuration change must be done before creating the object. 
+After creating an object (Manager, Device, Interface, Node, Rpc) it is not guaranty that changing its configuration
+instance will have the wanted effect. All configuration change must be done before creating the object. 
 
 
 
@@ -249,7 +252,17 @@ And then use it:
     finally:
        motor1.disconnect()
 
-    
+From version v0.5 Devices and Manager also understand context management: entering a width statement is connecting and
+exiting with is disconnecting the device or manager. The above example is equivalent to:
+
+.. code-block:: Python
+   
+   from pydevmgr_elt import Motor 
+   with Motor("motor1", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1') as motor1:
+        print( "MOTOR1 POS", motor1.stat.pos_actual.get() )
+        # do more stuff 
+
+
 To know the list of 'children'  available on a device (or any pydevmgr object)  one can use the ``.find`` method :  
 
 .. code-block:: python
@@ -272,7 +285,7 @@ open a device with the right class according to the type defined inside the conf
    from pydevmgr_elt import open_elt_device
    motor1 = open_elt_device("tins/motor1.yml")
 
-The path to configuration file (here `tins/motor1.yml`) must be relative to one of the path defined in the $CFGPATH environment variable.   
+The path to configuration file (here `tins/motor1.yml`) must be relative to one of the path defined in the ``$CFGPATH`` environment variable.   
 
 An other use case, load a configuration and change some parameters:
 
@@ -332,7 +345,21 @@ One can also open directly a device manager configuration file including several
        # etc ...
     finally:
         tins.disconnect()
-    
+
+Or, better amd mode compact, since v0.5: 
+
+.. code-block:: python
+
+    from pydevmgr_elt import open_elt_manager, wait
+    with open_elt_manager("tins/tins.yml") as tins:
+       tins.configure() # configure all tins devices down to PLC
+       tins.reset() # reset all devices
+       wait( tins.init() ) # init all devices and wait 
+       wait( tins.enable() ) # enable all devices
+       
+       # etc ...
+
+
 
 
 .. note::
@@ -357,7 +384,7 @@ A manager (collection of several devices) can be also created without the need o
     
     >>> mgr.motor1.stat.pos_actual.get()
     4.0
-    >>> download( m.stat.pos_actual for m in mgr.devices if m.dev_type == 'Motor')
+    >>> download( m.stat.pos_actual for m in mgr.devices if m.config.type == 'Motor')
     [4.0, 3.4]
     
     
@@ -405,7 +432,7 @@ Instead:
    >>> wait( tins.adc1.init() )
    >>> wait( tins.adc1.enable() )
 
-What does return the init and enable is a Node to be checked to figure out if the requested action has been finished.  
+What does return the ``init`` and ``enable`` is a Node to be checked to figure out if the requested action has been finished.  
 
 E.g: In the exemple above ``init`` is returning the node ``tins.adc1.stat.initialised`` 
 
@@ -418,13 +445,10 @@ it will wait that all input callables or node return ``True``. But the logic can
 .. code-block:: python
 
    from pydevmgr_elt import open_elt_manager, wait
-   mgr = open_elt_manager("tins/tins.yml")
    
-   mgr.connect()
-   mgr.configure() # configure all devices
-   
-   wait( [mgr.adc1.init(), mgr.drot1.init()])
-   wait( [mgr.adc1.enable(), mgr.dot1.enable()] 
+   with open_elt_manager("tins/tins.yml") as mgr:   
+       wait( [mgr.adc1.init(), mgr.drot1.init()] )
+       wait( [mgr.adc1.enable(), mgr.dot1.enable()] )
 
   
    
@@ -434,7 +458,7 @@ All 'check' nodes are requested (in one call per server) at a configurable perio
 
 Wait has a timeout option. If time exceed timeout (in seconds) an exception is raised.
 
-An other keyword of ``wait`` is ``lag`` which add x seconds before starting to check nodes values. This can be usefull
+An other keyword of ``wait`` is ``lag`` which add x seconds before starting to check nodes values. This can be useful
 to make sure that the requested action had time to start, for instance when moving motors: 
 
 .. code-block:: python 
@@ -442,10 +466,10 @@ to make sure that the requested action had time to start, for instance when movi
     wait( mgr.motor.move_abs(8,1.0) , lag=0.1 )
 
 
-When the logic of the expecting "end of action" is too embigous, None is returned (None is ignored by wait). 
+When the logic of the expecting "end of action" is too ambiguous, None is returned (None is ignored by wait). 
 One Example is the ``move_vel`` method of a motor there is no end on this action. 
 
-On the Example above ``start_track()`` is returning a node ``is_tracking``.
+Note, on the Example above ``start_track()`` is returning a node ``is_tracking``.
 
 The function :func:`wait` has a :class:`Waiter` counterpart where the node list definition is separated from the call:
 
@@ -463,19 +487,18 @@ Note, one can also use the :class:`AllTrue` node alias to combine node logic :
 
     >>> from pydevmgr_core.nodes import AllTrue
     >>> all_standstill = AllTrue(nodes=[tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill]) 
-    >>> wait( [all_standstill] )
+    >>> wait( all_standstill )
 
 A good practice would be also to add a node which check any errors and raise an exception in case of error, pydevmgr as
 this (in v>0.4): 
 
 .. code-block:: python
 
-   from pydevmgr import NodeAlias
    
    wait (  [mgr.motor1.move_abs(4.5, 0.8), mgr.motor1.move_abs(4.5, 0.8),  mgr.motor1.stat.noerror_check,  mgr.motor2.stat.noerror_check ] )         
 
-The noerror_check is a :class:`pydevmgr_core.NodeAlias` returning always True but raise an exception in case of error
-(non zero error_code). This allow to interupt the wait with an exception raised. 
+The noerror_check is a :class:`pydevmgr_core.NodeAlias` returning always True but raise an exception in case of device error 
+(not RPC-Error, but the FB error). This allow to interrupt the wait with an exception raised. 
 
 
 .. _configuration files: http://www.eso.org/~eeltmgr/ICS/documents/IFW_HL/sphinx_doc/html/manuals/fcf/src/docs/devmgr.html#configuration
@@ -514,16 +537,16 @@ Dictionary based
      <NodeAlias key='motor1.substate_txt'>: 'OP_STANDSTILL'}
 
 Note on the Example above ``substate_txt`` is a :class:`pydevmgr_core.NodeAlias` it transforms the substate number (from the PLC) into a text. 
-In consequence the substate node is downloaded from PLC and added as well in the data dictionary.  
+In consequence, the substate node is downloaded from PLC and added as well in the data dictionary.  
 
 Items of the data dictionary are node/value pairs. One can access  values with e.g. ``data[tins.motor1.stat.pos_actual]``. 
     
-But a *view* of the data dictionary with string keys can be retrieved easely :
+But a *view* of the data dictionary with string keys can be retrieved easily :
 
  .. code-block:: python
  
      >>> from pydevmgr_elt import DataView  
-     >>> m1_data = DataView(data, tins.motor1)
+     >>> m1_data = DataView(data, tins.motor1.stat)
      >>> m1_data['pos_actual']
      30.0 
      >>> wait( tins.motor1.move_abs(25.0, 100))
@@ -548,8 +571,7 @@ So a DataView can be used by a function for instance :
 a :class:`DataView` object is reflecting any change made in the root data except when a new node is added inside the root data dictionary. 
  
  
-Each manager, device, interface objects has a find method used to loock for and return children recursively 
-
+Each manager, device, interface objects has a find method used to return children 
 One can also build the full list of nodes :
 
 .. code-block:: python
@@ -559,7 +581,7 @@ One can also build the full list of nodes :
    data = {}     
    download( tins.find(BaseNode,-1), data )
    
-In the exemple above find is loocking for BaseNode object, the -1 argument is the depth, a negative depth is infinit. 
+In the example above find is looking for BaseNode object, the -1 argument is the depth, a negative depth is infinite. 
 
     
 
@@ -567,10 +589,10 @@ Structure Base Model
 --------------------
 
 This is most probably the cleanest way to make an application or script with pydevmgr. The Data Structure is declared 
-frontend with all the necessary attributes to work with. Making a less ambiguous and more robust 
-way to work  with values at run time than a dynamic dictionary. 
+front end with all the necessary attributes to work with. Making a less ambiguous and more robust 
+way to work with values at run time than a dynamic dictionary. It is also more IDE friendly. 
 
-Data Structure are :class:`BaseModel` of the excellent `PYDANTIC`_ module (it is like an extention of data class with data validation). 
+Data Structure are :class:`BaseModel` of the excellent `PYDANTIC`_ module (it is like an extension of data class with data validation). 
 
 .. code-block:: python
 
@@ -589,10 +611,11 @@ Above, a call of ``dl.download()`` will trigger an update of ``my_data`` instanc
 
 
 .. code-block:: python
-
-   >>> dl.download()
-   >>> my_data.pos_actual
-   25.0
+   
+   with motor1: 
+      dl.download()
+      my_data.pos_actual
+   # 25.0
 
 A full Data Model Class is available for each devices :
 
@@ -612,7 +635,7 @@ Similary this should also work
     >>> dl = DataLink(mgr.motor1.stat, mot_stat_data)
     >>> dl.download() 
 
-In version v0.4 the manager has a ``create_data_class`` method to create a Data class dynamicaly: 
+Since version v0.4 the manager has a ``create_data_class`` method to create a Data class dynamicaly: 
 
 .. code-block:: python
 
@@ -705,12 +728,12 @@ Their goal is to mimic a real server node by doing on-the-fly small computations
 When the alias node .get() method is called (or the node is added in a node list for download) the required 
 nodes of the :class:`pydevmgr_core.NodeAlias` will also be downloaded from server
 
-For instance `tins.motor1.stat.substate_txt` is 'geting' the text representation of the substate.
+For instance `tins.motor1.stat.substate_txt` is 'getting' the text representation of the substate.
 The substate integer is taken from server and converted into string on the fly. 
           
-This allows to make the device capabilities uniforme and more clear, the applications can than just 
-focus on its tasks by using a single and simple data dictionary. The en user does not have to know 
-is a node is real or an alias. 
+This allows to make the device capabilities uniform and more clear, the applications can than just 
+focus on its tasks by using a single and simple data dictionary. The end user does not have to know 
+if a node is real or an alias. 
 
 For instance :
 
@@ -753,7 +776,7 @@ To generate a :class:`pydevmgr_core.NodeAlias` one can use a :func:`pydevmgr_cor
     >>> is_centered.get() 
     True
 
-Within a parent class one can use the ``NodeAlias.prop`` (for property) to create a NodeAlias instanciated in the
+Within a parent class one can use the ``NodeAlias.prop`` (for property) to create a NodeAlias instantiated in the
 context of its parent: 
 
 .. code-block:: python
@@ -767,13 +790,13 @@ context of its parent:
           return abs(pos_error)<0.03 
             
 
-You can also define your how NodeAlias Class easely with som configuration: 
+You can also define your own NodeAlias Class easily with some configuration: 
 
 .. code-block:: python 
 
    from pydevmgr_elt import Motor, NodeAlias1 
 
-   class IsInTarget(NodeAlias1,  sigma=(float, 0.03)): 
+   class IsArrived(NodeAlias1,  sigma=(float, 0.03)): 
         def fget(self, pos_error): 
             return abs(pos_error)<0.03
 
@@ -783,26 +806,26 @@ And include it to your Motor class configuration so it can be configured from a 
 
     class MyMotor(Motor): 
         class Config(Motor.Config): 
-            is_in_target : IsInTarget.Config = IsInTarget.Config( node="stat.pos_error", sigma=0.05 )
-            
-    m = MyMotor(address="opc.tcp://localos:4840", prefix="MAIN.Motor1")
-    m.connect()
-    m.is_in_target.get()
+            is_arrived : IsArrived.Config = IsArrived.Config( node="stat.pos_error", sigma=0.05 )
+    
+
+    with MyMotor(address="opc.tcp://localos:4840", prefix="MAIN.Motor1") as m:
+        print( m.is_in_target.get() )
 
 
-Or if this is not suposed to be configurable one can include the property directly inside the class  : 
+Or if this is not supposed to be configurable one can include the property directly inside the class  : 
 
 .. code-block:: python
 
    class MyMotor(Motor):
-        is_in_target = IsInTarget.prop( node="stat.pos_error", sigma=0.05 )
+        is_arrived = IsArrived.prop( node="stat.pos_error", sigma=0.05 )
 
 
 
 
-Some usefull alias node are buitl-in like : 
+Some useful alias node are built-in like : 
 
-- :class:`pydevmgr_core.nodes.DequeList` which allow to fifo values of several nodes at each download. Usefull for plot for instance.
+- :class:`pydevmgr_core.nodes.DequeList` which allow to fifo values of several nodes at each download. Useful for plot for instance.
 - :class:`pydevmgr_core.nodes.DateTime`, :class:`pydevmgr_elt.nodes.UtcTime` to deal with time stamps
 - :class:`pydevmgr_core.nodes.AllTrue`, :class:`pydevmgr_core.nodes.AnyTrue`, :class:`pydevmgr_core.nodes.AllFalse`, :class:`pydevmgr_core.nodes.AnyFalse` to combine 
   the logic of several nodes. 
@@ -823,7 +846,7 @@ The GUI part of **pydevmgr_elt** is constantly in progress. Making a full comple
 consuming and overkill for the purpose of this package. 
 Instead tools will be added on demand. 
 
-However one can quickly buil a user interface for 
+However one can quickly built a user interface for 
 the purpose of **pydevmgr_elt**. 
 
 .. warning:: For pydevmgr_elt_qt, pyqt5 and pyqtgraph shall be installed 
@@ -844,7 +867,7 @@ Each devices have several widget kinds, serving different purposes:
 .. image:: img/motor_ctrl.png
    :width: 600
 
-- ``'cfg'``  a widget interface to configure the device. So far only for motor in v0.3.
+- ``'cfg'``  a widget interface to configure the device. So far only for motor in v0.6.
 
 .. image:: img/motor_cfg.png
    :width: 600 
@@ -864,25 +887,26 @@ to build it and than connect it to a device and a :class:`pydevmgr_core.Download
     motor_ctrl = MotorCtrl() # create an empty widget 
     motor_ctrl.connect(downloader, motor1) # connect the widget to the downloader and the motor1 instance 
     
-    downloader.download() # This will update the widget with the new values it can be called in a timer 
-
+    with motor1:
+        downloader.download() # This will update the widget with the new values it can be called in a timer 
 
 
 The ``connect`` method above does : 
 
 - add all the necessary nodes to the ``downloader``. i.e., The ones used by the widget
-- add the widget :meth:`pydevmgr_elt_qt.MotorCtrl.update` method to the ``downloader`` call back qeue: widget is updated after each downlaod 
-- update the widget (e.g. position names in dropdown menus, etc) and link buttons to device methods.  
+- add the widget :meth:`pydevmgr_elt_qt.MotorCtrl.update` method to the ``downloader`` call back queue: widget is updated after each download 
+- update the widget (e.g. position names in drop-down menus, etc) and link buttons to device methods.  
 
 The  :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` does the contrary, it free the nodes and callbacks from the ``downloader``
 and remove buttons action, used when the widget is destroyed for instance.
 
-Optionaly the :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` returns a object used to enable and disable the widget
-temporaly : 
+Optionally the :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` returns a object used to enable and disable the widget
+temporally : 
 
 .. code-block:: python 
-
-   c = motor_ctrl.connec(downloader, motor1)
+    
+   
+   c = motor_ctrl.connect(downloader, motor1)
    
    c.diable() # diable the widget and suspend the nodes download associated to this widget 
    c.enable() # reconnect the widget. 
@@ -895,7 +919,7 @@ Here is a complete script to make a window GUI to control two motors :
 
 .. code-block:: python
     
-    from pydevmgr_qt import get_widget_factory
+    from pydevmgr_elt_qt import get_widget_factory
     from pydevmgr_elt import Motor, Downloader
     from PyQt5 import QtWidgets, QtCore
     from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -910,11 +934,11 @@ Here is a complete script to make a window GUI to control two motors :
         win = QtWidgets.QWidget()
         layout =  QtWidgets.QVBoxLayout(win)
                 
-        motor1_wl = get_widget_factory("ctrl", motor1.dev_type).build()
+        motor1_wl = get_widget_factory("ctrl", motor1.config.type).build()
         motor1_wl.connect(downloader, motor1)
         layout.addWidget(motor1_wl.widget)
         
-        motor2_wl = get_widget_factory("ctrl", motor2.dev_type).build()
+        motor2_wl = get_widget_factory("ctrl", motor2.config.type).build()
         motor2_wl.connect(downloader, motor2)
         layout.addWidget(motor2_wl.widget)
         
@@ -927,16 +951,12 @@ Here is a complete script to make a window GUI to control two motors :
         
     if __name__ == '__main__':
     
-        motor1 = Motor('motor1', address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')
-        motor2 = Motor('motor2', address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor2')
-        try:
-            motor1.connect()
-            motor2.connect()
+        motor1 = Motor('motor1', address='opc.tcp://192.168.1.11:4840', prefix='MAIN.Motor1')
+        motor2 = Motor('motor2', address='opc.tcp://192.168.1.11:4840', prefix='MAIN.Motor2')
+        
+        with motor1, motor2:
             main_gui(motor1, motor2)
-        finally:
-            motor1.disconnect()
-            motor2.disconnect()
-    
+
 .. image:: img/gui_motor_exemple.png
    :width: 600     
 
@@ -970,7 +990,7 @@ An automatic gui can be created easily with the `pydevmgr_gui` shell command :
    
 A definition of the gui "views" or layouts can be done in a yml file (with suffix ``_ui.yml``) and a ui file. 
 The yml define which device or type of device shall be included in layouts named in the ui file. For instance 
-if the .ui file has a ``QVBoxLayout`` named ``ly_devices`` the manager suffixed ``_ui.yml`` file can declare what to add in the layout:
+if the .ui file has a ``QVBoxLayout`` named ``ly_devices`` the manager suffixed ``_ui.yml`` file can declare what to add in this layout:
 
 
 .. code-block:: yaml

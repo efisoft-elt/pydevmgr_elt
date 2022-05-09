@@ -2,7 +2,7 @@ import yaml
 import os
 import pkg_resources
 from jinja2 import Template
-from pydevmgr_core import io as cio
+from pydevmgr_core.base import io as cio
 
 class IOConfig(cio.IOConfig):
     resources : str = 'resources'

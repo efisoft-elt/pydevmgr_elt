@@ -1,7 +1,6 @@
 
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base import EltDevice
 
 from enum import Enum
 
@@ -13,6 +12,9 @@ ND = Defaults[NC] # this typing var says that it is a Node object holding defaul
 NV = NodeVar # used in Data 
 
 
+
+
+    
 class AiChannels(Base):
     class Config(Base.Config):
         ai1:               ND =  NC(suffix="stat.arrAI[0].lrValueUser")

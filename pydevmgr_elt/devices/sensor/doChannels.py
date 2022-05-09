@@ -1,7 +1,6 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_core import   Defaults, NodeVar
+from pydevmgr_elt.base import EltDevice
 
 from enum import Enum
 
@@ -11,6 +10,8 @@ N = Base.Node # Base Node
 NC = N.Config
 ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
+
+
 
 
 class DoChannels(Base):
