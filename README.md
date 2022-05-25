@@ -27,8 +27,22 @@ From sources :
 
 # Basic Usage
 
+(since v0.5)
 
 ```python 
+from pydevmgr_elt import Motor, wait
+
+
+with Motor('motor1', address="opc.tcp://192.168.1.11:4840", prefix="MAIN.Motor1") as m1:
+    wait(m1.move_abs(7.0,1.0), lag=0.1)
+    print( "position is", m1.stat.pos_actual.get() )
+
+```
+
+Can also be done in the old way: 
+
+```python
+
 from pydevmgr_elt import Motor, wait
 m1 = Motor('motor1', address="opc.tcp://192.168.1.11:4840", prefix="MAIN.Motor1")
 
@@ -48,14 +62,9 @@ m1 = Motor('motor1', address="opc.tcp://152.77.134.95:4840", prefix="MAIN.Motor1
 m1_data = Motor.Data() # m1_data is a structure built with default value
 m1_dl = DataLink(m1, m1_data) # create a data link use to fill m1_data to real hw values
 
-try:
-    m1.connect()
+with m1: # with conexte manager open/close a connection  
     m1_dl.download()
-    
     print( m1_data.stat.pos_actual,   m1_data.stat.pos_error  )
-finally:
-    m1.disconnect()
-
 ```
 
 Open from an elt yaml configuration file as defined in ELT IFW v3
