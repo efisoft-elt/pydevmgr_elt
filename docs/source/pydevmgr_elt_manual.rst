@@ -15,22 +15,16 @@ What is it ?
 
 .. note:: 
     
-   **About v0.2 vs v0.4.X**
+   **About versions**
+   Up to v0.5.x version pydevmgr_core, pydevmgr_ua and pydevmgr_elt has involved in a way that break backward
+   compatibilities. From v0.5 I will try my best to avoid any majore backward compatibility break.       
+   
    The deprecated version 0.2 of this module was included in a pydevmgr package. Now, the package is independant and
    using two other subpackages `pydevmgr_core`_ core engine for pydevmgr and `pydevmgr_ua`_ for generic OPC-UA com  
    
-   In its current version 0.4.X, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
-   to communicate with the OPC-UA server. The core engine can now be used for other purposes then communicating with 
-   ELT devices or OPC-UA (e.g. serial com, custom websockets, etc ...)
-   
-   Compare to v0.2 Some base classes as been renamed, e.g.  UaDevice -> EltDevice.  UaDevice is now part of `pydevmgr_ua`_. 
-   For the end user who just want to move motors the change in version 0.4 should not realy matters with two exceptions:
-
-    - :func:`pydevmgr_elt.open_elt_device`  is replacing `open_device`
-    - :func:`pydevmgr_elt.open_elt_manager` is replacing the `open_manager`
-   
+   In its current version 0.5.X, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
+   to communicate with the OPC-UA server.   
         
-
 
 
 If you do not know what is ELT software, this page is probably not for you.
@@ -688,7 +682,7 @@ The example above works because the path on the manager and on the data structur
 I mean `data.motor1.stat.pos_error`  <-> `mgr.motor1.stat.pos_error`   
 
 However one can specify other path in the data structure thanks to attribute of the Pydantic `Field`, we can 
-use the node attribute to determine the node path inside a tuple :
+use the node attribute to determine the node path inside a tuple or string with "." separated names :
 
 .. code-block:: python
 
@@ -798,9 +792,10 @@ You can also define your own NodeAlias Class easily with some configuration:
 
    class IsArrived(NodeAlias1,  sigma=(float, 0.03)): 
         def fget(self, pos_error): 
-            return abs(pos_error)<0.03
+            return abs(pos_error)<self.config.sigma
 
-And include it to your Motor class configuration so it can be configured from a configuration payload :
+And include it to your Motor class configuration so it can be configured from a configuration payload (a configuration
+file):
 
 .. code-block:: python 
 
@@ -810,7 +805,7 @@ And include it to your Motor class configuration so it can be configured from a 
     
 
     with MyMotor(address="opc.tcp://localos:4840", prefix="MAIN.Motor1") as m:
-        print( m.is_in_target.get() )
+        print( m.is_arrived.get() )
 
 
 Or if this is not supposed to be configurable one can include the property directly inside the class  : 

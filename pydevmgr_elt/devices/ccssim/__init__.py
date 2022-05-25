@@ -114,7 +114,8 @@ class CcsSim(Base):
         """ set environmnent data to the Ccs Simulator 
         
         Each settings arguments are potionals: 
-        temperature, pressure, humidity, lapserate, wavelength, dut
+        temperature, pressure, humidity, lapserate, wavelength, dut.
+        
         They are taken into account if not None
         
         """

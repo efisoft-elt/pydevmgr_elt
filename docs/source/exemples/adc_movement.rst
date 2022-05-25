@@ -9,7 +9,7 @@ The ESO FCS is not integrated for this test being used in an other institute so 
 For this tutorial we considers: 
     
     - A PLC Project with   1 ADC, A CcsSim and a Timer instanced
-    - They are two REAL values one the PLC to be read directly on the PLC (temperatures), not included in an IODEV
+    - They are two REAL values on the PLC to be red directly on the PLC (temperatures), not included in an IODEV
     - We want to be abble to send the ADC in a realistic trajectory 
 
 
@@ -20,7 +20,7 @@ As everything appear on the same PLC we can start from a UaDevice instead of e U
 in other examples.
 
 The advantage is that OPC-UA communication parameters are entered in one single place. A  "Child" device will share 
-the same OPC-UA client than its master (so address, namespace, ... of a child device will be ignored). 
+the same OPC-UA client than its master (so address, namespace, ... configuration of a child device will be ignored). 
 
 Here is the script:
 
@@ -58,7 +58,7 @@ Here is the script:
            temp1 : UaNode.Config = UaNode.Config( suffix="lrTemp1")
            temp2:  UaNode.Config = UaNode.Config( suffix="lrTemp2")
            
-           # maybe a list of real child device to be used, only the adc in sour case but some other can come later
+           # maybe a list of real child device to be used, only the adc in our case but some other can come later
            devices: List[str] = ['adc'] 
         
            
