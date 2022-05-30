@@ -12,13 +12,22 @@ R = Base.Rpc # Base Node
 RC = R.Config
 RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
-# RPC_ERROR are iddentical then Motor 
+# RPC_ERROR are iddentical to Motor 
+
+class TRACK_MODE(int, Enum):
+    SKY  = MODE.SKY.value 
+    ELEV = MODE.ELEV.value 
+        
 
 def mode_parser(mode):
     if isinstance(mode, str):
-        if mode not in ['SKY', 'ELEV']:
-            raise ValueError('tracking mode must be one of SKY or ELEV got %r'%mode)
-        mode = getattr(MODE, mode)
+        try:
+            mode = getattr( TRACK_MODE, mode)
+        except AttributeError:
+            choices = ",".join(str(m) for m in  TRACK_MODE)
+            raise ValueError(f'tracking mode must be one of {choices} got %r'%mode)
+    else:
+        mode = TRACK_MODE(mode)
     return Int16(mode)
 
 
