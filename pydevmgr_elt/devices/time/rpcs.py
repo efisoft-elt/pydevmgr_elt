@@ -32,7 +32,7 @@ enum_txt ( {
 @record_class
 class PlcTime(BaseParser, fmt='%Y-%m-%d-%H:%M:%S.%f', type="PlcTime"):
     @staticmethod
-    def parse(value, config):
+    def fparse(value, config):
         if isinstance(value, datetime):
             return value.strftime( config.fmt)
         return str(value).replace('T','-')
