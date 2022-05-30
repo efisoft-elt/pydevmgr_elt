@@ -36,7 +36,6 @@ STATE.OP    :  GROUP.OK,
 class SUBSTATE(int, Enum):
     """ constant holder for device SUBSTATEs """
     # SUBSTATE are specific to each device
-    # :TODO: is their common SUBSTATE for each device ? NOTOP_NOTREADY =  100
     #  NOTOP_READY = 101  ?
     NONE = 0
     NOTOP_NOTREADY = 100 # not sure these number are the same accros devices
@@ -114,12 +113,18 @@ class StatInterface(EltInterface):
     @NodeAlias1.prop(node="substate")
     def substate_txt(self, substate: int) -> str:
         """ Return a text representation of the substate """
-        return get_txt( self.SUBSTATE(substate) )
+        try:
+            return get_txt( self.SUBSTATE(substate) )
+        except ValueError:
+            return f"Unknown substate ({substate})"
     
     @NodeAlias1.prop(node="substate")
     def substate_group(self, substate: int):
         """ Return the afiliated group of the substate """
-        return get_group(self.SUBSTATE(substate))
+        try:
+            return get_group(self.SUBSTATE(substate))
+        except ValueError:
+            return GROUP.UNKNOWN
 
     
     @NodeAlias1.prop(node="state")
@@ -135,7 +140,10 @@ class StatInterface(EltInterface):
     @NodeAlias1.prop(node="error_code")
     def error_txt(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
-        return get_txt( self.ERROR(error_code) )
+        try:
+            return get_txt( self.ERROR(error_code) )
+        except ValueError:
+            return f"Unknown Error ({error_code})"
     
 
     @NodeAlias.prop(nodes=["error_code", "error_txt"])
