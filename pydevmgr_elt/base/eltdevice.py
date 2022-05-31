@@ -1,21 +1,17 @@
 from . import io
-from .tools import  enum_group, enum_txt, get_txt
-from enum import Enum
-from .config import eltconfig, GROUP
+from .tools import    get_enum_txt
+from .config import eltconfig
 
 from .eltinterface import EltInterface
 from .eltnode import EltNode
 from .eltrpc import EltRpc
 from .eltstat import StatInterface
 
-from enum import Enum
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
-from pydevmgr_core import (KINDS,  upload, NodeVar, open_device, record_class, get_class, NodeAlias,
-NodeAlias1,  GenInterface)
+from pydevmgr_core import (upload, NodeVar, open_device, record_class, GenInterface)
 from pydevmgr_core.nodes import Local
 from pydevmgr_ua import UaDevice
-from typing import Optional, Type
-import logging
+from typing import Optional
 
 
 
@@ -248,11 +244,11 @@ class EltDevice(UaDevice):
     
     def get_error_txt(self, errcode: int) -> str:
         """ Get a text description of the given error code number """
-        return get_txt(self.ERROR(errcode))
+        return get_enum_txt(self.ERROR, errcode, f"Unknown Error ({errcode})")
     
     def get_rpc_error_txt(self, rpc_errcode: int) -> str:
         """ Get a text description of the given rpc error code number """
-        return get_txt( self.RpcInterface.RPC_ERROR(rpc_errcode) )
+        return get_enum_txt( self.RpcInterface.RPC_ERROR, rpc_errcode, f"Unknown error ({rpc_errcode})" )
    
 
     def get_configuration(self, exclude_unset=True, **kwargs):

@@ -1031,8 +1031,7 @@ Auto generated Indexes
 .. automodule:: pydevmgr_elt
     :members:  GROUP,  Motor,  Drot, Adc, Shutter, Lamp, Piezo, Sensor, Time, CcsSim, EltManager, EltDevice 
                open_elt_manager, open_elt_device, nodealias, RpcError, EltRpc,  NodeAlias,  
-               Int16, Int32, Int64, UInt16, UInt32, UInt64, Float, Double, 
-               INT  , DINT , LINT , UINT  , UDINT , ULINT  , REAL, LREAL, 
+               UaInt16, UaInt32, UaInt64, UaUInt16, UaUInt32, UaUInt64, UaFloat, UaDouble, 
                wait, Waiter,  
                Downloader, Uploader, DataView,
                download, upload, 

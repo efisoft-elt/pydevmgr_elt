@@ -35,18 +35,13 @@ class LampLine(EltDeviceLine):
         self.outputs.time_left = self.outputs.Float( self.widget.time_left, fmt="%.0f")   
         
         self.inputs.intensity = self.inputs.Float(self.widget.input_intensity, default=1.0, fmt="%.1f")
-        self.inputs.time = self.inputs.Float(self.widget.input_time, default=10.0, fmt="%.1f")
+        self.inputs.time = self.inputs.Int(self.widget.input_time, default=10, fmt="%.0f")
     
     def update(self, data):
         super().update(data)        
         self.outputs.time_left.set( data.stat.time_left )
         
     
-    def list_actions(self, lamp):
-        return super().list_actions(lamp)+[
-        ("ON",  lamp.switch_on, [self.input_intensity.text, self.input_time.text]),
-        ("OFF", lamp.switch_off, [])
-        ]
         
     def setup_ui(self,lamp, data):
         """ Link a device to the widget 
