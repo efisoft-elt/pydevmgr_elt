@@ -1,8 +1,7 @@
 from .eltinterface import EltInterface
-from .eltnode import EltNode
 from pydevmgr_core import NodeVar, NodeAlias1, Defaults, NodeAlias
 from enum import Enum 
-from .tools import enum_group, enum_txt, get_txt, get_group
+from .tools import enum_group, enum_txt,  get_enum_txt, get_enum_group
 from .config import GROUP
 
 
@@ -75,7 +74,7 @@ enum_txt({
 })
 
 class StatInterface(EltInterface):
-    
+     
     ERROR = ERROR # needed for error_txt alias 
     SUBSTATE = SUBSTATE # needed for substate_txt node alias
     STATE = STATE 
@@ -113,37 +112,27 @@ class StatInterface(EltInterface):
     @NodeAlias1.prop(node="substate")
     def substate_txt(self, substate: int) -> str:
         """ Return a text representation of the substate """
-        try:
-            return get_txt( self.SUBSTATE(substate) )
-        except ValueError:
-            return f"Unknown substate ({substate})"
+        return get_enum_txt( self.SUBSTATE , substate, f"UNKNOWN ({substate})")
     
     @NodeAlias1.prop(node="substate")
     def substate_group(self, substate: int):
         """ Return the afiliated group of the substate """
-        try:
-            return get_group(self.SUBSTATE(substate))
-        except ValueError:
-            return GROUP.UNKNOWN
+        return get_enum_group(self.SUBSTATE, substate, GROUP.UNKNOWN)
 
-    
     @NodeAlias1.prop(node="state")
     def state_txt(self, state: int) -> str:
         """ Return a text representation of the state """
-        return get_txt( self.STATE(state) )
+        return get_enum_txt( self.STATE, state, f"UNKNOWN ({state})" )
 
     @NodeAlias1.prop(node="state")
     def state_group(self, state: int):
         """ Return the afiliated group of the state """
-        return get_group( self.STATE(state) )
+        return get_enum_group( self.STATE, state, GROUP.UNKNOWN )
     
     @NodeAlias1.prop(node="error_code")
     def error_txt(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
-        try:
-            return get_txt( self.ERROR(error_code) )
-        except ValueError:
-            return f"Unknown Error ({error_code})"
+        return get_enum_txt( self.ERROR , error_code, f"Unknown error ({error_code})" )
     
 
     @NodeAlias.prop(nodes=["error_code", "error_txt"])

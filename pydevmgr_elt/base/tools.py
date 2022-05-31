@@ -1,4 +1,4 @@
-from typing import Tuple, Type, Optional
+from typing import Any, Tuple, Type, Optional
 
 from .config import GROUP
 from . import io
@@ -16,9 +16,26 @@ def get_txt(e) -> str:
     """
     return getattr(e, 'txt', e.name)
 
+
+def get_enum_txt(enumerator: Enum, member: Any, default: str) -> str:
+    """ get enumerator member txt """
+    try:
+        item = enumerator(member)
+    except ValueError:
+        return default
+    return get_txt(item)
+
+
 def get_group(e)-> int:
     """ get attribute .group if exists alse return GROUP.UNKNOWN """
     return getattr(e, 'group', GROUP.UNKNOWN)
+
+def get_enum_group(enumerator: Enum, member: Any, default: str)-> GROUP:
+    try:
+        item = enumerator(member)
+    except ValueError:
+        return default
+    return get_group(item)
 
 
 def enum_group(groups: dict ) -> None:

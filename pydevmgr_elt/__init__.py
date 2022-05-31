@@ -20,8 +20,7 @@ Example:
 """
 from pydevmgr_core import *
 
-from pydevmgr_ua import  (Int16, Int32, Int64, UInt16, UInt32, UInt64, Float, Double, 
-                          INT  , DINT , LINT , UINT  , UDINT , ULINT  , REAL, LREAL, 
+from pydevmgr_ua import  (UaInt16, UaInt32, UaInt64, UaUInt16, UaUInt32, UaUInt64, UaFloat, UaDouble, 
                           UaCom, UaDevice, UaNode, UaInterface, UaRpc 
                           )
 
