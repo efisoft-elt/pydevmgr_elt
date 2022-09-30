@@ -7,14 +7,15 @@ adc1_motor2:
   simulated: false
   ignored: false
   address: opc.tcp://myplc.local:4840
-  simaddr: opc.tcp://134.171.57.209:4840       # Simulation address
   mapfile: "tins/mapMotor.yml"
   fits_prefix: "MOT1"
+  axis_type:             CIRCULAR_OPTIMISED
+
+
   ctrl_config:
     velocity:              3.0
     min_pos:               0.0
     max_pos:               359.0
-    axis_type:             CIRCULAR_OPTIMISED
     active_low_lstop:      false
     active_low_lhw:        false
     active_low_ref:        true
@@ -28,24 +29,16 @@ adc1_motor2:
     tout_init:             30000
     tout_move:             120000
     tout_switch:           10000
-  initialisation:
-      #sequence: ['FIND_LHW', 'FIND_UHW', 'CALIB_ABS', 'END']
-      sequence: ['CALIB_ABS', 'END'] # fine for simulated instrument 
-      FIND_LHW:
-         value1: 4.0
-         value2: 4.0
-      FIND_UHW:
-         value1: 4.0
-         value2: 4.0
-      CALIB_ABS:
-         value1: 0.0
-         value2: 0.0
-      END:
-         value1: 0.0
-         value2: 0.0
-  positions:
-     posnames: ['ON', 'OFF']
-     tolerance: 1                              # Tolerance in UU
-     'ON': 30
-     'OFF': 100
 
+  initialisation:
+      - step: 'CALIB_ABS'
+        value1: 14.0
+        value2: 4.0
+
+  positions:
+    - name: 'ON'
+      value: 30 
+    - name: 'OFF'
+      value: 100
+
+  tolerance: 1      

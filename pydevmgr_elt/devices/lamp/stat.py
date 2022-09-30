@@ -122,7 +122,11 @@ class LampStat(Base):
         status: ND = NC(suffix='stat.nStatus' )
         substate: ND = NC(suffix='stat.nSubstate' )
         time_left: ND = NC(suffix='stat.nTimeLeft' )
-    
+        on_analog: ND = NC(suffix='stat.bOnAnalog')
+        on_digital: ND = NC(suffix='stat.bOnDigital')
+        analog_feedback: ND = NC(suffix='stat.nOn')
+
+
     @NodeAlias1.prop(node="substate")
     def is_ready(self, substate):
         """ Alias node: True if lamp is ready (substate NOTOP_READY_ON or NOTOP_READY_OFF) """

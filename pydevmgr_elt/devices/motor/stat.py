@@ -2,8 +2,8 @@
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
-from pydevmgr_elt.devices.motor.positions import PositionsConfig
-from typing import Optional
+from pydevmgr_elt.devices.motor.positions import PositionConfig 
+from typing import Optional, List
 from enum import Enum
 Base = EltDevice.Stat
 
@@ -213,13 +213,14 @@ class MotorStat(Base):
         substate: ND = NC(suffix='stat.nSubstate' )
         vel_actual: ND = NC(suffix='stat.lrVelActual' )
     
-        mot_positions: Optional[PositionsConfig] = None
+        mot_positions: Optional[List[PositionConfig]] = None
+        tolerance: float = 1.0
         
     # for this one we redefine the init so it does accept a mot_positions argument
-    def __init__(self, *args, mot_positions: Optional[dict] = None, **kwargs):
+    def __init__(self, *args, mot_positions: Optional[List[PositionConfig]] = None, tolerance: float = 1.0, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config.mot_positions = mot_positions or PositionsConfig()
-
+        self.config.mot_positions = mot_positions or []
+        self.config.tolerance = tolerance
         
     # we need the mot_position from te parent (a Motor Device)
     # just add it to the dictionary create by  the super
@@ -229,8 +230,15 @@ class MotorStat(Base):
         try:
             mot_positions = parent.config.positions
         except AttributeError:
-            mot_positions = {}
+            mot_positions = []
+        
+        try:
+            tolerance = parent.config.tolerance
+        except AttributeError:
+            tolerance = 1.0
+
         d['mot_positions'] = mot_positions
+        d['tolerance'] = tolerance
         return d
 
     @NodeAlias1.prop(node="substate")
@@ -248,10 +256,10 @@ class MotorStat(Base):
     def pos_name(self, pos_actual):
         if not self.config.mot_positions: return ''
         positions = self.config.mot_positions
-        tol = positions.tolerance
-        for pname, pos in positions.positions.items():
-            if abs( pos-pos_actual)<tol:
-                return pname
+        tol = self.config.tolerance
+        for pos in positions:
+            if abs( pos.value-pos_actual)<tol:
+                return pos.name
         return ''
   
   

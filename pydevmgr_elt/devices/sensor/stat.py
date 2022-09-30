@@ -84,10 +84,10 @@ class SensorStat(Base):
         # all configured node will be accessible by the Interface
 
 
-        state:          ND = NC(suffix="nState")
-        substate:       ND = NC(suffix="nSubstate")
-        local:          ND = NC(suffix="bLocal")
-        error_code:     ND = NC(suffix="nErrorCode")
+        state:          ND = NC(suffix="stat.nState")
+        substate:       ND = NC(suffix="stat.nSubstate")
+        local:          ND = NC(suffix="stat.bLocal")
+        error_code:     ND = NC(suffix="stat.nErrorCode")
 
     @NodeAlias1.prop(node="substate")
     def is_ready(self, substate):

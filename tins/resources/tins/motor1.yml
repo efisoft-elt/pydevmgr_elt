@@ -7,14 +7,14 @@ motor1:
   simulated: false
   ignored: false
   address: opc.tcp://myplc.local:4840
-  simaddr: opc.tcp://127.0.0.1:7578
   mapfile: "tins/mapMotor.yml"
   fits_prefix: "MOT1"
+  axis_type:             CIRCULAR
+  
   ctrl_config:
     velocity:              3.0
     min_pos:               0.0
     max_pos:               359.0
-    axis_type:             CIRCULAR
     active_low_lstop:      false
     active_low_lhw:        false
     active_low_ref:        true
@@ -28,23 +28,24 @@ motor1:
     tout_init:             30000
     tout_move:             120000
     tout_switch:           10000
-  initialisation:
-      sequence: ['FIND_LHW', 'FIND_UHW', 'CALIB_ABS', 'END']
-      FIND_LHW:
-         value1: 4.0
-         value2: 4.0
-      FIND_UHW:
-         value1: 4.0
-         value2: 4.0
-      CALIB_ABS:
-         value1: 0.0
-         value2: 0.0
-      END:
-         value1: 0.0
-         value2: 0.0
-  positions:
-     posnames: ['ON', 'OFF']
-     tolerance: 1                              # Tolerance in UU
-     "ON": 30
-     "OFF": 100
 
+  initialisation:
+      - step: 'FIND_LHW'
+        value1: 4.0
+        value2: 4.0
+      - step: 'FIND_UHW'
+        value1: 4.0
+        value2: 4.0
+      - step: 'CALIB_ABS'
+        value1: 0.0
+        value2: 0.0
+      - step: 'END'
+        value1: 0.0
+        value2: 0.0
+  
+  positions:
+    - name: 'ON'
+      value: 30 
+    - name: 'OFF'
+      value: 100
+  tolerance: 1  

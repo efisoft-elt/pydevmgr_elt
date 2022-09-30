@@ -115,7 +115,7 @@ class PiezoStat(Base):
         """ -> True is axis is in auto mode """
         return substate == self.SUBSTATE.OP_AUTO
     
-    @NodeAlias1.prop("substate")
+    @NodeAlias1.prop(node="substate")
     def is_pos(self, substate: int) -> bool:
         """ -> True is axis is in pos mode """
         return substate == self.SUBSTATE.OP_POS

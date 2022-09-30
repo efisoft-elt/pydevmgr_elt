@@ -17,7 +17,14 @@ class LampCtrlConfig(Base.Config.CtrlConfig):
     low_on:           bool = False   # If T, signal is active low
     low_switch:       bool = False   # If T, signal is active low
     initial_state:    bool = False
+    initial_intensity: float = 0.0
     timeout:          int  = 2000 
+    maxon: int = 0 # zero = no maximum 
+    cooldown: int = 0 
+    warmup: int = 0
+    invert_analog: bool = 0
+    analog_threshold: int = 0
+
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     

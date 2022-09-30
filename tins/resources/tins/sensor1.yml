@@ -1,0 +1,50 @@
+sensor1: 
+  identifier: PLC1
+  prefix: MAIN.IODev1
+  dev_endpoint: opc.tcp://myplc.local:4840
+  sim_endpoint: opc.tcp://134.171.57.209:4840
+  fits_prefix: "SENSOR1"
+  #ctrl_config:
+  channels: [
+  {
+  name: ch1,
+  description: "channel1",
+  fits_prefix: "CH1 STAT",
+  type: DI,
+  unit: mm,
+  map: di1
+  },
+  {
+  name: ch2,
+  description: "channel2",
+  fits_prefix: "CH2 STAT",
+  type: DI,
+  unit: dd,
+  map: di2
+  },
+  {
+  name: ch3,
+  description: "channel3",
+  fits_prefix: "CH3 STAT",
+  type: DI,
+  unit: df,
+  map: di3
+  },
+  {
+  name: ch4,
+  description: "channel4",
+  fits_prefix: "CH4 VAL",
+  type: AI,
+  unit: volts,
+  map: ai1
+  },
+  {
+  name: ch5,
+  description: "channel5",
+  fits_prefix: "CH5 VAL",
+  type: AI,
+  unit: degrees,
+  map: ai2
+  }
+  ]
+

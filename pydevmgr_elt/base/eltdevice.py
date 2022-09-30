@@ -8,7 +8,7 @@ from .eltrpc import EltRpc
 from .eltstat import StatInterface
 
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
-from pydevmgr_core import (upload, NodeVar, open_device, record_class, GenInterface)
+from pydevmgr_core import (upload, NodeVar, open_device, record_class, get_class, DeviceFactory, KINDS, BaseFactory) 
 from pydevmgr_core.nodes import Local
 from pydevmgr_ua import UaDevice
 from typing import Optional
@@ -24,67 +24,99 @@ class CtrlConfig(BaseModel):
         
     def cfgdict(self):
         return self.dict()
+
+
+class EltDeviceIO(BaseFactory):
+    """ Factory which load a configuration file when building device 
+
+    Args:
+        type: str the type of the wanted object factory (e.g. 'Motor')
+        cfgfile: configuration file path must be absolute or relative to one found in resources directory
+        name (str, optional) : give the path to where the device is located in the configuration file. If 
+                               not given the configuration file is considered as the root device configuration
+        
+    """
+    type: str
+    cfgfile: str
+    name: Optional[str] = None
+    def build(self, parent=None, name=None):
+        file_path = self.cfgfile
+        if self.name:
+           file_path += "("+self.name+")"
+        cls = get_class(KINDS.DEVICE, self.type)
+        cfg = cls.Config.from_cfgfile(file_path)
+        for key, val in self.dict( exclude=set(["name", "cfgfile", "type"]) ).items():
+            setattr(cfg, key, val)
+        return cfg.build( parent, name= name or self.name)
         
 class EltDeviceConfig(UaDevice.Config):
     CtrlConfig = CtrlConfig
     Interface = EltInterface.Config
     Node = EltNode.Config
     Rpc = EltRpc.Config
-
+    Stat = StatInterface.Config # comes with some default   
+    Cfg  = EltInterface.Config
+    Rpcs = EltInterface.Config
+    # ###############################################
     type: str = "Elt"
-    address     : AnyUrl         = Field( default_factory = lambda : eltconfig.default_address)    
+    address : AnyUrl = Field( default_factory = lambda : eltconfig.default_address)
+    @property
+    def dev_endpoint(self): # read only property to handle ELT V4 version 
+        return self.address
+
     fits_prefix : str            = ""    
     ignored     : bool           = False  
     ctrl_config : CtrlConfig     = CtrlConfig()
     mapfile: Optional[str] = ""
     
+    identifier: str = "PLC1"
+    alias: str = ""
+    simulated: bool = False
+    interface: str = "Softing"
+    sim_endpoint: str = ""
 
-    Stat = StatInterface.Config # comes with some default   
-    Cfg  = EltInterface.Config
-    Rpcs = EltInterface.Config
+    stat : Stat = Stat() #  a generic interface so the Base EltDevice can almost function with any interfaces
+    cfg  : Cfg = Cfg() 
+    Rpcs : Rpcs = Rpcs()
     
-
-    stat : GenInterface = Stat() # type is a generic interface so the Base EltDevice can almost function with any interfaces
-    cfg  : GenInterface = Cfg() 
-    Rpcs : GenInterface = Rpcs()
-    
+    # ###############################################
     class Config: # BaseModel configuration of pydantic 
         # ignore/allow extra stuff for auto setup
         extra = 'allow'
     
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.mapfile:
+            self.load_mapping()
 
-    @root_validator(pre=True)
-    def _convert_map_file(cls, values):
-        """ when a map file is set it is loaded to replace the defaults suffix of the associated node """
+    def load_mapping(self):
+        if not self.mapfile:
+            return 
+
+        map_d = io.load_map(self.mapfile)
+        try:
+            map = map_d[self.type]
+        except KeyError:
+            raise ValueError("The associated map file does not contain type %r"%self.type)
         
-        # -------------------------------------------------- 
-        # Warning This is realy important to delete the mapfile from the dictionary 
-        # otherwhise at each attribute assignment of the model the mapfile will be evaluated ! 
-        mapfile = values.pop('mapfile', None)
-        # --------------------------------------------------
-        
-        if mapfile:
+        for k_i, d_i in map.items():
+            if k_i == "rpc":
+                interface = self.rpcs 
+            else:
+                interface = getattr(self, k_i)
 
-            dtype = values.get('type', cls.__fields__['type'].default)
-
+            for k,s in d_i.items():
+                node = getattr(interface, k)
+                node.suffix = s
     
-            map_d = io.load_map(mapfile)
-            try:
-                map = map_d[dtype]
-            except KeyError:
-                raise ValueError("The associated map file does not contain type %r"%dtype)
-            for k_i, d_i in map.items():
-                if k_i == "rpc":
-                    # rpcs = EltInterface.Config.parse_obj({ k:EltRpc.Config(suffix=s ) for k, s in d_i.items()  })
-                    rpcs = { k:{'suffix':s}   for k, s in d_i.items() }
-                    values['rpcs'] = rpcs
-                else:
-                    # interface =  EltInterface.Config.parse_obj( { k:EltNode.Config(suffix=s ) for k, s in d_i.items()} )
-                    interface = { k:{'suffix':s}   for k, s in d_i.items() }
-
-                    values[k_i] = interface
-
+    @root_validator(pre=True)
+    def _cfg_file_version_handling(cls, values):
+        try:
+            values['address'] = values.pop('dev_endpoint')
+        except KeyError:
+            pass
         return values
+    
 
 
     @validator('address', pre=True)

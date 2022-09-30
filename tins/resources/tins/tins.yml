@@ -1,7 +1,7 @@
 
 server_id           : 'ins1.fcs1'
 
-ins1.fcs1:
+server:
     req_endpoint    : "zpb.rr://127.0.0.1:12082/"
     pub_endpoint    : "zpb.ps://127.0.0.1:12345/"
     db_endpoint     : "127.0.0.1:6379"
@@ -14,44 +14,40 @@ ins1.fcs1:
     devices         : ['shutter1', 'lamp1',  'piezo1', 'motor1', 'motor2', 'adc1', 'drot1']
     #devices         : ['motor1', 'motor2']
     cmdtout         : 60000
+    devices:
+      - name: shutter1
+        type: Shutter
+        cfgfile: "tins/shutter1.yml"
 
-shutter1:
-  type: Shutter
-  cfgfile: "tins/shutter1.yml"
+      - name: lamp1
+        type: Lamp
+        cfgfile: "tins/lamp1.yml"
 
-lamp1:
-  type: Lamp
-  cfgfile: "tins/lamp1.yml"
+      - name: motor1
+        type: Motor
+        cfgfile: "tins/motor1.yml"
 
-motor1:
-  type: Motor
-  cfgfile: "tins/motor1.yml"
-
-motor2:
-  type: Motor
-  cfgfile: "tins/motor2.yml"
+      - name: motor2
+        type: Motor
+        cfgfile: "tins/motor2.yml"
   
-sensor1:
-  type: Sensor
-  cfgfile: "tins/sensor1.yml"
+      - name: sensor1
+        type: Sensor
+        cfgfile: "tins/sensor1.yml"
 
-ccc1:
-  type: Sensor
-  cfgfile: "tins/ccc1.yml"
+      - name: drot1
+        type: Drot
+        cfgfile: "tins/drot1.yml"
 
-drot1:
-  type: Drot
-  cfgfile: "tins/drot1.yml"
+      - name: adc1
+        type: Adc
+        cfgfile: "tins/adc1.yml"
 
-adc1:
-  type: Adc
-  cfgfile: "tins/adc1.yml"
+      - name: piezo1
+        type: Piezo
+        cfgfile: "tins/piezo1.yml"
 
-piezo1:
-  type: Piezo
-  cfgfile: "tins/piezo1.yml"
-
-actuator1:
-  type: Actuator
-  cfgfile: "tins/actuator1.yml"
+      #- name: actuator1
+      #  type: Actuator
+      #  cfgfile: "tins/actuator1.yml"
 

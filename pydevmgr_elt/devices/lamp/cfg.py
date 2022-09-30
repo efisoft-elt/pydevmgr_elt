@@ -19,6 +19,7 @@ class LampCfg(Base):
         cooldown: ND = NC(suffix='cfg.nCooldown', parser='UaUInt32')
         ignore_fault: ND = NC(suffix='cfg.bIgnoreFault' )
         initial_state: ND = NC(suffix='cfg.bInitialState' )
+        initial_intensity: ND = NC(suffix="cfg.lrInitialIntensity")
         invert_analog: ND = NC(suffix='cfg.bInvertAnalog' )
         low_fault: ND = NC(suffix='cfg.bActiveLowFault' )
         low_on: ND = NC(suffix='cfg.bActiveLowOn' )
@@ -35,6 +36,7 @@ class LampCfg(Base):
         cooldown: NV[int] = 0
         ignore_fault: NV[bool] = False
         initial_state: NV[bool] = False
+        initial_intensity: NV[float] = 0.0
         invert_analog: NV[bool] = False
         low_fault: NV[bool] = False
         low_on: NV[bool] = False

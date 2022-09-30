@@ -16,9 +16,10 @@ class CcsSimCfg(Base):
     class Config(Base.Config):
         latitude: ND = NC(suffix="cfg.site.latitude")
         longitude: ND = NC(suffix="cfg.site.longitude")
- 
+        height: ND = NC(suffix="cfg.site.height")
+
     class Data(Base.Data):
         latitude:  NodeVar[float] =  -0.429833092     
         longitude:  NodeVar[float] = 1.228800386    
-
+        height: NodeVar[float] = 3046.0
 

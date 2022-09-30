@@ -7,14 +7,16 @@ lamp1:
   simulated: false
   ignored: false
   address: opc.tcp://myplc.local:4840
-  simaddr: opc.tcp://134.171.12.182:4840      # Simulation address
   mapfile: "tins/mapLamp.yml"
   fits_prefix: "LAMP1"
   ctrl_config:
     low_fault:        false                     # If T, signal is active low
     low_on:           false                     # If T, signal is active low
     low_switch:       false                     # If T, signal is active low
+     
     initial_state:    false
+    initial_intensity: 0.0
     timeout:         2000
+    analog_threshold: 100  
 
 

@@ -3,32 +3,38 @@ from pydevmgr_elt.devices.adc.cfg  import AdcCfg as Cfg
 from pydevmgr_elt.devices.adc.rpcs import AdcRpcs as Rpcs
 
 from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class, Defaults, RpcError, kjoin, BaseDevice
-from typing import Optional, Any, Dict, List
+from pydevmgr_core import record_class,  RpcError 
+from typing import Optional, Any, Dict 
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt import io
-from pydevmgr_core import path_walk_item , KINDS, get_class
+from pydevmgr_core import   FactoryList, BaseFactory
 from pydevmgr_core.nodes import Opposite 
-from pydantic import BaseModel 
 
 Base = EltDevice
 
 
-class AxisIoConfig(BaseModel):
+class MotorFactory(BaseFactory):
     """ Configuration for one Axis """
     Motor = Motor.Config
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Data Structure 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    prefix  : str = ""
-    cfgfile : str = ""
-    path: Optional[str] = None
-    def load(self):
-        cfg = io.load_config(self.cfgfile)
-        if self.path is not None:
-            cfg = path_walk_item(cfg, self.path)
-            
-        return Motor.Config.parse_obj(cfg)
+    prefix: str  
+    cfgfile: Optional[str] = None
+    name: str = ""
+    
+    def build(self, parent=None, name=None):
+        name = self.name if name is None else name 
+        
+        mot_config = self.dict( exclude=set(["name", "cfgfile"]))
+        if self.cfgfile:
+            path = self.cfgfile
+            if self.name: path+=  "("+self.name+")"
+            cfg = io.load_config(path)
+            cfg.update(**mot_config) 
+        else:
+            cfg = Motor.Config( **mot_config )
+        return cfg.build(parent, name)     
 
 class AdcCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -36,12 +42,12 @@ class AdcCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     latitude  : Optional[float] = -0.429833092 
     longitude : Optional[float] = 1.228800386
-    axes : List[str] = ['default_motor1', 'default_motor2'] # name of axes 
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-class AdcConfig(Base.Config, extra="allow"):
+class AdcConfig(Base.Config , extra="forbid"):
     CtrlConfig = AdcCtrlConfig
+    MotorFactory = MotorFactory
     Motor = Motor.Config 
     Cfg = Cfg.Config
     Stat = Stat.Config
@@ -51,57 +57,22 @@ class AdcConfig(Base.Config, extra="allow"):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Adc"
     ctrl_config : CtrlConfig= CtrlConfig()
+    motors: FactoryList[MotorFactory] = FactoryList(
+                [{'prefix':'motor1', 'name':'motor1'}, 
+                 {'prefix':'motor2', 'name':'motor2'} ],
+                MotorFactory
+            )
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
     rpcs: Rpcs = Rpcs()
-    
-    # add some default motor configuration
-    default_motor1: Motor = Motor(prefix="motor1")
-    default_motor2: Motor = Motor(prefix="motor2")
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-    @classmethod
-    def validate_extra(cls, name, extra, values):
-        ctrl = values['ctrl_config']
-        if name in ctrl.axes:
-            if isinstance(extra, BaseModel ):
-                return extra 
-            prefix = extra.get('prefix', None)
-            if "cfgfile" in extra:
-                axis_io = AxisIoConfig( path=name, **extra )
-                # extra = cls.Motor.parse_obj( io.load_config(axis_io.cfgfile)[name] )
-                # extra = cls._Motor.parse_obj( io.load_config(axis_io.cfgfile)[name]  )
-                extra = axis_io.load()
-            elif "type" in extra:
-                ExtraClass = get_class( KINDS.DEVICE, extra['type'] ).Config
-                extra = ExtraClass.parse_obj(extra)
-
-            else:
-                extra = super().validate_extra(name, extra, values)
-                if not isinstance(extra, BaseDevice.Config):
-                    raise ValueError(f"axis {name} is not a device")
-            if prefix is not None:
-                extra.prefix = prefix
-        return extra   
-    
+      
     @property
     def motor1(self):
-        axis =  self.ctrl_config.axes[0]
-        try:
-            return self.__dict__[axis]
-        except KeyError:
-            raise ValueError(f"The axis refered as {axis!r} is not in configuration")
-    
-    
+        return self.motors[0]
     @property
     def motor2(self):
-        axis =  self.ctrl_config.axes[1]
-        try:
-            return self.__dict__[axis]
-        except KeyError:
-            raise ValueError(f"The axis refered as {axis!r} is not in configuration")
-
+        return self.motors[1]
     
 @record_class(overwrite=True)
 class Adc(Base):
@@ -112,6 +83,7 @@ class Adc(Base):
     Rpcs = Rpcs
     AXIS = AXIS
     MODE = MODE 
+    Motor = Motor
 
     class Data(Base.Data):
         Cfg = Cfg.Data
@@ -121,13 +93,15 @@ class Adc(Base):
         cfg: Cfg = Cfg()
         stat: Stat = Stat()
         rpcs: Rpcs = Rpcs()
-    
 
     @property
-    def motors(self) -> list:
-        return (self.motor1, self.motor2)
+    def motor1(self):
+        return self.motors[0] 
     
-            
+    @property
+    def motor2(self):
+        return self.motors[1] 
+    
     def get_configuration(self, exclude_unset=True, **kwargs) -> Dict[Base.Node,Any]:
         cfg_dict = {}
         for m in self.motors:

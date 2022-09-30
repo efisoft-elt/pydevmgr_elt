@@ -6,7 +6,6 @@ piezo1:
   prefix: MAIN.Piezo1                       # OPCUA attribute prefix
   simulated: false
   address: opc.tcp://myplc.local:4840
-  simaddr: opc.tcp://134.171.2.213:7677
   mapfile: "tins/mapPiezo.yml"
   fits_prefix: "OPTI1"
   ctrl_config:

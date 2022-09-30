@@ -502,7 +502,7 @@ Application and Data
 ====================
 
 **pydevmgr_elt** provides several ways to retrieve data from OPC-UA node. One can use the ``.get`` method of a node but 
-when several nodes has to be retrieve in the same time the function :func:`pydevmgr_elt.downloader` and the  :class:`pydevmgr_elt.Downloader`
+when several nodes has to be retrieve in the same time the function :func:`pydevmgr_elt.download` and the  :class:`pydevmgr_elt.Downloader`
 allows to download nodes values in one call per server. 
 
 One have the choice to work with structure for a cleaner definition of used data or with dictionaries to work more dynamically.
@@ -625,7 +625,7 @@ Similary this should also work
 
 .. code-block:: python   
  
-    >>> mot_stat_data = Motor.Data.StatData() #  Motor.StatInterface.Data() gives the same results 
+    >>> mot_stat_data = Motor.Data.Stat() #  Motor.Stat.Data() gives the same results 
     >>> dl = DataLink(mgr.motor1.stat, mot_stat_data)
     >>> dl.download() 
 
@@ -895,7 +895,7 @@ The ``connect`` method above does :
 The  :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` does the contrary, it free the nodes and callbacks from the ``downloader``
 and remove buttons action, used when the widget is destroyed for instance.
 
-Optionally the :meth:`pydevmgr_elt_qt.MotorCtrl.disconnect` returns a object used to enable and disable the widget
+Optionally the :meth:`pydevmgr_elt_qt.MotorCtrl.connect` returns a object used to enable and disable the widget
 temporally : 
 
 .. code-block:: python 

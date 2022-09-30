@@ -1,13 +1,13 @@
 from pydevmgr_elt.devices.motor.stat import MotorStat as Stat
 from pydevmgr_elt.devices.motor.cfg  import MotorCfg as Cfg
 from pydevmgr_elt.devices.motor.rpcs import MotorRpcs as Rpcs
-from pydevmgr_elt.devices.motor.init_seq import init_sequence_to_cfg, InitialisationConfig
-from pydevmgr_elt.devices.motor.positions import PositionsConfig
+from pydevmgr_elt.devices.motor.init_seq import init_sequence_to_cfg, InitSeqequenceStep
+from pydevmgr_elt.devices.motor.positions import PositionConfig
 from pydevmgr_elt.devices.motor.axis_type import AXIS_TYPE
 
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_core import record_class, Defaults
-from typing import Any, Optional, Dict, Union
+from typing import Any, List, Optional, Dict, Union
 from pydantic import validator
 Base = EltDevice
 
@@ -21,7 +21,6 @@ class MotorCtrlConfig(Base.Config.CtrlConfig):
     velocity : float = 0.1 # mendatory because used as default for movement
     min_pos :           Optional[float] = 0.0
     max_pos :           Optional[float] = 0.0 
-    axis_type :         Union[None,int,str] = "LINEAR" # LINEAR , CIRCULAR, CIRCULAR_OPTIMISED
     active_low_lstop :  Optional[bool] = False
     active_low_lhw :    Optional[bool] = False
     active_low_ref :    Optional[bool] = True
@@ -36,9 +35,31 @@ class MotorCtrlConfig(Base.Config.CtrlConfig):
     tout_move :         Optional[int] = 12000
     tout_switch :       Optional[int] = 10000 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Data Validator Functions
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
+   
+    
+class MotorConfig(Base.Config):
+    CtrlConfig = MotorCtrlConfig
+    Position = PositionConfig
+    InitSeqequenceStep = InitSeqequenceStep 
+    AXIS_TYPE = AXIS_TYPE
+
+    Cfg = Cfg.Config
+    Stat = Stat.Config
+    Rpcs = Rpcs.Config
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # Data Structure (redefine the ctrl_config)
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    type: str = "Motor"
+    ctrl_config :    CtrlConfig = CtrlConfig()
+    initialisation : List[InitSeqequenceStep] = []
+    positions      : List[Position] = []
+    tolerance: float = 1.0 # position tolerance in user unit   
+    cfg: Cfg = Cfg()
+    stat: Stat = Stat()
+    rpcs: Rpcs = Rpcs()
+    axis_type: Union[None,int,str] = "LINEAR" # LINEAR , CIRCULAR, CIRCULAR_OPTIMISED
+    
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @validator('axis_type')
     def validate_axis_type(cls, ax):
         if isinstance(ax, str):
@@ -51,28 +72,6 @@ class MotorCtrlConfig(Base.Config.CtrlConfig):
             ax = AXIS_TYPE(ax).name        
         return ax
 
-    
-class MotorConfig(Base.Config):
-    CtrlConfig = MotorCtrlConfig
-    Positions= PositionsConfig
-    Initialisation= InitialisationConfig
-   
-    Cfg = Cfg.Config
-    Stat = Stat.Config
-    Rpcs = Rpcs.Config
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # Data Structure (redefine the ctrl_config)
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    type: str = "Motor"
-    ctrl_config :    CtrlConfig = CtrlConfig()
-    initialisation : Initialisation= Initialisation()
-    positions      : Positions= Positions()
-    
-    cfg: Cfg = Cfg()
-    stat: Stat = Stat()
-    rpcs: Rpcs = Rpcs()
-    
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
@@ -112,17 +111,26 @@ class Motor(Base):
         # just update what is in ctrl_config, this should work for motor 
         # one may need to check parse some variable more carefully       
         values = ctrl_config.dict(exclude_none=True, exclude_unset=exclude_unset)
+        values.update(  self.config.dict(include=set(['axis_type']),  exclude_unset=True, exclude_none=True) )
+
         cfg_dict = { getattr(self.cfg, k):v for k,v in  values.items() }
-        cfg_dict[self.is_ignored] = self.config.ignored 
+        cfg_dict[self.is_ignored] = self.config.ignored
+
+        
         cfg_dict.update({ getattr(self.cfg,k):v for k,v in  kwargs.items() })
         
-        init_cfg = init_sequence_to_cfg(config.initialisation, self.Cfg.INITSEQ)
+    
+
+        init_cfg = init_sequence_to_cfg(config.initialisation, self.cfg.init_sequence_loockup)
         cfg_dict.update({ getattr( self.cfg, k):v for k,v in init_cfg.items()})
         
         # transform axis type to number 
         if self.cfg.axis_type in cfg_dict:
             axis_type = cfg_dict[self.cfg.axis_type] 
-            cfg_dict[self.cfg.axis_type] =  getattr(self.Cfg.AXIS_TYPE, axis_type) if isinstance(axis_type, str) else axis_type
+            if isinstance(axis_type, str):
+                cfg_dict[self.cfg.axis_type] =  getattr(self.Cfg.AXIS_TYPE, axis_type)
+            else:
+                cfg_dict[self.cfg.axis_type] = axis_type
         ###
         # Set the new config value to the device 
         return cfg_dict
@@ -186,12 +194,11 @@ class Motor(Base):
     
     def get_pos_target_of_name(self, name: str) -> float:
         """return the configured target position of a given pos name or raise error"""
-        # TODO: Fix the get_pos_target_name so it uses the dict 
-        try:
-            position = getattr(self.config.positions, name)
-        except AttributeError:
-            raise ValueError('unknown posname %r'%name)
-        return position
+        for pos in self.config.positions:
+            if pos.name == "name":
+                return pos.value
+        
+        raise ValueError('unknown posname %r'%name)
 
     def get_name_of_pos(self, pos_actual: float) -> str:
         """ Retrun the name of a position from a position as input or ''
@@ -200,11 +207,11 @@ class Motor(Base):
             m.get_name_of( m.stat.pos_actual.get() )
         """
         positions = self.config.positions    
-        tol = positions.tolerance
+        tol = self.config.tolerance
         
-        for pname, pos in positions.positions.items():
-            if abs( pos-pos_actual)<tol:
-                return pname
+        for pos in positions:
+            if abs( pos.value-pos_actual)<tol:
+                return pos.name
         return ''
         
     def is_near(self, pos: float, tol: float, data: Optional[Dict[str,Any]] =None) -> bool:

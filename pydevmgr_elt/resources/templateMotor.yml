@@ -6,15 +6,18 @@
   simulated: false
   ignored: false
   address: {{ address }}   # TO BE UPDATED 
-  simaddr: {{ simaddr }}
-  mapfile: {{ map_file }}  # TO BE UPDATED 
+  # mapfile: {{ map_file }}  # optional for pydevmgr
+  # simaddr: {{ simaddr }} # not used in pydevmgr 
+  namespace: 4
   fits_prefix: "MOT1"
+    
+  # axis_type accept LINEAR, CIRCULAR, CIRCULAR_OPTIMISED
+  axis_type: CIRCULAR
+    
   ctrl_config:
     velocity:              3.0
     min_pos:               0.0
     max_pos:               359.0
-    # axis_type accept LINEAR, CIRCULAR, CIRCULAR_OPTIMISED
-    axis_type:             CIRCULAR 
     active_low_lstop:      false
     active_low_lhw:        false
     active_low_ref:        true
@@ -28,29 +31,20 @@
     tout_init:             30000
     tout_move:             120000
     tout_switch:           10000
-  initialisation:
-      # sequence accepts : 
+     
+  initialisation: [
+      # step of  init sequence  accepts : 
       #  END, FIND_INDEX, FIND_REF_LE, FIND_REF_UE, FIND_LHW, FIND_UHW, 
-      # D ELAY, MOVE_ABS, MOVE_REL, CALIB_ABS, CALIB_REL , CALIB_SWITCH      
+      # D ELAY, MOVE_ABS, MOVE_REL, CALIB_ABS, CALIB_REL , CALIB_SWITCH   
+        {
+          step: 'END',
+          value1: 0.0,
+          value2: 0.0
+        }
+      ]
       
-      sequence: ['END'] 
-      
-      # FIND_LHW: 
-      #    value1: 4.0
-      #    value2: 4.0
-      # FIND_UHW:
-      #    value1: 4.0
-      #    value2: 4.0
-      # CALIB_ABS:
-      #    value1: 0.0
-      #    value2: 0.0 
-      # .... etc .......
-      END:
-         value1: 0.0
-         value2: 0.0
-  positions:
-     # define named position here 
-     posnames: ['ON', 'OFF']
-     tolerance: 1                              # Tolerance in UU
-     "ON": 30
-     "OFF": 100
+  positions: 
+    [
+      {name: 'ON', value: 30}, 
+      {name: 'OFF', value: 100}
+    ]

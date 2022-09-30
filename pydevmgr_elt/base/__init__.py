@@ -1,4 +1,4 @@
-from .eltdevice import EltDevice , open_elt_device
+from .eltdevice import EltDevice , open_elt_device, EltDeviceIO
 from .eltnode import EltNode
 from .eltrpc import EltRpc
 from .eltinterface import EltInterface

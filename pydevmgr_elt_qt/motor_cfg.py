@@ -108,11 +108,11 @@ class MotorCfg(EltDeviceCfg):
         self.io.keys['axis_type'] = self.io.Enum(Motor.Cfg.AXIS_TYPE, self.widget.in_axis_type, self.widget.axis_type)
         
         self.io.sequences = {}
-        names = [a.name for a in Motor.Cfg.INITSEQ]
+        names = [a.name for a in Motor.Cfg.InitSeqNumber]
         for i in range(1,11):
             wa = get(f"init{i}_action")
             wa.addItems(names)
-            self.io.sequences[i] = InitSeq(Motor.Cfg.INITSEQ, 
+            self.io.sequences[i] = InitSeq(Motor.Cfg.InitSeqNumber, 
                                            wa,
                                            get(f"init{i}_value1"),
                                            get(f"init{i}_value2"),

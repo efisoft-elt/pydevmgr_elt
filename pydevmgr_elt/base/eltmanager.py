@@ -1,11 +1,12 @@
 from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
-                           BaseManager, upload,   get_class, record_class, GenDevice, 
-                            BaseDevice, NodeVar, ObjectFactory
-                           )
+                           BaseManager, upload,   get_class, record_class, 
+                           BaseDevice, NodeVar,  
+                           FactoryList , FactoryDict, ObjectDict, BaseFactory
+                        )
 from pydevmgr_core.nodes import AllTrue
 
 from . import io
-from .eltdevice import EltDevice
+from .eltdevice import EltDevice, EltDeviceIO
 
 from .tools import  get_txt, get_group
 import logging
@@ -19,9 +20,19 @@ import warnings
 
 
 
+
+class EltDeviceFactory(EltDeviceIO):
+    cfgfile: Optional[str] = None
+    def build(self, parent=None, name=None):
+        if not self.cfgfile:
+            Factory = get_class(KINDS.DEVICE, self.type).Config
+            return Factory( **self.dict( exclude=set(["name", "cfgfile"])) ).build(parent, name) 
+        else:
+            return super().build(parent, name) 
+
 class ManagerServerConfig(BaseModel):
     fits_prefix: str = ""
-    devices : List[str] = [] # list of device names for the record 
+    devices : FactoryList[EltDeviceFactory] = FactoryList(Factory=EltDeviceFactory) # list of device names for the record 
     cmdtout : int = 60000    # not yet used in pydevmgr 
     # ~~~~~~ Not Used by pydevmgr ~~~~~~~~~~~~~~~~~~~~~~
     req_endpoint    : str =  "zpb.rr://127.0.0.1:12082/"
@@ -63,8 +74,8 @@ class ManagerConfig(BaseManager.Config):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Config of BaseModel see pydantic 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    class Config:
-        extra = "allow"
+    #class Config:
+    #    extra = "allow"
 
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,23 +95,23 @@ class ManagerConfig(BaseManager.Config):
     
 
      
-    @classmethod
-    def validate_extra(cls, name, extra, values):
-        server = values['server']
-        if name in server.devices:
-            if "cfgfile" in extra:
-                device_io = DeviceIoConfig( path = name, **extra )
-                extra = device_io.load()
-            elif "type" in extra:
-                ExtraClass = get_class( KINDS.DEVICE, extra['type'] ).Config
-                extra = ExtraClass.parse_obj(extra)
-            else:
-                extra = super().validate_extra(name, extra, values)
-                if not isinstance(extra, BaseDevice.Config):
-                    raise ValueError(f"{name} children is not a device")
-        else:
-            extra =  super().validate_extra(name, extra, values)         
-        return extra
+    # @classmethod
+    # def validate_extra(cls, name, extra, values):
+    #     server = values['server']
+    #     if name in server.devices:
+    #         if "cfgfile" in extra:
+    #             device_io = DeviceIoConfig( path = name, **extra )
+    #             extra = device_io.load()
+    #         elif "type" in extra:
+    #             ExtraClass = get_class( KINDS.DEVICE, extra['type'] ).Config
+    #             extra = ExtraClass.parse_obj(extra)
+    #         else:
+    #             extra = super().validate_extra(name, extra, values)
+    #             if not isinstance(extra, BaseDevice.Config):
+    #                 raise ValueError(f"{name} children is not a device")
+    #     else:
+    #         extra =  super().validate_extra(name, extra, values)         
+    #     return extra
 
         
            
@@ -338,6 +349,8 @@ class EltManager(BaseManager):
         
     """
     Device = EltDevice # default device class
+    DeviceFactory = EltDeviceFactory
+
     Config = ManagerConfig    
     
     StatInterface = ManagerStatInterface    
@@ -350,21 +363,47 @@ class EltManager(BaseManager):
            **kwargs
         ) -> None:
        
-        super().__init__(key, config=config, **kwargs)    
+        super().__init__(key, config=config, **kwargs)
+
+        self._devices_dict = ObjectDict()
+        
         if devices is not None:
-            factory = ObjectFactory(EltDevice)
-            for name, obj in devices.items():
-                self.__dict__[name] = factory.build(self, name, obj)
-            self.config.server.devices = list(devices)    
+           self._add_devices(devices)
+
+        else:
+            self._add_devices(self.config.server.devices)
+        
 
     def __dir__(self):
-        lst = [d.name for d in self.devices]
+        lst = [name for name in self._devices_dict]
         for sub in self.__class__.__mro__:
             for k in sub.__dict__:
                 if not k.startswith('_'):
                     lst.append(k)
         return lst 
     
+    def _add_devices(self, devices):
+        if isinstance( devices, (dict, FactoryDict)):
+            for key, obj in devices.items():
+                self._add_device( key, obj)
+        else:
+            for obj in devices:
+                self._add_device(None, obj)
+                
+    def _add_device(self, key, obj):
+        if isinstance( obj, BaseFactory):
+            device = obj.build( self, key)
+        elif isinstance( obj, BaseDevice):
+            device = obj
+        else:
+            factory = self.DeviceFactory.parse_obj(obj)
+            device = factory.build( self, key)
+
+        # self.__dict__[device.name] = device
+        self._devices_dict[device.name] = device
+            
+
+
     @classmethod
     def from_cfgfile(cls, cfgfile, path="", prefix: str = '', key=None):
         return super().from_cfgfile( cfgfile, path=path, prefix=prefix, key=key)
@@ -379,14 +418,25 @@ class EltManager(BaseManager):
     
     @property
     def devices(self):
-        return [getattr(self, dn) for dn in self.config.server.devices]
+        return list( self._devices_dict.values() )
+        # return [getattr(self, dn) for dn in self.config.server.devices]
 
 
     @property
     def name(self) -> str:
         return ksplit(self._key)[1]
     
-     
+    
+    def __getattr__(self, attr):
+        try:
+            return super().__getattr__(attr)
+        except AttributeError:
+            try:
+                return self._devices_dict[attr]
+            except KeyError:
+                raise AttributeError(attr)
+            
+
     def active_devices(self):
         """ return an iterator on active, aka, not-ignored devices """
         for d in self.devices:

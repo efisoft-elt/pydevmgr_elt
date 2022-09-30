@@ -12,11 +12,14 @@
   ctrl_config:
     latitude:              -0.429833092
     longitude:             1.228800386
-    axes: ['{{ name }}_motor1', '{{ name }}_motor2']
+    trk_threshod: 1.0 
 
-  {{ name }}_motor1:
-      prefix: "{{ name }}_motor1"
+  motors:
+    - name: "{{ name }}_motor1", 
       cfgfile: "{{ cfgdir }}/{{ name }}Motor1.yml" # TO BE UPDATED
-  {{ name }}_motor2:
-      prefix: "{{ name }}_motor2"
+      prefix: 'motor1'
+     
+    - name: "{{ name }}_motor1", 
       cfgfile: "{{ cfgdir }}/{{ name }}Motor2.yml" # TO BE UPDATED
+      prefix: 'motor2'
+    

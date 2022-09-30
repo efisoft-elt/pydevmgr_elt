@@ -1,3 +1,4 @@
+from pydantic.main import BaseModel
 from pydevmgr_elt.devices.sensor.stat import SensorStat as Stat
 from pydevmgr_elt.devices.sensor.cfg  import SensorCfg as Cfg
 from pydevmgr_elt.devices.sensor.rpcs import SensorRpcs as Rpcs
@@ -8,12 +9,15 @@ from pydevmgr_elt.devices.sensor.aoChannels import AoChannels
 from pydevmgr_elt.devices.sensor.diChannels import DiChannels  
 from pydevmgr_elt.devices.sensor.doChannels import DoChannels  
 
+from pydevmgr_elt.devices.sensor.channel import SensorChannelFactory, SensorChannelNodeAlias
 
 from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class, BaseNodeAlias1
-from typing import Optional
+from pydevmgr_core import record_class, BaseNodeAlias1, FactoryList
+from typing import List, Optional
 
 Base = EltDevice
+
+
 
 
 class SensorCtrlConfig(Base.Config.CtrlConfig):
@@ -43,15 +47,18 @@ class SensorConfig(Base.Config):
     type: str = "Sensor"
     ctrl_config : CtrlConfig= CtrlConfig()
     
+    channels: FactoryList[SensorChannelFactory] = FactoryList([], SensorChannelFactory) 
+    
+
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
     rpcs: Rpcs = Rpcs()
-    
+     
     aiChannels: AiChannels = AiChannels()
     aoChannels: AoChannels = AoChannels()
     diChannels: DiChannels = DiChannels()
     doChannels: DoChannels = DoChannels()
-
+    
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -188,6 +195,7 @@ class DoChannel(BaseNodeAlias1):
 class Sensor(Base):
     """ ELt Standard Sensor device """
     Config = SensorConfig
+    
     Cfg = Cfg
     Stat = Stat
     Rpcs = Rpcs
@@ -196,12 +204,10 @@ class Sensor(Base):
     AoChannels = AoChannels
     DiChannels = DiChannels
     DoChannels = DoChannels
-
     
-    AiChannel = AiChannel
-    AoChannel = AoChannel
-    DiChannel = DiChannel
-    DoChannel = DoChannel
+    ChannelFactory = SensorChannelFactory
+    ChannelNodeAlias = SensorChannelNodeAlias
+    
 
     class Data(Base.Data):
         Cfg = Cfg.Data

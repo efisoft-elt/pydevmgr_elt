@@ -1,8 +1,9 @@
+from os import wait
 from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_elt.devices.motor.axis_type import  AXIS_TYPE # just needed to record axis type parser
-from pydevmgr_elt.devices.motor.init_seq import INITSEQ
+from pydevmgr_elt.devices.motor.init_seq import InitSeqNumber, init_sequence_loockup
 from enum import Enum
 Base = EltDevice.Cfg
 
@@ -15,7 +16,9 @@ NV = NodeVar # used in Data
 
 class MotorCfg(Base):
     AXIS_TYPE = AXIS_TYPE
-    INITSEQ = INITSEQ
+    InitSeqNumber = InitSeqNumber
+    init_sequence_loockup = init_sequence_loockup
+
     class Config(Base.Config):
         active_low_index:   ND  =  NC(suffix='cfg.bArrActiveLow[3].bValue'  )
         active_low_lhw:     ND  =  NC(suffix='cfg.bArrActiveLow[1].bValue'  )
