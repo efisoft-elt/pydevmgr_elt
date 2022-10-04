@@ -1,5 +1,6 @@
 import pytest 
 from pydevmgr_elt import EltManager, Motor, Lamp
+from pydevmgr_elt.base.eltnode import EltNode
 
 
 def test_create_from_device_dict():
@@ -34,3 +35,8 @@ def test_create_devices_from_server_config():
      
     assert mgr.motor1.key == 'fcf.motor1'
 
+def test_create_stat_state():
+    
+    mgr = EltManager( devices={"motor1":Motor.Config(), "lamp":Lamp.Config()})
+
+test_create_stat_state()   

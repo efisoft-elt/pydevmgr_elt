@@ -32,19 +32,21 @@ class AoChannels(Base):
         ao14:              ND =  NC(suffix="ctrl.arrAO[13].lrValueUser")
         ao15:              ND =  NC(suffix="ctrl.arrAO[14].lrValueUser")
         ao16:              ND =  NC(suffix="ctrl.arrAO[15].lrValueUser")
-        used : list = []
 
-    @property
-    def used_channels(self):
-        return [getattr(self, f'ao{i}') for i in self.config.used]
-
-
-    
-
-
-
-
-
-
-
+        ao17:              ND =  NC(suffix="ctrl.arrAO[16].lrValueUser")
+        ao18:              ND =  NC(suffix="ctrl.arrAO[17].lrValueUser")
+        ao19:              ND =  NC(suffix="ctrl.arrAO[18].lrValueUser")
+        ao20:              ND =  NC(suffix="ctrl.arrAO[19].lrValueUser")
+        ao21:              ND =  NC(suffix="ctrl.arrAO[20].lrValueUser")
+        ao22:              ND =  NC(suffix="ctrl.arrAO[21].lrValueUser")
+        ao23:              ND =  NC(suffix="ctrl.arrAO[22].lrValueUser")
+        ao24:              ND =  NC(suffix="ctrl.arrAO[23].lrValueUser")
+        ao25:              ND =  NC(suffix="ctrl.arrAO[24].lrValueUser")
+        ao26:              ND =  NC(suffix="ctrl.arrAO[25].lrValueUser")
+        ao27:              ND =  NC(suffix="ctrl.arrAO[26].lrValueUser")
+        ao28:              ND =  NC(suffix="ctrl.arrAO[27].lrValueUser")
+        ao29:              ND =  NC(suffix="ctrl.arrAO[28].lrValueUser")
+        ao30:              ND =  NC(suffix="ctrl.arrAO[29].lrValueUser")
+        ao31:              ND =  NC(suffix="ctrl.arrAO[30].lrValueUser")
+        ao32:              ND =  NC(suffix="ctrl.arrAO[31].lrValueUser")
 

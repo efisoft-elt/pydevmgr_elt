@@ -1,5 +1,7 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_core import   Defaults, NodeVar
+from pydevmgr_core.decorators import nodealias 
+
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_elt.devices.motor import Motor
@@ -117,26 +119,26 @@ class AdcStat(Base):
         
   
 
-    @NodeAlias1.prop(node="track_mode")
+    @nodealias("track_mode")
     def track_mode_txt(self, track_mode: int) -> str:
         return self.MODE(track_mode).name
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_presetting(self,  substate: int) -> bool:
         """ -> True is axis is preseting """
         return substate == self.SUBSTATE.OP_PRESETTING
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_tracking(self,  substate: int) -> bool:
         """ -> True is axis is tracking """
         return substate == self.SUBSTATE.OP_TRACKING
 
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_moving(self, substate: int) -> bool:
         """ -> True is axis is moving """
         return substate == self.SUBSTATE.OP_MOVING
 
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_standstill(self,  substate: int) -> bool:
         """ -> True is axis is standstill """
         return substate == self.SUBSTATE.OP_STANDSTILL

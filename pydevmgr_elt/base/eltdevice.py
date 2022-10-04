@@ -6,6 +6,8 @@ from .eltinterface import EltInterface
 from .eltnode import EltNode
 from .eltrpc import EltRpc
 from .eltstat import StatInterface
+from .eltengine import EltEngine 
+
 
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
 from pydevmgr_core import (upload, NodeVar, open_device, record_class, get_class, DeviceFactory, KINDS, BaseFactory) 
@@ -156,9 +158,10 @@ class CfgInterface(EltInterface):
 
 
 @record_class
-class EltDevice(UaDevice):
-    
+class EltDevice(UaDevice): 
     Config = EltDeviceConfig
+    Engine = EltEngine 
+    
     class Data(UaDevice.Data):
         Stat = StatInterface.Data
         Cfg  = CfgInterface.Data
@@ -180,10 +183,6 @@ class EltDevice(UaDevice):
     STATE = Stat.STATE
     SUBSTATE = Stat.SUBSTATE
     ERROR    = Stat.ERROR
-  
-    # stat = StatInterface.prop('stat')    
-    # cfg  = CfgInterface.prop('cfg')
-    # rpcs  = Rpcs.prop('rpcs')
     
     @property
     def rpc(self):
@@ -191,14 +190,12 @@ class EltDevice(UaDevice):
         return self.rpcs
     
 
-    is_ignored = Local.prop(default=False)
+    is_ignored = Local.Config(default=False)
     
     _devices = None # some device can have child devices (e.g. ADC)
     
-    def __init__(self, *args, fits_key: str = "", **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fits_key = fits_key or self._config.fits_prefix
-        
         self.is_ignored.set( self.config.ignored )
         
    

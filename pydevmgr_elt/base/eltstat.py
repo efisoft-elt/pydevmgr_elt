@@ -1,5 +1,7 @@
 from .eltinterface import EltInterface
-from pydevmgr_core import NodeVar, NodeAlias1, Defaults, NodeAlias
+from pydevmgr_core import NodeVar,  Defaults
+from pydevmgr_core.decorators import nodealias
+
 from enum import Enum 
 from .tools import enum_group, enum_txt,  get_enum_txt, get_enum_group
 from .config import GROUP
@@ -84,65 +86,65 @@ class StatInterface(EltInterface):
         substate:          ND = NC(suffix="stat.nSubstate") 
         error_code:        ND = NC(suffix="stat.nErrorCode")
 
-    @NodeAlias1.prop(node="state")
+    @nodealias("state")
     def is_operational(self, state: int) -> bool:
         """ True if device is operational """
         return state == self.STATE.OP
     
-    @NodeAlias1.prop(node="state")
+    @nodealias("state")
     def is_not_operational(self, state: int) -> bool:
         """ True if device not operational """
         return state == self.STATE.NOTOP
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_ready(self, substate: int) -> bool:
         """ True if device is ready """
         return substate == self.SUBSTATE.NOTOP_READY
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_not_ready(self, substate: int) -> bool:
         """ True if device is not ready """
         return substate == self.SUBSTATE.NOTOP_NOTREADY
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_in_error(self, substate: int) -> bool:
         """ -> True is device is in error state:  NOP_ERROR or OP_ERROR """
         return substate in [self.SUBSTATE.NOTOP_ERROR, self.SUBSTATE.OP_ERROR]
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def substate_txt(self, substate: int) -> str:
         """ Return a text representation of the substate """
         return get_enum_txt( self.SUBSTATE , substate, f"UNKNOWN ({substate})")
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def substate_group(self, substate: int):
         """ Return the afiliated group of the substate """
         return get_enum_group(self.SUBSTATE, substate, GROUP.UNKNOWN)
 
-    @NodeAlias1.prop(node="state")
+    @nodealias("state")
     def state_txt(self, state: int) -> str:
         """ Return a text representation of the state """
         return get_enum_txt( self.STATE, state, f"UNKNOWN ({state})" )
 
-    @NodeAlias1.prop(node="state")
+    @nodealias("state")
     def state_group(self, state: int):
         """ Return the afiliated group of the state """
         return get_enum_group( self.STATE, state, GROUP.UNKNOWN )
     
-    @NodeAlias1.prop(node="error_code")
+    @nodealias("error_code")
     def error_txt(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
         return get_enum_txt( self.ERROR , error_code, f"Unknown error ({error_code})" )
     
 
-    @NodeAlias.prop(nodes=["error_code", "error_txt"])
+    @nodealias("error_code", "error_txt")
     def noerror_check(self, error_code, error_txt):
         """ Return always True but raise a ValueError in case of a non zero error code """
         if error_code:
             raise ValueError(f"Error [{self.key}]  error={error_code}: {error_txt}")
         return True
 
-    @NodeAlias1.prop(node="error_code")
+    @nodealias("error_code")
     def error_group(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
         return GROUP.ERROR if error_code else GROUP.OK

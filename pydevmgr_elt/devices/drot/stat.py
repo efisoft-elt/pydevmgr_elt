@@ -1,8 +1,9 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
-from pydevmgr_elt.base import EltInterface,  GROUP
+from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core.decorators import nodealias 
+from pydevmgr_elt.base import   GROUP
 from pydevmgr_elt.devices.motor import Motor
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base.tools import  enum_group
 
 from enum import Enum
 Base = Motor.Stat
@@ -138,16 +139,16 @@ class DrotStat(Base):
 
     # We can add some nodealias to compute some stuff on the fly 
     # If they node to be configured one can set a configuration above 
-    @NodeAlias1.prop(node="track_mode")
+    @nodealias("track_mode")
     def track_mode_txt(self, track_mode: int) -> str:
         return self.MODE(track_mode).name
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_presetting(self,  substate: int) -> bool:
         """ -> True is axis is preseting """
         return substate == self.SUBSTATE.OP_PRESETTING
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_tracking(self,  substate: int) -> bool:
         """ -> True is axis is tracking """
         return substate == self.SUBSTATE.OP_TRACKING

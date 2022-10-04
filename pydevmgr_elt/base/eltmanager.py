@@ -1,12 +1,18 @@
+from dataclasses import Field, dataclass, field
+import weakref
 from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
                            BaseManager, upload,   get_class, record_class, 
                            BaseDevice, NodeVar,  
                            FactoryList , FactoryDict, ObjectDict, BaseFactory
                         )
+from pydevmgr_core.base.node_alias import BaseNodeAlias
 from pydevmgr_core.nodes import AllTrue
+from pydevmgr_core.decorators import nodealias
+
 
 from . import io
 from .eltdevice import EltDevice, EltDeviceIO
+from .eltengine import EltManagerEngine 
 
 from .tools import  get_txt, get_group
 import logging
@@ -93,28 +99,6 @@ class ManagerConfig(BaseManager.Config):
             values["server"] = values.pop(server_id)
         return values  
     
-
-     
-    # @classmethod
-    # def validate_extra(cls, name, extra, values):
-    #     server = values['server']
-    #     if name in server.devices:
-    #         if "cfgfile" in extra:
-    #             device_io = DeviceIoConfig( path = name, **extra )
-    #             extra = device_io.load()
-    #         elif "type" in extra:
-    #             ExtraClass = get_class( KINDS.DEVICE, extra['type'] ).Config
-    #             extra = ExtraClass.parse_obj(extra)
-    #         else:
-    #             extra = super().validate_extra(name, extra, values)
-    #             if not isinstance(extra, BaseDevice.Config):
-    #                 raise ValueError(f"{name} children is not a device")
-    #     else:
-    #         extra =  super().validate_extra(name, extra, values)         
-    #     return extra
-
-        
-           
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Method to save back the configuration     
     def cfgdict(self):
@@ -204,60 +188,58 @@ def get_device_state_nodes(parent):
 ##
 # The stat manager for stat interface will be build of NodeAliases only 
 #  
-@record_class
 class ManagerStatInterface(BaseInterface):
     """ Special definition of Stat Interface for a Manager """
-    class Config(BaseInterface.Config):
-        type: str = "UaManagerStatInterface"
-        
     STATE = EltDevice.STATE
-    def __init__(self, key, devices, config=None, **kwargs):
-        # config is a place holder
-        super().__init__(key, config=config, **kwargs)
-        self._devices = devices        
+    
+    class StateAlias(BaseNodeAlias):
+        """ Compute a State for all devices combined """
+        @staticmethod
+        def manager_ref():
+            return None
+        
+        @classmethod
+        def new(cls, parent, name, config=None):
+            new = super().new(parent, name, config)
+            new.manager_ref = parent.parent_ref
+            return new
+
+        def nodes(self):
+            for device in self.manager_ref().devices:
+                if not device.is_ignored.get():
+                    yield device.stat.state
+                    
+            
+        def fget(self, *states):
+            if all( s==self.STATE.OP for s in states ):
+                return int(self.STATE.OP)
+            return int(self.STATE.NOTOP)
+    state = StateAlias.Config() 
+
+    @staticmethod
+    def parent_ref():
+        return None
     
     @property
-    def devices(self) -> Iterable:
-        return self._devices
-    
-    @classmethod
-    def prop(cls, name: Optional[str] = None):
-        return cls.Property(cls, cls.new, name, config=cls.Config())
+    def devices(self):
+        self.parent_ref().devices 
         
     @classmethod
     def new(cls, parent, name, config=None):
-        """ build a :class:`ManagerStatInterface` from its parent context 
-        
-        parent is mostlikely a :class:`UaManager`
-        
-        requirement for the parent is to have: 
-        
-        - the devices() method
-        """        
-        return cls(kjoin(parent.key, name), list(parent.devices), config=config, **cls.new_args(parent, name, config))
+        new = super().new(parent, name, config)
+        new.parent_ref = weakref.ref(parent)
+        return new
     
-    # The nodes is a function with signature func(parent) it is called by the .new class method 
-    @NodeAlias.prop('state', nodes=get_device_state_nodes)
-    def state(self, *states_ignore) -> int:
-        """ return STATE.OP if all (not ignored) devices are in STATE.OP, STATE.NOTOP otherwhise """       
-        states = [states_ignore[i] for i in range(0,len(states_ignore),2) if not states_ignore[i+1]]
-                
-        if all( s==self.STATE.OP for s in states ):
-            return int(self.STATE.OP)
-        return int(self.STATE.NOTOP)
-    
-    #state = DevicesState.prop('state')    
-        
-    @NodeAlias.prop("state_txt", ["state"])
+    @nodealias("state")
     def state_txt(self, state: int) -> str:
         """ text representation of the state """        
         return get_txt(self.STATE(state))
     
-    @NodeAlias.prop("state_group", ["state"])
+    @nodealias("state")
     def state_group(self, state: int) -> state:
         """ group of the state """
         return get_group(self.STATE(state))
-
+    
     class Data(BaseInterface.Data):
         state: NodeVar[int] = 0 
         state_txt: NodeVar[str] = ""
@@ -354,7 +336,7 @@ class EltManager(BaseManager):
     Config = ManagerConfig    
     
     StatInterface = ManagerStatInterface    
-    stat = StatInterface.prop('stat')
+    stat = StatInterface.Config()
         
     def __init__(self, 
           key : Optional[str] = None, 
@@ -420,7 +402,6 @@ class EltManager(BaseManager):
     def devices(self):
         return list( self._devices_dict.values() )
         # return [getattr(self, dn) for dn in self.config.server.devices]
-
 
     @property
     def name(self) -> str:

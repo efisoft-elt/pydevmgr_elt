@@ -29,7 +29,7 @@ class MotorPlotStatData(EltDeviceCtrl.Data.StatData):
     
     pos_actual: NodeVar[float] = 0.0
     pos_error: NodeVar[float]  = 0.0
-    plot_data: NodeVar[list] = Field([], node=DequeList.prop('plot_data' , nodes=plot_nodes, trigger_index=-1))
+    plot_data: NodeVar[list] = Field([], node=DequeList.Config( nodes=plot_nodes, trigger_index=-1))
 
 
 ###

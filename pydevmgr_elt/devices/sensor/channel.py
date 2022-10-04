@@ -1,9 +1,6 @@
 from enum import Enum
-from pydantic import BaseModel
-import pydevmgr_core 
-from pydevmgr_elt.base import EltNode
-from pydevmgr_core.nodes import NodeAlias1
-from pydevmgr_core import BaseFactory 
+import weakref
+from pydevmgr_core.base.node_alias import BaseNodeAlias1 
 
 class ChanelType(str, Enum):
     DI = 'DI'
@@ -15,37 +12,11 @@ ChanelType.AI.groupMap = "aiChannels"
 ChanelType.II.groupMap = "iiChannels"
 
 
-class SensorChannelFactory(BaseFactory):
-    name: str
-    map: str
-    description: str = ""
-    alias: str = ""
-    header: bool = False
-    log: bool = False
-    fits_prefix: str = ""
-    type: ChanelType = ChanelType.DI
-    unit: str = ""
-    
-    def build(self, parent, name=None):
-        
-        node_name = ChanelType(self.type).groupMap+"."+self.map
-         
-        
-        config = SensorChannelNodeAlias.Config(
-                node = node_name, 
-                **self.dict(exclude=set(['type', 'map']), exclude_unset=True ), 
-                channel_type = self.type
-                )
-
-        return config.build(parent, name or self.name)
-         
-
-
-class SensorChannelNodeAlias(NodeAlias1):
-    class Config(NodeAlias1.Config):
-        type: str = "SensorChannel"
-        name: str = ""
-        channel_type: ChanelType = ChanelType.DI
+class SensorChannelAlias(BaseNodeAlias1):
+    # class Config(BaseNodeAlias1.Config):
+    class Config:
+        name: str 
+        map: str 
         description: str = ""
         alias: str = ""
         header: bool = False
@@ -53,9 +24,19 @@ class SensorChannelNodeAlias(NodeAlias1):
         fits_prefix: str = ""
         type: ChanelType = ChanelType.DI
         unit: str = ""
-
     
-
-
+    @staticmethod
+    def parent_ref():
+        return None
+    
+    def nodes(self):
+        channels = getattr( self.parent_ref(), ChanelType(self.config.type).groupMap)
+        yield getattr( channels, self.config.map )
+    
+    @classmethod
+    def new(cls, parent, name, config=None):
+        node = super().new(parent, name, config)
+        node.parent_ref = weakref.ref(parent)
+        return node
     
     

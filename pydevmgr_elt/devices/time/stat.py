@@ -1,5 +1,6 @@
 
-from pydevmgr_core import  NodeAlias1, NodeAlias, Defaults, NodeVar
+from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core.decorators import nodealias 
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, get_txt
 from pydevmgr_ua import UaInterface
@@ -77,12 +78,12 @@ class TimeStat(Base):
         time_difference : ND = NC(suffix="stat.signal.time_difference") 
         #: UDINT; // Time difference between DC and External Time Source
     
-    @NodeAlias.prop(nodes=["mode", "utc_time", "dc_time"])
+    @nodealias("mode", "utc_time", "dc_time")
     def time(self, mode: int, utc:str, dc:str) -> str:        
         """ Return a text representation of the mode """
         return dc if mode == self.MODE.LOCAL else utc 
     
-    @NodeAlias1.prop(node="utc_time")
+    @nodealias("utc_time")
     def utc_datetime(self, utc):
         """ Convert the UTC returned by timer (which is not ISO) to a datetime 
         
@@ -91,17 +92,17 @@ class TimeStat(Base):
         return datetime.datetime.strptime( utc[:26] , '%Y-%m-%d-%H:%M:%S.%f')
 
 
-    @NodeAlias1.prop(node="mode")
+    @nodealias("mode")
     def mode_txt(self, mode: int) -> str:
         """ Return a text representation of the mode """
         return get_txt(self.MODE(mode))
     
-    @NodeAlias1.prop(node="qos")    
+    @nodealias("qos")    
     def qos_txt(self, qos: int) -> str:
         """ Return a text representation of the qos """
         return get_txt( self.QOS(qos))
         
-    @NodeAlias1.prop(node="status")
+    @nodealias("status")
     def status_txt(self, status: int) -> str:
         """ Return a text representation of the status """
         return get_txt(self.QOS(status))

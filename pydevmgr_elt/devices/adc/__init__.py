@@ -31,9 +31,10 @@ class MotorFactory(BaseFactory):
             path = self.cfgfile
             if self.name: path+=  "("+self.name+")"
             cfg = io.load_config(path)
-            cfg.update(**mot_config) 
+            cfg.update(**mot_config)
+            cfg = self.Motor(**cfg) 
         else:
-            cfg = Motor.Config( **mot_config )
+            cfg = self.Motor( **mot_config )
         return cfg.build(parent, name)     
 
 class AdcCtrlConfig(Base.Config.CtrlConfig):

@@ -1,5 +1,6 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_core import   Defaults, NodeVar
+from pydevmgr_core.decorators import nodealias 
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 
@@ -127,17 +128,17 @@ class LampStat(Base):
         analog_feedback: ND = NC(suffix='stat.nOn')
 
 
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_ready(self, substate):
         """ Alias node: True if lamp is ready (substate NOTOP_READY_ON or NOTOP_READY_OFF) """
         return substate in [self.SUBSTATE.NOTOP_READY_ON, self.SUBSTATE.NOTOP_READY_OFF]
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_off(self, substate):
         """  Alias node: True if lamp is off """
         return substate == self.SUBSTATE.OP_OFF
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_on(self, substate):
         """  Alias node: True if lamp is on """
         return substate == self.SUBSTATE.OP_ON

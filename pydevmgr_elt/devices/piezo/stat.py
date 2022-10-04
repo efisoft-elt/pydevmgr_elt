@@ -1,5 +1,7 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core.decorators  import nodealias 
+
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from typing import Any
@@ -110,12 +112,12 @@ class PiezoStat(Base):
         substate: ND = NC(suffix='stat.nSubstate' )
 
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_auto(self, substate: int) -> bool:
         """ -> True is axis is in auto mode """
         return substate == self.SUBSTATE.OP_AUTO
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_pos(self, substate: int) -> bool:
         """ -> True is axis is in pos mode """
         return substate == self.SUBSTATE.OP_POS

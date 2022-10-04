@@ -33,11 +33,24 @@ class AiChannels(Base):
         ai14:              ND =  NC(suffix="stat.arrAI[13].lrValueUser")
         ai15:              ND =  NC(suffix="stat.arrAI[14].lrValueUser")
         ai16:              ND =  NC(suffix="stat.arrAI[15].lrValueUser")
-        used : list = []
 
-    @property
-    def used_channels(self):
-        return [getattr(self, f'ai{i}') for i in self.config.used]
+        ai17:               ND =  NC(suffix="stat.arrAI[16].lrValueUser")
+        ai18:               ND =  NC(suffix="stat.arrAI[17].lrValueUser")
+        ai19:               ND =  NC(suffix="stat.arrAI[18].lrValueUser")
+        ai20:               ND =  NC(suffix="stat.arrAI[19].lrValueUser")
+        ai21:               ND =  NC(suffix="stat.arrAI[20].lrValueUser")
+        ai22:               ND =  NC(suffix="stat.arrAI[21].lrValueUser")
+        ai23:               ND =  NC(suffix="stat.arrAI[22].lrValueUser")
+        ai24:               ND =  NC(suffix="stat.arrAI[23].lrValueUser")
+        ai25:               ND =  NC(suffix="stat.arrAI[24].lrValueUser")
+        ai26:               ND =  NC(suffix="stat.arrAI[25].lrValueUser")
+        ai27:               ND =  NC(suffix="stat.arrAI[26].lrValueUser")
+        ai28:               ND =  NC(suffix="stat.arrAI[27].lrValueUser")
+        ai29:               ND =  NC(suffix="stat.arrAI[28].lrValueUser")
+        ai30:               ND =  NC(suffix="stat.arrAI[29].lrValueUser")
+        ai31:               ND =  NC(suffix="stat.arrAI[30].lrValueUser")
+        ai32:               ND =  NC(suffix="stat.arrAI[31].lrValueUser")
+
 
 
     

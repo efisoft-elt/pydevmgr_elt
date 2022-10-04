@@ -9,7 +9,7 @@ from pydevmgr_elt.devices.sensor.aoChannels import AoChannels
 from pydevmgr_elt.devices.sensor.diChannels import DiChannels  
 from pydevmgr_elt.devices.sensor.doChannels import DoChannels  
 
-from pydevmgr_elt.devices.sensor.channel import SensorChannelFactory, SensorChannelNodeAlias
+from pydevmgr_elt.devices.sensor.channel import  SensorChannelAlias
 
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_core import record_class, BaseNodeAlias1, FactoryList
@@ -47,7 +47,7 @@ class SensorConfig(Base.Config):
     type: str = "Sensor"
     ctrl_config : CtrlConfig= CtrlConfig()
     
-    channels: FactoryList[SensorChannelFactory] = FactoryList([], SensorChannelFactory) 
+    channels: FactoryList[SensorChannelAlias.Config] = FactoryList([], SensorChannelAlias.Config) 
     
 
     cfg: Cfg = Cfg()
@@ -205,8 +205,7 @@ class Sensor(Base):
     DiChannels = DiChannels
     DoChannels = DoChannels
     
-    ChannelFactory = SensorChannelFactory
-    ChannelNodeAlias = SensorChannelNodeAlias
+    ChannelAlias = SensorChannelAlias
     
 
     class Data(Base.Data):

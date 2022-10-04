@@ -32,12 +32,24 @@ class DoChannels(Base):
         do14:              ND =  NC(suffix="ctrl.arrDO[13].bValue")
         do15:              ND =  NC(suffix="ctrl.arrDO[14].bValue")
         do16:              ND =  NC(suffix="ctrl.arrDO[15].bValue")
-        used : list = []
 
-    @property
-    def used_channels(self):
-        return [getattr(self, f'do{i}') for i in self.config.used]
- 
+        do17:              ND =  NC(suffix="ctrl.arrDO[16].bValue")
+        do18:              ND =  NC(suffix="ctrl.arrDO[17].bValue")
+        do19:              ND =  NC(suffix="ctrl.arrDO[18].bValue")
+        do20:              ND =  NC(suffix="ctrl.arrDO[19].bValue")
+        do21:              ND =  NC(suffix="ctrl.arrDO[20].bValue")
+        do22:              ND =  NC(suffix="ctrl.arrDO[21].bValue")
+        do23:              ND =  NC(suffix="ctrl.arrDO[22].bValue")
+        do24:              ND =  NC(suffix="ctrl.arrDO[23].bValue")
+        do25:              ND =  NC(suffix="ctrl.arrDO[24].bValue")
+        do26:              ND =  NC(suffix="ctrl.arrDO[25].bValue")
+        do27:              ND =  NC(suffix="ctrl.arrDO[26].bValue")
+        do28:              ND =  NC(suffix="ctrl.arrDO[27].bValue")
+        do29:              ND =  NC(suffix="ctrl.arrDO[28].bValue")
+        do30:              ND =  NC(suffix="ctrl.arrDO[29].bValue")
+        do31:              ND =  NC(suffix="ctrl.arrDO[30].bValue")
+        do32:              ND =  NC(suffix="ctrl.arrDO[31].bValue")
+
 
 
 

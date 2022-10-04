@@ -1,5 +1,7 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core.decorators import nodealias 
+
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 
@@ -125,26 +127,26 @@ class ShutterStat(Base):
     # We can add some nodealias to compute some stuff on the fly 
     # If they node to be configured one can set a configuration above 
     
-    @NodeAlias1.prop("is_ready", "substate")
+    @nodealias("substate")
     def is_ready(self, substate):
         """ True if device is ready """
         return substate in [self.SUBSTATE.NOT_OP_READY_OPEN, self.SUBSTATE.NOT_OP_READY_CLOSED]
     
-    @NodeAlias1.prop("is_not_ready", "substate")
+    @nodealias("substate")
     def is_not_ready(self, substate):
         """ True if device is not ready """
         return substate in [self.SUBSTATE.NOT_OP_NOT_READY]
     
-    @NodeAlias1.prop("is_open", "substate")
+    @nodealias("substate")
     def is_open(self, substate):
         """ True if shutter is OPEN  """
         return substate in [self.SUBSTATE.OP_OPEN, self.SUBSTATE.NOT_OP_READY_OPEN]
     
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_closed(self, substate):
         return substate in [self.SUBSTATE.OP_CLOSED, self.SUBSTATE.NOT_OP_READY_CLOSED]
         
-    @NodeAlias1.prop("is_in_error", "substate")
+    @nodealias("substate")
     def is_in_error(self, substate: int) -> bool:
         """ -> True if device is in error state:  NOP_ERROR or OP_ERROR """
         return substate in [self.SUBSTATE.NOT_OP_FAILURE, self.SUBSTATE.OP_FAILURE]

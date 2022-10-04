@@ -1,5 +1,7 @@
 from pydevmgr_ua import UaRpc
 from pydevmgr_core import record_class
+from .eltengine import EltRpcEngine
+
 from .tools import enum_txt, get_txt
 from enum import Enum
 
@@ -26,6 +28,7 @@ enum_txt( {
 class EltRpc(UaRpc):
     class Config(UaRpc.Config):
         type: str = "Elt"
+    Engine = EltRpcEngine
     
     RPC_ERROR = RPC_ERROR
     

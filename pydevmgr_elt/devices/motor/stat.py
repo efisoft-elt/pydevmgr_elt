@@ -1,5 +1,7 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core.decorators import nodealias 
+
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_elt.devices.motor.positions import PositionConfig 
@@ -241,18 +243,18 @@ class MotorStat(Base):
         d['tolerance'] = tolerance
         return d
 
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_moving(self, substate):
         """ -> True is axis is moving """
         return substate == self.SUBSTATE.OP_MOVING
 
-    @NodeAlias1.prop(node="substate")
+    @nodealias("substate")
     def is_standstill(self,  substate):
         """ -> True is axis is standstill """
         return substate == self.SUBSTATE.OP_STANDSTILL
     
     
-    @NodeAlias1.prop(node="pos_actual")
+    @nodealias("pos_actual")
     def pos_name(self, pos_actual):
         if not self.config.mot_positions: return ''
         positions = self.config.mot_positions

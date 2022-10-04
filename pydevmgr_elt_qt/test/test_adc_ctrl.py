@@ -1,3 +1,4 @@
+from pydevmgr_core.base.datamodel import DataLink
 from pydevmgr_elt_qt import AdcCtrl
 from pydevmgr_elt import open_device
 from pydevmgr_core import Downloader
@@ -14,7 +15,9 @@ if __name__=="__main__":
     downloader = Downloader()
     
     device = open_device("tins/adc1.yml", "adc1")
+    DataLink(device, devLinker.Data())
     
+
     ctrl = devLinker.connect(downloader, device)
     
     # To refresh the gui we need a timer and connect the download method 

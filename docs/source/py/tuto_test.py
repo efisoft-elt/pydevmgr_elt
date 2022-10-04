@@ -114,6 +114,7 @@ class TestWriteCollector:
 # The goal here is to create a Node for the use of our client 
 
 from pydevmgr_core import BaseNode, kjoin, record_class
+from pydevmgr_core.decorators import nodealias 
 from typing import Optional, Any 
 
 @record_class 
@@ -218,9 +219,9 @@ class TestMotor(BaseDevice):
         prefix: str
         address: AnyUrl = "ws://127.0.0.1:5678"
     
-    position = TestNode.prop('position', suffix="POS")
-    rpc_move = TestRpc.prop('move', method_name="move")
-    rpc_init = TestRpc.prop('init', method_name="init")
+    position = TestNode.Config('position', suffix="POS")
+    rpc_move = TestRpc.Config('move', method_name="move")
+    rpc_init = TestRpc.Config('init', method_name="init")
 
    
     def __init__(self, key=None, client=None, **kwargs):
@@ -246,17 +247,19 @@ class TestMotor(BaseDevice):
     def init(self):
         return self.rpc_init.call()
 
-from pydevmgr_core import BaseDevice, NodeAlias1
+from pydevmgr_core import BaseDevice
+from pydevmgr_core.decorators import nodealias 
 class TestMotor2(TestMotor):
     
-    @NodeAlias1.prop('position_mm', node="position")
+    @nodealias("position")
     def position_mm(self, position):
         return position/1000.
 
 
 
 
-from pydevmgr_core import BaseDevice, NodeAlias1, NodeVar
+from pydevmgr_core import BaseDevice,  NodeVar
+from pydevmgr_core.decorators import nodealias 
 from pydevmgr_core.nodes import UtcTime, Deque
 from pydantic import Field 
 from collections import deque 
@@ -267,9 +270,9 @@ class TestMotor3(TestMotor):
         position_mm: NodeVar[float] = 0.0
         time: NodeVar[str] = Field(  '2000-01-01T00:00:00.000000', node=UtcTime() )
 
-        position_buffer: NodeVar[deque] = Field( deque(), node = Deque.prop( node="position", maxlen=100 ) )
+        position_buffer: NodeVar[deque] = Field( deque(), node = Deque.Config( node="position", maxlen=100 ) )
 
-    @NodeAlias1.prop('position_mm', node="position")
+    @nodealias("position")
     def position_mm(self, position):
         return position/1000.
    

@@ -4,7 +4,7 @@ from pydevmgr_core.nodes import Time, DequeList
 from pydevmgr_elt_qt import MotorCtrl, MotorCfg
 
 from pydevmgr_core_qt import BaseUiLinker
-from pydevmgr_core import io
+from pydevmgr_elt import io
 
 from pydantic import BaseModel, Field
 from PyQt5 import  QtCore
@@ -33,7 +33,7 @@ time = Time('time')
 class MotorPlotStatData(BaseModel):
     """ a Data Model defining what we need for the plot widget """
     substate_txt : NodeVar[int] = 0
-    plotdata: NodeVar[list] = Field([], node=DequeList.prop('plotdata', [time, 'pos_actual', 'pos_error', 'is_moving'], maxlen=100, trigger_index=-1)) 
+    plotdata: NodeVar[list] = Field([], node=DequeList.Config(nodes = [time, 'pos_actual', 'pos_error', 'is_moving'], maxlen=100, trigger_index=-1)) 
     
 class MotorPlotData(BaseModel):
     StatData = MotorPlotStatData
@@ -199,6 +199,7 @@ def main():
             print(f"    {f}    inside {r}")
         return 1
     
+    print( sys.argv ) 
     motor = open_elt_device(sys.argv[1])
     motor.connect()
     
@@ -214,4 +215,5 @@ def main():
     
         
 if __name__ == "__main__":
+    pass
     main()

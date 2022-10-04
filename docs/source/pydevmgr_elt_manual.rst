@@ -770,7 +770,7 @@ To generate a :class:`pydevmgr_core.NodeAlias` one can use a :func:`pydevmgr_cor
     >>> is_centered.get() 
     True
 
-Within a parent class one can use the ``NodeAlias.prop`` (for property) to create a NodeAlias instantiated in the
+Within a parent class one can use the ``nodealias`` to create a NodeAlias instantiated in the
 context of its parent: 
 
 .. code-block:: python
@@ -779,7 +779,7 @@ context of its parent:
 
    class MyMotor(Motor):
         
-      @NodeAlias1.prop( node="stat.pos_error")
+      @nodealias("stat.pos_error")
       def is_in_target(self, pos_serro): 
           return abs(pos_error)<0.03 
             
@@ -813,7 +813,7 @@ Or if this is not supposed to be configurable one can include the property direc
 .. code-block:: python
 
    class MyMotor(Motor):
-        is_arrived = IsArrived.prop( node="stat.pos_error", sigma=0.05 )
+        is_arrived = IsArrived.Config( node="stat.pos_error", sigma=0.05 )
 
 
 
