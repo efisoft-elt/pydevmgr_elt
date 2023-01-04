@@ -39,30 +39,4 @@ def test_adc_motor_factory():
     assert adc.motor1.engine.prefix == "MAIN.adc.motor888"
 
 
-def test_adc_data_matching():
-    
-    adc = Adc()
-    from pydevmgr_elt_qt.elt_device_ctrl import EltDeviceCtrl
-    from pydevmgr_elt import open_device
 
-    class MotorCtrStatData(EltDeviceCtrl.Data.StatData):
-        pos_actual: NodeVar[float] = 0.0
-        pos_error:  NodeVar[float] = 0.0
-        pos_target: NodeVar[float] = 0.0
-        vel_actual: NodeVar[float] = 0.0
-
-    class MotorCtrData(EltDeviceCtrl.Data):
-        StatData =  MotorCtrStatData               
-        stat: StatData = StatData()  
-   
-    class AdcData(BaseModel):
-        
-        motor1= MotorCtrData()
-        motor2= MotorCtrData()
-        
-    data = AdcData()
-
-    dl = DataLink(adc, data)
-    data.motor1.stat.pos_actual 
-
-test_adc_data_matching()

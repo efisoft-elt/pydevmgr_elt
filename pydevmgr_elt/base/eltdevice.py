@@ -81,7 +81,7 @@ class EltDeviceConfig(UaDevice.Config):
 
     stat : Stat = Stat() #  a generic interface so the Base EltDevice can almost function with any interfaces
     cfg  : Cfg = Cfg() 
-    Rpcs : Rpcs = Rpcs()
+    rpcs : Rpcs = Rpcs()
     
     # ###############################################
     class Config: # BaseModel configuration of pydantic 
