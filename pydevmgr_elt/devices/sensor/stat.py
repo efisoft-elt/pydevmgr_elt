@@ -1,16 +1,15 @@
 
-from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core import   NodeVar
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base.tools import  enum_group, enum_txt
 
 from enum import Enum
 Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -86,10 +85,10 @@ class SensorStat(Base):
         # all configured node will be accessible by the Interface
 
 
-        state:          ND = NC(suffix="stat.nState")
-        substate:       ND = NC(suffix="stat.nSubstate")
-        local:          ND = NC(suffix="stat.bLocal")
-        error_code:     ND = NC(suffix="stat.nErrorCode")
+        state:          NC = NC(suffix="stat.nState")
+        substate:       NC = NC(suffix="stat.nSubstate")
+        local:          NC = NC(suffix="stat.bLocal")
+        error_code:     NC = NC(suffix="stat.nErrorCode")
 
     @nodealias("substate")
     def is_ready(self, substate):

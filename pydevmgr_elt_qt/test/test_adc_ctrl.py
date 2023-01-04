@@ -10,11 +10,11 @@ from PyQt5 import  QtCore
 
 if __name__=="__main__":
     app = QApplication(sys.argv)
-    devLinker = AdcCtrl()
+    devLinker = AdcCtrl(link_failure=False)
     devLinker.widget.show()
     downloader = Downloader()
     
-    device = open_device("tins/adc1.yml", "adc1")
+    device = open_device("tins/adc1.yml(adc1)")
     DataLink(device, devLinker.Data())
     
 

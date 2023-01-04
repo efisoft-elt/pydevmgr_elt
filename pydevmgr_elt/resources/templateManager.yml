@@ -8,11 +8,11 @@ server_id           : '{{ name }}'
     scxml           : "{{ cfgdir }}/sm.xml"                              #
     dictionaries    : ['dit/stddid/primary.did', 'tins/fcf.did'] #
     fits_prefix     : "{{ fits_prefix }}"
-    devices         : [{% for device in devices %}'{{ device.name }}', {% endfor %}]
     cmdtout         : 60000
+devices:
+  {% for device in devices %}
+  - name: {{ device.name }}:
+    type: {{ device.type }}
+    cfgfile: {{ device.file }}
 
-{% for device in devices %}
-{{ device.name }}:
-   type: {{ device.type }}
-   cfgfile: {{ device.file }}
-{% endfor %}
+  {% endfor %}

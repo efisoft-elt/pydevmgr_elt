@@ -1,3 +1,4 @@
+import yaml
 from . import io
 from .tools import    get_enum_txt
 from .config import eltconfig
@@ -7,10 +8,10 @@ from .eltnode import EltNode
 from .eltrpc import EltRpc
 from .eltstat import StatInterface
 from .eltengine import EltEngine 
-
+from .register import register
 
 from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
-from pydevmgr_core import (upload, NodeVar, open_device, record_class, get_class, DeviceFactory, KINDS, BaseFactory) 
+from pydevmgr_core import (upload, NodeVar, open_device,  get_class, DeviceFactory, KINDS, BaseFactory) 
 from pydevmgr_core.nodes import Local
 from pydevmgr_ua import UaDevice
 from typing import Optional
@@ -46,7 +47,8 @@ class EltDeviceIO(BaseFactory):
         if self.name:
            file_path += "("+self.name+")"
         cls = get_class(KINDS.DEVICE, self.type)
-        cfg = cls.Config.from_cfgfile(file_path)
+        cfg = io.load_config(file_path)        
+        cfg = cls.Config.parse_obj(cfg)
         for key, val in self.dict( exclude=set(["name", "cfgfile", "type"]) ).items():
             setattr(cfg, key, val)
         return cfg.build( parent, name= name or self.name)
@@ -61,7 +63,7 @@ class EltDeviceConfig(UaDevice.Config):
     Rpcs = EltInterface.Config
     # ###############################################
     type: str = "Elt"
-    address : AnyUrl = Field( default_factory = lambda : eltconfig.default_address)
+    # address : AnyUrl = Field( default_factory = lambda : eltconfig.default_address)
     @property
     def dev_endpoint(self): # read only property to handle ELT V4 version 
         return self.address
@@ -157,7 +159,7 @@ class CfgInterface(EltInterface):
 
 
 
-@record_class
+@register
 class EltDevice(UaDevice): 
     Config = EltDeviceConfig
     Engine = EltEngine 

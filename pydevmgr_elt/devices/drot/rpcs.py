@@ -1,8 +1,5 @@
-from pydevmgr_core import  NodeAlias1, Defaults 
-from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt.devices.drot.stat import MODE
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_ua import UaInt16
 
 from enum import Enum
@@ -10,9 +7,8 @@ Base = Motor.Rpcs
 
 R = Base.Rpc # Base Node
 RC = R.Config
-RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
-to_int16 = UaInt16()
+to_int16 = UaInt16().parse
 
 # RPC_ERROR are iddentical to Motor 
 
@@ -36,9 +32,9 @@ def mode_parser(mode):
 class DrotRpcs(Base):
 
     class Config(Base.Config):
-        rpcMoveAngle : RD = RC(suffix="RPC_MoveAngle", arg_parsers=[float])
-        rpcStartTrack: RD = RC(suffix="RPC_StartTrack", arg_parsers=[mode_parser, float])
+        rpcMoveAngle : RC = RC(suffix="RPC_MoveAngle", arg_parsers=[float])
+        rpcStartTrack: RC = RC(suffix="RPC_StartTrack", arg_parsers=[mode_parser, float])
          
-        rpcStopTrack: RD = RC(suffix="RPC_StopTrack")
+        rpcStopTrack: RC = RC(suffix="RPC_StopTrack")
 
 

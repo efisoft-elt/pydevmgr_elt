@@ -1,12 +1,11 @@
+from pydevmgr_elt.devices.motor.axis_type import AXIS_TYPE
 from pydevmgr_elt.devices.motor.stat import MotorStat as Stat
 from pydevmgr_elt.devices.motor.cfg  import MotorCfg as Cfg
 from pydevmgr_elt.devices.motor.rpcs import MotorRpcs as Rpcs
 from pydevmgr_elt.devices.motor.init_seq import init_sequence_to_cfg, InitSeqequenceStep
 from pydevmgr_elt.devices.motor.positions import PositionConfig
-from pydevmgr_elt.devices.motor.axis_type import AXIS_TYPE
 
-from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class, Defaults
+from pydevmgr_elt.base import EltDevice, register
 from typing import Any, List, Optional, Dict, Union
 from pydantic import validator
 Base = EltDevice
@@ -18,7 +17,7 @@ class MotorCtrlConfig(Base.Config.CtrlConfig):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     # Data Structure (on top of CtrlConfig)
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    velocity : float = 0.1 # mendatory because used as default for movement
+    velocity : float = 1.0 # mendatory because used as default for movement
     min_pos :           Optional[float] = 0.0
     max_pos :           Optional[float] = 0.0 
     active_low_lstop :  Optional[bool] = False
@@ -76,7 +75,7 @@ class MotorConfig(Base.Config):
 
 
 
-@record_class
+@register
 class Motor(Base):
     """ ELt Standard Motor device """
     Config = MotorConfig
@@ -138,7 +137,7 @@ class Motor(Base):
     @property
     def posnames(self) -> str:
         """ configured position names in a name:(pos, tol) dictionary """
-        return self.config.positions.posnames      
+        return [p.name for p in  self.config.positions]     
             
     @property
     def velocity(self) -> float:
@@ -195,7 +194,7 @@ class Motor(Base):
     def get_pos_target_of_name(self, name: str) -> float:
         """return the configured target position of a given pos name or raise error"""
         for pos in self.config.positions:
-            if pos.name == "name":
+            if pos.name == name:
                 return pos.value
         
         raise ValueError('unknown posname %r'%name)

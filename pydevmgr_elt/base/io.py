@@ -114,7 +114,7 @@ def explore_config(what=None, ioconfig=ioconfig):
             return True
     elif what == "Manager":
         def filter_func(cfg):
-            return 'server_id' in cfg
+            return 'server' in cfg
     else:
         def filter_func(cfg):
             if not len(cfg): return False

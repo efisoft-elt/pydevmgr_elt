@@ -23,7 +23,7 @@ def test_adc_configured_motor():
 
 def test_adc_motor_can_be_found():
     adc = Adc()
-    assert len(list(adc.find(Adc.Motor, -1))) == 2
+    assert len(set(adc.find(Adc.Motor, -1))) == 2
    
 
 def test_adc_motor_factory():

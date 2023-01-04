@@ -16,15 +16,15 @@ What is it ?
 .. note:: 
     
    **About versions**
-   Up to v0.5.x version pydevmgr_core, pydevmgr_ua and pydevmgr_elt has involved in a way that break backward
-   compatibilities. From v0.5 I will try my best to avoid any majore backward compatibility break.       
-   
-   The deprecated version 0.2 of this module was included in a pydevmgr package. Now, the package is independant and
-   using two other subpackages `pydevmgr_core`_ core engine for pydevmgr and `pydevmgr_ua`_ for generic OPC-UA com  
-   
-   In its current version 0.5.X, ``pydevmgr_elt`` is a separated module from ``pydevmgr_core`` and ``pydevmgr_ua``. 
-   to communicate with the OPC-UA server.   
-        
+   The official maintened version is now v0.6.x and above. 
+    
+   If you are a regular user of pydevmgr_elt to drive standard devices this new version is transparent. However some  
+   changes has been done to build devices which are not backward compatible. 
+   Also devices are following the v4 of the ESO low level software. So their is no garanty that v0.6 of pydevmgr_elt
+   will work with version v3 of IFW low level softwre. 
+
+   The core pluggin has been rewriten to follow the primary goal of providing a generic tool to drive any system.
+           
 
 
 If you do not know what is ELT software, this page is probably not for you.
@@ -48,13 +48,15 @@ used by non-software engineers in order to easily scrips sequences to integrate,
 - **Use simple GUIs** to drive standard or custom ESO devices from any computers. For instance, useful when electronics and PLC setup is done separately in an other institute but wants to script some motor movements. 
 
 
-**pydevmgr_elt** can use the `YAML`_ `configuration files`_ as defined by ESO (in ELT software version 2&3) to communicate with the PLC through OPC-UA. 
-This allows to reuse those configuration files directly in the ESO fcf software. However the use of configuration file
-is not necessary.  
 
-Note that in future update of the ELT CII this configuration files will no longer be valid, I guess, but it  
-should not be a problem as long as low level software is unchanged, pydevmgr_elt will still work, 
-only the ability to copy past configuration files will be lost, not a big deal.  
+**pydevmgr_elt** Does not really need `YAML`_ `configuration files`_  configuration file to run (all configuration can
+be written in python). However `YAML`_ configuration files can be used but they are not anymore 100% compatible with ESO
+framework configuration file in version IFW V4. Indead CII services to define yaml format does not work. However one can
+simply remove the CII `YAML`_ markers and it should work (the rest of the config file is iddentical). 
+
+.. warning:: 
+
+   Configuration file has changed in V4 of IFW. They are not anymore 100% compatible with pydevmgr_elt v0.6 
 
 
 A `tins`_, a test instrument, is included in the source package. It contains the yaml files and a running 
@@ -62,7 +64,7 @@ PLC project. The PLC project is not documented, see ESO FCS webpage for more inf
 The Example in the documents are given for the "tins" but are adaptable to any configurations. 
 
 In the following doc Examples, it is assumed that the `tins`_ is running on a OPC-UA server. One can easily
-adapt the Example from any working projects. Also it is assumed that the yml files of the `tins`_ are accessible through
+adapt the Example from any working projects. Also it is assumed that the yaml files of the `tins`_ are accessible through
 the ``$CFGPATH`` environment variable and they are edited to match the current hardware configuration (address,
 namespace, etc).  
 
@@ -107,45 +109,6 @@ If `pydevmgr_elt_qt` module is used, PyQt5 must be installed separately. This is
     > pip install pyqt5 
     
             
-Configuration Files
--------------------
-
-One can use yaml configuration file to configure device communication and control as it is done so 
-far in v3 framework. But as we will see below this is not necessary. 
-
-The configuration file shall be in one of the directories defined in the "$CFGPATH" environment variable.
-
-For the ``tins`` this could be : 
-
-.. code-block:: bash
-
-    > export CFGPATH=${CFGPATH}:/__path/to/your/src__/pydevmgr/tins/resources
-
-A script is available to generate configuration file ready for edition. The script is smart enough 
-to build an almost ready to use device manager. 
-
-Example of quick creation of device and manager config file in a shell :
-
-.. code-block:: bash
-
-    > pydevmgr_dump Motor > motor1.yml 
-    > pydevmgr_dump Motor > motor2.yml 
-    > pydevmgr_dump Manager > manager.yml 
-
-``pydevmgr_dump`` (or ``pydevmgr_dump.exe`` on window computer) accept also some options.   
-
-.. code-block:: bash
-
-    > export CFGPATH=some/directory
-    > mkdir $CFGPATH/fcs1
-    > cd $CFGPATH/fcs1
-    
-    > pydevmgr_dump mapMotor > mapMotor.yml
-    > pydevmgr_dump mapLamp > mapLamp.yml
-    > pydevmgr_dump Motor motor1 --address opc.tcp://192.168.1.28:4840 --cfgdir "fcs1" > motor1.yml
-    > pydevmgr_dump Motor motor2 --address opc.tcp://192.168.1.28:4840 --cfgdir "fcs1" > motor2.yml
-    > pydevmgr_dump Lamp  lamp1  --address opc.tcp://192.168.1.28:4840 --cfgdir "fcs1" > lamp.yml
-    > pydevmgr_dump Manager fcs1 --cfgdir "fcs1/server" > fcs1.yml 
 
 
 Basic Usage
@@ -196,6 +159,45 @@ thanks to parent and config informations.
 After creating an object (Manager, Device, Interface, Node, Rpc) it is not guaranty that changing its configuration
 instance will have the wanted effect. All configuration change must be done before creating the object. 
 
+Configuration Files
+-------------------
+
+One can use yaml configuration file to configure device communication and control as it is done so 
+far in IFW framework. The files are however not anymore compatible with IFW v4.
+
+The configuration file shall be in one of the directories defined in the "$CFGPATH" environment variable.
+
+For the ``tins`` this could be : 
+
+.. code-block:: bash
+
+    > export CFGPATH=${CFGPATH}:/__path/to/your/src__/pydevmgr/tins/resources
+
+A script is available to generate configuration file ready for edition. The script is smart enough 
+to build an almost ready to use device manager. 
+
+Example of quick creation of device and manager config file in a shell :
+
+.. code-block:: bash
+
+    > pydevmgr_dump Motor > motor1.yml 
+    > pydevmgr_dump Motor > motor2.yml 
+    > pydevmgr_dump Manager > manager.yml 
+
+``pydevmgr_dump`` (or ``pydevmgr_dump.exe`` on window computer) accept also some options.   
+
+.. code-block:: bash
+
+    > export CFGPATH=some/directory
+    > mkdir $CFGPATH/fcs1
+    > cd $CFGPATH/fcs1
+    
+    > pydevmgr_dump mapMotor > mapMotor.yml
+    > pydevmgr_dump mapLamp > mapLamp.yml
+    > pydevmgr_dump Motor motor1 --address opc.tcp://192.168.1.28:4840 --cfgdir "fcs1" > motor1.yml
+    > pydevmgr_dump Motor motor2 --address opc.tcp://192.168.1.28:4840 --cfgdir "fcs1" > motor2.yml
+    > pydevmgr_dump Lamp  lamp1  --address opc.tcp://192.168.1.28:4840 --cfgdir "fcs1" > lamp.yml
+    > pydevmgr_dump Manager fcs1 --cfgdir "fcs1/server" > fcs1.yml 
 
 
 Quick Start
@@ -211,6 +213,8 @@ the proper device Class, so far they are:
 - :class:`pydevmgr_elt.Lamp` to drive FB_LAMP
 - :class:`pydevmgr_elt.Shutter` to drive FB_SHUTTER
 - :class:`pydevmgr_elt.Piezo` to drive FB_PIEZO
+- :class:`pydevmgr_elt.Sensor` to drive FB_IODEV (to be updated) 
+  
 
 And 
 
@@ -218,9 +222,10 @@ And
 - :class:`pydevmgr_elt.CcsSim` for FB_CCS_SIM
 
 
-Each device class has its own ``.Config`` (a class) and ``config`` (instance of ``.Config``) attribute  which basically
+Each device class has its own ``.Config`` (a class) attribute  which basically
 contains what a yaml configuration file (as defined by ESO) contains plus other stuff used by pydevmgr, 
-those are  :class:`pydantic.BaseModel`.
+those are  :class:`pydantic.BaseModel`.  Objects created from these class have an instance of  ``.Config`` 
+with all the parameters eddited. 
 
 
 .. code-block:: python
@@ -264,7 +269,7 @@ To know the list of 'children'  available on a device (or any pydevmgr object)  
     from pydevmgr_elt import Motor, BaseInterface, BaseNode 
 
     motor1 = Motor("motor1", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1')
-    list(  motors.find( BaseNode, -1 ) )                                                                                                                                                        
+    list(  motor1.find( BaseNode, -1 ) )                                                                                                                                                        
     
 The :class:`pydevmgr_elt.EltDevice.Config` configuration structure is used by the :meth:`pydevmgr_elt.EltDevice.configure`
 method which will send the proper configuration parameters to the PLC.   
@@ -277,20 +282,22 @@ open a device with the right class according to the type defined inside the conf
 .. code-block:: python
 
    from pydevmgr_elt import open_elt_device
-   motor1 = open_elt_device("tins/motor1.yml")
+   motor1 = open_elt_device("tins/motor1.yml(motor1)")
 
-The path to configuration file (here `tins/motor1.yml`) must be relative to one of the path defined in the ``$CFGPATH`` environment variable.   
+The path to configuration file (here `tins/motor1.yml`) must be relative to one of the path defined in the ``$CFGPATH`` environment variable.
+After the path file name comes the path to the object definition inside the yaml (here ``motor1``).    
 
 An other use case, load a configuration and change some parameters:
 
 .. code-block:: python
     
     from pydevmgr_elt import Motor
-    conf = Motor.Config.from_cfgfile('tins/motor1.yml', path="motor1")
+    conf = Motor.Config.from_cfgfile('tins/motor1.yml(motor1)')
     conf.address = "opc.tcp://192.167.34.5:4840"
-    conf.initialisation.sequence = ['FIND_LHW']
-    conf.initialisation.FIND_LHW.value1 = 3.0                                                    
-    conf.initialisation.FIND_LHW.value2 = 1.0 
+    conf.initialisation[0].step = 'FIND_LHW'
+    conf.initialisation[0].value1 = 3.0 
+    conf.initialisation[0].value2 = 1.0 
+
    
     motor1 = Motor('motor1', config=conf)
     try:
@@ -365,7 +372,7 @@ A manager (collection of several devices) can be also created without the need o
 
 .. code-block:: python
 
-    from pydevmgr_elt import UaManager, Motor
+    from pydevmgr_elt import EltManager, Motor
     
     devices = {
        'motor1' :   Motor("motor1", address='opc.tcp://192.168.1.13:4840', prefix='MAIN.Motor1'), 
@@ -373,6 +380,8 @@ A manager (collection of several devices) can be also created without the need o
        }   
     
     mgr = EltManager('', devices=devices)
+   
+    assert mgr.motor1.prefix == "MAIN.Motor1"
     
     mgr.connect()
     
@@ -452,26 +461,27 @@ All 'check' nodes are requested (in one call per server) at a configurable perio
 
 Wait has a timeout option. If time exceed timeout (in seconds) an exception is raised.
 
-An other keyword of ``wait`` is ``lag`` which add x seconds before starting to check nodes values. This can be useful
-to make sure that the requested action had time to start, for instance when moving motors: 
+An other keyword of ``wait`` is ``lag`` which add x seconds before starting to check nodes values the first time. 
+This can be useful to make sure that the requested action had time to start, for instance when moving motors: 
 
 .. code-block:: python 
    
     wait( mgr.motor.move_abs(8,1.0) , lag=0.1 )
 
 
-When the logic of the expecting "end of action" is too ambiguous, None is returned (None is ignored by wait). 
-One Example is the ``move_vel`` method of a motor there is no end on this action. 
+When the logic of the expecting "end of action" is not relevant, None is returned (and None is ignored by wait). 
+One Example is the ``move_vel`` method of a motor, there is no end on this action. 
 
 Note, on the Example above ``start_track()`` is returning a node ``is_tracking``.
 
 The function :func:`wait` has a :class:`Waiter` counterpart where the node list definition is separated from the call:
 
 .. code-block:: python
-
-    >>> waiter = Waiter([tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill], timeout=10)
+    
+    from pydevmgr_core import Waiter
+    waiter = Waiter([tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill], timeout=10)
     # somewhereless:
-    >>> waiter.wait()
+    waiter.wait()
 
 
 
@@ -479,9 +489,9 @@ Note, one can also use the :class:`AllTrue` node alias to combine node logic :
 
 .. code-block:: python 
 
-    >>> from pydevmgr_core.nodes import AllTrue
-    >>> all_standstill = AllTrue(nodes=[tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill]) 
-    >>> wait( all_standstill )
+    from pydevmgr_core.nodes import AllTrue
+    all_standstill = AllTrue(nodes=[tins.motor1.stat.is_standstill, tins.motor2.stat.is_standstill]) 
+    wait( all_standstill )
 
 A good practice would be also to add a node which check any errors and raise an exception in case of error, pydevmgr as
 this (in v>0.4): 
@@ -492,7 +502,7 @@ this (in v>0.4):
    wait (  [mgr.motor1.move_abs(4.5, 0.8), mgr.motor1.move_abs(4.5, 0.8),  mgr.motor1.stat.noerror_check,  mgr.motor2.stat.noerror_check ] )         
 
 The noerror_check is a :class:`pydevmgr_core.NodeAlias` returning always True but raise an exception in case of device error 
-(not RPC-Error, but the FB error). This allow to interrupt the wait with an exception raised. 
+(not RPC-Error, but the Function Block runtime error). This allow to interrupt the wait with an exception raised. 
 
 
 .. _configuration files: http://www.eso.org/~eeltmgr/ICS/documents/IFW_HL/sphinx_doc/html/manuals/fcf/src/docs/devmgr.html#configuration
@@ -509,75 +519,6 @@ One have the choice to work with structure for a cleaner definition of used data
 The idea behind this is to be able to program scripts without having to deal with device, nodes, etc at run time except when downloading 
 data from PLC. Analysis function can just work with regular structure or dictionaries.   
 
-Dictionary based
-----------------
-
-.. code-block:: python
-
-    >>> data = {}
-    >>> nodes = [tins.motor1.stat.pos_actual, tins.motor1.stat.pos_error, 
-                 tins.motor1.stat.substate_txt,
-                 tins.motor2.stat.pos_actual, tins.motor2.stat.pos_error, 
-                 tins.motor2.stat.substate_txt]
-    >>> download(nodes, data)
-    >>> data
-    {<UaNode key='motor1.pos_actual'>: 4.0,
-     <UaNode key='motor1.pos_error'>: 0.0,
-     <UaNode key='motor1.substate'>: 216,
-     <UaNode key='motor2.pos_actual'>: 0.0,
-     <UaNode key='motor2.pos_error'>: 0.0,
-     <UaNode key='motor2.substate'>: 216,
-     <NodeAlias key='motor2.substate_txt'>: 'OP_STANDSTILL',
-     <NodeAlias key='motor1.substate_txt'>: 'OP_STANDSTILL'}
-
-Note on the Example above ``substate_txt`` is a :class:`pydevmgr_core.NodeAlias` it transforms the substate number (from the PLC) into a text. 
-In consequence, the substate node is downloaded from PLC and added as well in the data dictionary.  
-
-Items of the data dictionary are node/value pairs. One can access  values with e.g. ``data[tins.motor1.stat.pos_actual]``. 
-    
-But a *view* of the data dictionary with string keys can be retrieved easily :
-
- .. code-block:: python
- 
-     >>> from pydevmgr_elt import DataView  
-     >>> m1_data = DataView(data, tins.motor1.stat)
-     >>> m1_data['pos_actual']
-     30.0 
-     >>> wait( tins.motor1.move_abs(25.0, 100))
-     >>> download(nodes, data)
-     >>> m1_data['pos_actual']
-     25.0 
-
-So a DataView can be used by a function for instance :
-
- .. code-block:: python
- 
-    def mot_info(pos_actual=0.0, pos_error=0.0, substate_txt=0, **extras):
-         print(f"Substate is {substate_txt} and position is {pos_actual} with an error of {pos_error}")
-    
-    >>> mot_info(**m1_data)
-    Substate is OP_STANDSTILL and position is 4.0 with an error of 0.0     
-    >>> wait(tins.motor1.move_abs(30,100))
-    >>> download(nodes, data)
-    >>> mot_info(**m1_data)
-    Substate is OP_STANDSTILL and position is 30.0 with an error of 0.0
- 
-a :class:`DataView` object is reflecting any change made in the root data except when a new node is added inside the root data dictionary. 
- 
- 
-Each manager, device, interface objects has a find method used to return children 
-One can also build the full list of nodes :
-
-.. code-block:: python
-   
-   from pydevmgr_core import BaseNode
-   
-   data = {}     
-   download( tins.find(BaseNode,-1), data )
-   
-In the example above find is looking for BaseNode object, the -1 argument is the depth, a negative depth is infinite. 
-
-    
 
 Structure Base Model
 --------------------
@@ -621,7 +562,7 @@ A full Data Model Class is available for each devices :
     >>> mot_data.stat
     MotorStatData(state=2, substate=216, error_code=0, is_operational=True, is_not_operational=False, is_ready=False, is_not_ready=False, is_in_error=False, substate_txt='OP_STANDSTILL', substate_group='OK', state_txt='OP', state_group='OK', error_txt='OK', pos_target=27.0, pos_actual=0.0, pos_error=0.0, vel_actual=0.0, scale_factor=0.0001, local=False, backlash_step=2, mode=0, initialised=True, init_step=0, init_action=0, axis_ready=True, axis_enable=True, axis_inposition=False, axis_lock=False, axis_brake=False, axis_info_data1=0, axis_info_data2=0, signal_lstop=False, signal_lhw=False, signal_ref=False, signal_index=False, signal_uhw=False, signal_ustop=False, is_moving=False, is_standstill=True, pos_name='')
     
-Similary this should also work 
+Similary this should also work (note mgr.motor1 should be connected). 
 
 .. code-block:: python   
  
@@ -629,11 +570,15 @@ Similary this should also work
     >>> dl = DataLink(mgr.motor1.stat, mot_stat_data)
     >>> dl.download() 
 
-Since version v0.4 the manager has a ``create_data_class`` method to create a Data class dynamicaly: 
+Since version v0.6 a generic function create_data_class is available to dynamicaly create the class. 
+Useful for a device manager for instance. 
+
 
 .. code-block:: python
-
-   Data = tins.create_data_class( tins.children(BaseDevice) )
+    
+   from pydevmgr_core import create_data_class
+   
+   Data = create_data_class("MyData", mgr.find(BaseDevice) )
    data = Data()
    dl = DataLink( tins, data )
    
@@ -678,7 +623,7 @@ Since version v0.4 the manager has a ``create_data_class`` method to create a Da
     finally:
         mgr.disconnect()
 
-The example above works because the path on the manager and on the data structure are the same. 
+The example above works because the path on the manager and on the data structure are iddentical. 
 I mean `data.motor1.stat.pos_error`  <-> `mgr.motor1.stat.pos_error`   
 
 However one can specify other path in the data structure thanks to attribute of the Pydantic `Field`, we can 
@@ -711,6 +656,81 @@ use the node attribute to determine the node path inside a tuple or string with 
         mgr.disconnect()
         
 .. _PYDANTIC: https://pydantic-docs.helpmanual.io
+
+
+
+Dictionary based
+----------------
+
+For more dynamic applications. 
+
+.. code-block:: python
+
+    >>> data = {}
+    >>> nodes = [tins.motor1.stat.pos_actual, tins.motor1.stat.pos_error, 
+                 tins.motor1.stat.substate_txt,
+                 tins.motor2.stat.pos_actual, tins.motor2.stat.pos_error, 
+                 tins.motor2.stat.substate_txt]
+    >>> download(nodes, data)
+    >>> data
+    {<UaNode key='motor1.pos_actual'>: 4.0,
+     <UaNode key='motor1.pos_error'>: 0.0,
+     <UaNode key='motor1.substate'>: 216,
+     <UaNode key='motor2.pos_actual'>: 0.0,
+     <UaNode key='motor2.pos_error'>: 0.0,
+     <UaNode key='motor2.substate'>: 216,
+     <NodeAlias key='motor2.substate_txt'>: 'OP_STANDSTILL',
+     <NodeAlias key='motor1.substate_txt'>: 'OP_STANDSTILL'}
+
+Note on the Example above ``substate_txt`` is a :class:`pydevmgr_core.NodeAlias` it transforms the substate number (from the PLC) into a text. 
+In consequence, the substate node is downloaded from PLC and added as well in the data dictionary.  
+
+Items of the data dictionary are node/value pairs. One can access  values with e.g. ``data[tins.motor1.stat.pos_actual]``. 
+    
+But a *view* of the data dictionary with string keys can be retrieved easily with ``DataView`` a wrapper around the
+dictionary:
+
+ .. code-block:: python
+ 
+     >>> from pydevmgr_elt import DataView  
+     >>> m1_data = DataView(data, tins.motor1.stat)
+     >>> m1_data['pos_actual']
+     30.0 
+     >>> wait( tins.motor1.move_abs(25.0, 100))
+     >>> download(nodes, data)
+     >>> m1_data['pos_actual']
+     25.0 
+
+So a DataView can be used by a function for instance :
+
+ .. code-block:: python
+ 
+    def mot_info(pos_actual=0.0, pos_error=0.0, substate_txt=0, **extras):
+         print(f"Substate is {substate_txt} and position is {pos_actual} with an error of {pos_error}")
+    
+    >>> mot_info(**m1_data)
+    Substate is OP_STANDSTILL and position is 4.0 with an error of 0.0     
+    >>> wait(tins.motor1.move_abs(30,100))
+    >>> download(nodes, data)
+    >>> mot_info(**m1_data)
+    Substate is OP_STANDSTILL and position is 30.0 with an error of 0.0
+ 
+a :class:`DataView` object is reflecting any change made in the root data except when a new node is added inside the root data dictionary. 
+ 
+ 
+Each manager, device, interface objects has a find method used to return children 
+One can also build the full list of nodes :
+
+.. code-block:: python
+   
+   from pydevmgr_core import BaseNode
+   
+   data = {}     
+   download( tins.find(BaseNode,-1), data )
+   
+In the example above find is looking for BaseNode object, the -1 argument is the depth, a negative depth is infinite. 
+
+    
 
 
 Nodes and Node Alias
@@ -759,54 +779,58 @@ An other good Example of node alias is the ``pos_name`` included in :class:`pyde
      <NodeAlias key='motor1.pos_name'>: 'ON'}
 
 
-To generate a :class:`pydevmgr_core.NodeAlias` one can use a :func:`pydevmgr_core.nodealias` decorator as such:
+To generate a :class:`pydevmgr_core.NodeAlias` one can subclass the NodeAlias class and define the fget method:
 
 .. code-block:: python
 
-    @nodealias('is_centered', nodes=[tins.motor1.stat.pos_actual, tins.motor2.stat.pos_actual])
-    def is_centered(m1_pos, m2_pos):
-        return (m1_pos**2 + m2_pos**2) < 0.1**2
+    from pydevmgr_core import NodeAlias 
+    from typing import Tuple
+    class IsCentered(NodeAlias): 
+        class Config:
+            center: Tuple[float,float] = (0.0, 0.0) 
+            radius: float = 1.0
+            
+        def fget(self, pos1, pos2):
+            r2 = (pos1-self.center[0])**2 + (pos2-self.center[1])**2 
+            return r2 < self.radius**2 
+    
+    
+    is_centered = IsCentered(nodes=[mgr.motor1.stat.pos_actual, mgr.motor2.stat.pos_actual], center=(0.5, 1.2), radius=2.0 )
 
-    >>> is_centered.get() 
-    True
+    is_centered.get() 
+    # True
 
-Within a parent class one can use the ``nodealias`` to create a NodeAlias instantiated in the
-context of its parent: 
+
+The newly created class can by integrated in a device class for instance: 
+
+.. code-block:: python
+   
+    from pydevmgr_elt import Motor 
+    from pydevmgr_ua import UaDevice 
+    class My2Axes(UaDevice):
+        class Config:
+            motor1 = Motor.Config(prefix="Motor1")
+            motor2 = Motor.Config(prefix="Motor2")
+            is_centered = IsCentered.Config(nodes=["motor1.stat.pos_actual", "motor2.stat.pos_actual"],  center=(0.5, 1.2), radius=2.0) 
+    
+    tiptilt = My2Axes( address="opc.tcp://192.168.1.11:4840", prefix="MAIN")
+    with tiptilt: 
+        print ( tiptilt.is_centered.get() )
+    
+                
+However one can use the ``nodealias`` decorator to quickly create a node alias to an object. 
+The nodealias decorator accept a list of string which define the path to the list of input nodes, the 
+decorated method will get ``self`` the parent instance and the values returned by input nodes. For instance  
 
 .. code-block:: python
 
-   from pydevmgr_elt import NodeAlias1, Motor
+   from pydevmgr_elt import nodealias, Motor
 
    class MyMotor(Motor):
-        
-      @nodealias("stat.pos_error")
-      def is_in_target(self, pos_serro): 
-          return abs(pos_error)<0.03 
+      @nodealias("stat.pos_actual", "stat.pos_error")
+      def is_at_home(self, pos, pos_error): 
+          return abs(pos)<1.0 and  abs(pos_error)<0.3 
             
-
-You can also define your own NodeAlias Class easily with some configuration: 
-
-.. code-block:: python 
-
-   from pydevmgr_elt import Motor, NodeAlias1 
-
-   class IsArrived(NodeAlias1,  sigma=(float, 0.03)): 
-        def fget(self, pos_error): 
-            return abs(pos_error)<self.config.sigma
-
-And include it to your Motor class configuration so it can be configured from a configuration payload (a configuration
-file):
-
-.. code-block:: python 
-
-    class MyMotor(Motor): 
-        class Config(Motor.Config): 
-            is_arrived : IsArrived.Config = IsArrived.Config( node="stat.pos_error", sigma=0.05 )
-    
-
-    with MyMotor(address="opc.tcp://localos:4840", prefix="MAIN.Motor1") as m:
-        print( m.is_arrived.get() )
-
 
 Or if this is not supposed to be configurable one can include the property directly inside the class  : 
 
@@ -827,6 +851,46 @@ Some useful alias node are built-in like :
 - :class:`pydevmgr_core.nodes.InsideInterval` To check if a value is inside a given interval
 - :class:`pydevmgr_core.nodes.PosName`  return names for given position
 
+
+Building a Device handling OPC-UA  
+=================================
+
+:mod:`pydevmgr_elt` is built on :mod:`pydevmgr_ua` which provide basic base class to communicate with opc-ua. 
+
+Bellow is defined a simplified version of a Motor device for read only purpose: 
+
+
+.. code-block:: python 
+    
+    from pydevmgr_ua import UaDevice, UaNode, UaRpc
+    from pydevmgr_core import nodealias, download  
+    
+    class Motor(UaDevice):
+        pos = UaNode.Config( suffix="stat.lrPosActual") 
+        state = UaNode.Config( suffix="stat.nState")
+        substate = UaNode.Config( suffix="stat.nSubstate")
+               
+    class TipTilt(UaDevice): 
+        class Config: 
+            prefix = "MAIN"
+            motor1 = Motor.Config( prefix="Motor1") 
+            motor2 = Motor.Config( prefix="Motor2")
+            
+            temp_digit = UaNode.Config(suffix="a_path_to_a_node")
+            
+        @nodealias("temp_digit")
+        def temp(self, digits): 
+            return digits*100 
+                
+            
+    with  TipTilt(address="opc.tcp://192.168.1.11:4840") as tiptilt:
+        print( *download( [tiptilt.motor1.pos, tiptilt.motor2.pos]))
+    
+
+
+   For more complexe use case and special device one should read directly the code for a standard device in pydevmgr.
+   The :class:`pydevmgr_elt.EltDevice` includes already common ``stat`` structure and some rpc method found in all
+   devices (Init, Enable, Disable, Reset) and the :met:`pydevmgr_elt.EltDevice.configure`.
  
 GUIS
 ====
@@ -1038,8 +1102,11 @@ Auto generated Indexes
                open_elt_manager , 
                nodealias ,   kjoin , ksplit, 
                NodeVar , DataLink, 
-               DataView , io,    
-               nodes.DateTime, nodes.UtcTime,
-               nodes.AllTrue , nodes.AllFalse , nodes.AnyTrue , nodes.AnyFalse
-               nodes.DequeList, nodes.Deque, 
-               nodes.InsideInterval , nodes.PosName
+               DataView , io 
+
+
+.. automodule:: pydevmgr_core.nodes
+    :members:  DateTime, UtcTime,
+               AllTrue , AllFalse , AnyTrue , AnyFalse
+               DequeList, Deque, 
+               InsideInterval , PosName

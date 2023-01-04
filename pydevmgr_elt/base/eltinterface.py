@@ -1,16 +1,11 @@
 from pydevmgr_ua import UaInterface
-from pydevmgr_core import record_class, ksplit, get_class
-
-from typing import Dict, Any, Optional
-from .tools import fjoin 
+from .register import register 
 from .eltnode import EltNode
 from .eltrpc import EltRpc
 from .eltengine import EltEngine 
-from . import io
-from pydantic import root_validator
 
 
-@record_class
+@register
 class EltInterface(UaInterface):
     Engine = EltEngine
     

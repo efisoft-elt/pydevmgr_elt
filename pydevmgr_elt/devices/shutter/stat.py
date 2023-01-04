@@ -1,5 +1,5 @@
 
-from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core import NodeVar
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -10,7 +10,6 @@ Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -117,11 +116,11 @@ class ShutterStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        error_code: ND = NC(suffix='stat.nErrorCode' )
-        local: Defaults[NC] = NC(suffix='stat.bLocal' )
-        state: ND = NC(suffix='stat.nState' )
-        status: ND = NC(suffix='stat.nStatus' )
-        substate: ND = NC(suffix='stat.nSubstate' )
+        error_code: NC = NC(suffix='stat.nErrorCode' )
+        local: NC = NC(suffix='stat.bLocal' )
+        state: NC = NC(suffix='stat.nState' )
+        status: NC = NC(suffix='stat.nStatus' )
+        substate: NC = NC(suffix='stat.nSubstate' )
 
 
     # We can add some nodealias to compute some stuff on the fly 

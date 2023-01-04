@@ -2,9 +2,8 @@ from pydevmgr_elt.devices.drot.stat import DrotStat as Stat, MODE
 from pydevmgr_elt.devices.drot.cfg  import DrotCfg as Cfg
 from pydevmgr_elt.devices.drot.rpcs import DrotRpcs as Rpcs
 
-from pydevmgr_elt.base import EltDevice
+from pydevmgr_elt.base import EltDevice, register
 from pydevmgr_elt.devices.motor import Motor
-from pydevmgr_core import record_class
 from pydevmgr_core.nodes import Opposite
 from typing import Optional
 
@@ -40,7 +39,7 @@ class DrotConfig(Base.Config):
 
 
 
-@record_class
+@register
 class Drot(Base):
     """ ELt Standard Drot device """
     Config = DrotConfig

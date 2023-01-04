@@ -2,8 +2,7 @@ from pydevmgr_elt.devices.lamp.stat import LampStat as Stat
 from pydevmgr_elt.devices.lamp.cfg  import LampCfg as Cfg
 from pydevmgr_elt.devices.lamp.rpcs import LampRpcs as Rpcs
 
-from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class
+from pydevmgr_elt.base import EltDevice, register
 from typing import Optional
 
 Base = EltDevice
@@ -49,7 +48,7 @@ class LampConfig(Base.Config):
 
 
 
-@record_class
+@register
 class Lamp(Base):
     """ ELt Standard Lamp device """
     Config = LampConfig

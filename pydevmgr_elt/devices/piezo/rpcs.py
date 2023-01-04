@@ -1,13 +1,11 @@
-from pydevmgr_core import  NodeAlias1, Defaults 
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base import EltDevice
+from pydevmgr_elt.base.tools import  enum_txt
 
 from enum import Enum
 Base = EltDevice.Rpcs
 
 R = Base.Rpc # Base Node
 RC = R.Config
-RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
 ### ##############
 # RPC error
@@ -41,16 +39,16 @@ class PiezoRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        rpcAuto: RD = RC(suffix= 'RPC_Auto')
-        rpcDisable: RD = RC(suffix= 'RPC_Disable')
-        rpcEnable: RD = RC(suffix= 'RPC_Enable')
-        rpcHome: RD = RC(suffix= 'RPC_Home')
-        rpcInit: RD = RC(suffix= 'RPC_Init')
-        rpcMoveBits: RD = RC(suffix= 'RPC_MoveBit', arg_parsers=['UaInt16', 'UaInt16', 'UaInt16'] )
-        rpcMoveUser: RD = RC(suffix= 'RPC_MoveUser', arg_parsers=['Float', 'Float', 'Float'] )
-        rpcPos: RD = RC(suffix= 'RPC_Pos')
-        rpcReset: RD = RC(suffix= 'RPC_Reset')
-        rpcStop: RD = RC(suffix= 'RPC_Stop')
+        rpcAuto: RC = RC(suffix= 'RPC_Auto')
+        rpcDisable: RC = RC(suffix= 'RPC_Disable')
+        rpcEnable: RC = RC(suffix= 'RPC_Enable')
+        rpcHome: RC = RC(suffix= 'RPC_Home')
+        rpcInit: RC = RC(suffix= 'RPC_Init')
+        rpcMoveBits: RC = RC(suffix= 'RPC_MoveBit', arg_parsers=['UaInt16', 'UaInt16', 'UaInt16'] )
+        rpcMoveUser: RC = RC(suffix= 'RPC_MoveUser', arg_parsers=['Float', 'Float', 'Float'] )
+        rpcPos: RC = RC(suffix= 'RPC_Pos')
+        rpcReset: RC = RC(suffix= 'RPC_Reset')
+        rpcStop: RC = RC(suffix= 'RPC_Stop')
  
 
 

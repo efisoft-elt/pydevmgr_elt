@@ -1,5 +1,6 @@
 
-from pydevmgr_core import  Defaults, NodeVar
+import weakref
+from pydevmgr_core import   NodeVar
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -11,7 +12,6 @@ Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -186,62 +186,52 @@ class MotorStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        axis_brake: ND = NC(suffix='stat.bBrakeActive' )
-        axis_enable: ND = NC(suffix='stat.bEnabled' )
-        axis_info_data1: ND = NC(suffix='stat.nInfoData1' )
-        axis_info_data2: ND = NC(suffix='stat.nInfoData2' )
-        axis_inposition: ND = NC(suffix='stat.bInPosition' )
-        axis_lock: ND = NC(suffix='stat.bLock' )
-        axis_ready: ND = NC(suffix='stat.bAxisReady' )
-        backlash_step: ND = NC(suffix='stat.nBacklashStep' )
-        error_code: ND = NC(suffix='stat.nErrorCode' )
-        init_action: ND = NC(suffix='stat.nInitAction' )
-        init_step: ND = NC(suffix='stat.nInitStep' )
-        initialised: ND = NC(suffix='stat.bInitialised' )
-        local: ND = NC(suffix='stat.bLocal' )
-        mode: ND = NC(suffix='stat.nMode' )
-        pos_actual: ND = NC(suffix='stat.lrPosActual' )
-        pos_error: ND = NC(suffix='stat.lrPosError' )
-        pos_target: ND = NC(suffix='stat.lrPosTarget' )
-        scale_factor: ND = NC(suffix='stat.lrScaleFactor' )
-        signal_index: ND = NC(suffix='stat.signals[3].bActive' )
-        signal_lhw: ND = NC(suffix='stat.signals[1].bActive' )
-        signal_lstop: ND = NC(suffix='stat.signals[0].bActive' )
-        signal_ref: ND = NC(suffix='stat.signals[2].bActive' )
-        signal_uhw: ND = NC(suffix='stat.signals[4].bActive' )
-        signal_ustop: ND = NC(suffix='stat.signals[5].bActive' )
-        state: ND = NC(suffix='stat.nState' )
-        status: ND = NC(suffix='stat.nStatus' )
-        substate: ND = NC(suffix='stat.nSubstate' )
-        vel_actual: ND = NC(suffix='stat.lrVelActual' )
-    
-        mot_positions: Optional[List[PositionConfig]] = None
-        tolerance: float = 1.0
-        
+        axis_brake: NC = NC(suffix='stat.bBrakeActive' )
+        axis_enable: NC = NC(suffix='stat.bEnabled' )
+        axis_info_data1: NC = NC(suffix='stat.nInfoData1' )
+        axis_info_data2: NC = NC(suffix='stat.nInfoData2' )
+        axis_inposition: NC = NC(suffix='stat.bInPosition' )
+        axis_lock: NC = NC(suffix='stat.bLock' )
+        axis_ready: NC = NC(suffix='stat.bAxisReady' )
+        backlash_step: NC = NC(suffix='stat.nBacklashStep' )
+        error_code: NC = NC(suffix='stat.nErrorCode' )
+        init_action: NC = NC(suffix='stat.nInitAction' )
+        init_step: NC = NC(suffix='stat.nInitStep' )
+        initialised: NC = NC(suffix='stat.bInitialised' )
+        local: NC = NC(suffix='stat.bLocal' )
+        mode: NC = NC(suffix='stat.nMode' )
+        pos_actual: NC = NC(suffix='stat.lrPosActual' )
+        pos_error: NC = NC(suffix='stat.lrPosError' )
+        pos_target: NC = NC(suffix='stat.lrPosTarget' )
+        scale_factor: NC = NC(suffix='stat.lrScaleFactor' )
+        signal_index: NC = NC(suffix='stat.signals[3].bActive' )
+        signal_lhw: NC = NC(suffix='stat.signals[1].bActive' )
+        signal_lstop: NC = NC(suffix='stat.signals[0].bActive' )
+        signal_ref: NC = NC(suffix='stat.signals[2].bActive' )
+        signal_uhw: NC = NC(suffix='stat.signals[4].bActive' )
+        signal_ustop: NC = NC(suffix='stat.signals[5].bActive' )
+        state: NC = NC(suffix='stat.nState' )
+        status: NC = NC(suffix='stat.nStatus' )
+        substate: NC = NC(suffix='stat.nSubstate' )
+        vel_actual: NC = NC(suffix='stat.lrVelActual' )
+                
     # for this one we redefine the init so it does accept a mot_positions argument
-    def __init__(self, *args, mot_positions: Optional[List[PositionConfig]] = None, tolerance: float = 1.0, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.config.mot_positions = mot_positions or []
-        self.config.tolerance = tolerance
-        
-    # we need the mot_position from te parent (a Motor Device)
-    # just add it to the dictionary create by  the super
+        self.positions = []
+        self.tolerance = 1.0
+    
+    @staticmethod 
+    def parent_ref():
+        return None
+    
     @classmethod
-    def new_args(cls, parent, name, config):
-        d = super().new_args(parent, name,  config)
-        try:
-            mot_positions = parent.config.positions
-        except AttributeError:
-            mot_positions = []
-        
-        try:
-            tolerance = parent.config.tolerance
-        except AttributeError:
-            tolerance = 1.0
-
-        d['mot_positions'] = mot_positions
-        d['tolerance'] = tolerance
-        return d
+    def new(cls, parent, name, config=None):
+        # record a weakreference of the parent (Motor) object 
+        # it is used by pos_name
+        stat = super().new(parent, name, config)
+        stat.parent_ref = weakref.ref(parent)
+        return stat
 
     @nodealias("substate")
     def is_moving(self, substate):
@@ -256,9 +246,14 @@ class MotorStat(Base):
     
     @nodealias("pos_actual")
     def pos_name(self, pos_actual):
-        if not self.config.mot_positions: return ''
-        positions = self.config.mot_positions
-        tol = self.config.tolerance
+        parent = self.parent_ref()
+        if not parent: return ''
+        try:
+            positions = parent.config.positions
+        except AttributeError:
+            return '' 
+        tol = parent.config.tolerance 
+        if not positions: return ''
         for pos in positions:
             if abs( pos.value-pos_actual)<tol:
                 return pos.name

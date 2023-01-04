@@ -1,5 +1,5 @@
 
-from pydevmgr_core import   Defaults, NodeVar
+from pydevmgr_core import  NodeVar
 from pydevmgr_core.decorators import nodealias 
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
@@ -9,7 +9,6 @@ Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -115,17 +114,17 @@ class LampStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        check_time_left: ND = NC(suffix='stat.bCheckTimeLeft' )
-        error_code: ND = NC(suffix='stat.nErrorCode' )
-        intensity: ND = NC(suffix='stat.lrIntensity' )
-        local: ND = NC(suffix='stat.bLocal' )
-        state: ND = NC(suffix='stat.nState' )
-        status: ND = NC(suffix='stat.nStatus' )
-        substate: ND = NC(suffix='stat.nSubstate' )
-        time_left: ND = NC(suffix='stat.nTimeLeft' )
-        on_analog: ND = NC(suffix='stat.bOnAnalog')
-        on_digital: ND = NC(suffix='stat.bOnDigital')
-        analog_feedback: ND = NC(suffix='stat.nOn')
+        check_time_left: NC = NC(suffix='stat.bCheckTimeLeft' )
+        error_code: NC = NC(suffix='stat.nErrorCode' )
+        intensity: NC = NC(suffix='stat.lrIntensity' )
+        local: NC = NC(suffix='stat.bLocal' )
+        state: NC = NC(suffix='stat.nState' )
+        status: NC = NC(suffix='stat.nStatus' )
+        substate: NC = NC(suffix='stat.nSubstate' )
+        time_left: NC = NC(suffix='stat.nTimeLeft' )
+        on_analog: NC = NC(suffix='stat.bOnAnalog')
+        on_digital: NC = NC(suffix='stat.bOnDigital')
+        analog_feedback: NC = NC(suffix='stat.nOn')
 
 
     @nodealias("substate")

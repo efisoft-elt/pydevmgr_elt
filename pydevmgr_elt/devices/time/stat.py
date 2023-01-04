@@ -1,16 +1,14 @@
 
-from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core import   NodeVar
 from pydevmgr_core.decorators import nodealias 
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, get_txt
-from pydevmgr_ua import UaInterface
+from pydevmgr_elt.base import EltDevice
+from pydevmgr_elt.base.tools import  get_txt
 import datetime
 from enum import Enum
 
 Base = EltDevice.Interface # not the .Stat
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -57,25 +55,25 @@ class TimeStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        dc_time :  ND = NC(suffix="stat.sDcTime")
-        utc_time : ND = NC(suffix="stat.sUtcTime")
-        tai_time : ND = NC(suffix="stat.sTaiTime")
-        error_msg : ND = NC(suffix="stat.sErrorMsg")
-        mode :  ND = NC(suffix="stat.mode")
-        ptp_offset_time : ND = NC(suffix="stat.lPtpOffsetTime")
-        sim_offset_time : ND = NC(suffix="stat.lSimOffsetTime")
-        dc_time_int : ND = NC(suffix="stat.lDcCurrentTime")
-        utc_time_int : ND = NC(suffix="stat.lUtcTime")
-        tai_time_int : ND = NC(suffix="stat.lTaiTime")
-        tai_unix_time : ND = NC(suffix="stat.lTaiUnixTime")
+        dc_time :  NC = NC(suffix="stat.sDcTime")
+        utc_time : NC = NC(suffix="stat.sUtcTime")
+        tai_time : NC = NC(suffix="stat.sTaiTime")
+        error_msg : NC = NC(suffix="stat.sErrorMsg")
+        mode :  NC = NC(suffix="stat.mode")
+        ptp_offset_time : NC = NC(suffix="stat.lPtpOffsetTime")
+        sim_offset_time : NC = NC(suffix="stat.lSimOffsetTime")
+        dc_time_int : NC = NC(suffix="stat.lDcCurrentTime")
+        utc_time_int : NC = NC(suffix="stat.lUtcTime")
+        tai_time_int : NC = NC(suffix="stat.lTaiTime")
+        tai_unix_time : NC = NC(suffix="stat.lTaiUnixTime")
         
     
-        user_time : ND = NC(suffix="stat.sUserTime") 
+        user_time : NC = NC(suffix="stat.sUserTime") 
         # STRING(29) := 'YYYY-MM-DD-hh:mm:ss.nnnnnnnnn';
-        user_time_int :  ND = NC(suffix="stat.tUserTime") #      ULINT := 0;
-        status: ND = NC(suffix="stat.signal.status")
-        qos: ND = NC(suffix="stat.signal.qos")
-        time_difference : ND = NC(suffix="stat.signal.time_difference") 
+        user_time_int :  NC = NC(suffix="stat.tUserTime") #      ULINT := 0;
+        status: NC = NC(suffix="stat.signal.status")
+        qos: NC = NC(suffix="stat.signal.qos")
+        time_difference : NC = NC(suffix="stat.signal.time_difference") 
         #: UDINT; // Time difference between DC and External Time Source
     
     @nodealias("mode", "utc_time", "dc_time")

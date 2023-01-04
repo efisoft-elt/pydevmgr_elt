@@ -1,32 +1,29 @@
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
+from pydevmgr_core import  NodeVar
 from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 
-from enum import Enum
 Base = EltDevice.Cfg
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 
 
 
 class LampCfg(Base):
     class Config(Base.Config):
-        analog_range: ND = NC(suffix='cfg.nFullRange', parser='UaUInt32')
-        analog_threshold: ND = NC(suffix='cfg.nAnalogThreshold', parser='UaInt32')
-        cooldown: ND = NC(suffix='cfg.nCooldown', parser='UaUInt32')
-        ignore_fault: ND = NC(suffix='cfg.bIgnoreFault' )
-        initial_state: ND = NC(suffix='cfg.bInitialState' )
-        initial_intensity: ND = NC(suffix="cfg.lrInitialIntensity")
-        invert_analog: ND = NC(suffix='cfg.bInvertAnalog' )
-        low_fault: ND = NC(suffix='cfg.bActiveLowFault' )
-        low_on: ND = NC(suffix='cfg.bActiveLowOn' )
-        low_switch: ND = NC(suffix='cfg.bActiveLowSwitch' )
-        maxon: ND = NC(suffix='cfg.nMaxOn', parser='UaUInt32')
-        timeout: ND = NC(suffix='cfg.nTimeout', parser='UaUInt32')
-        warmup: ND = NC(suffix='cfg.nWarmup', parser='UaUInt32')
+        analog_range: NC = NC(suffix='cfg.nFullRange', parser='UaUInt32')
+        analog_threshold: NC = NC(suffix='cfg.nAnalogThreshold', parser='UaInt32')
+        cooldown: NC = NC(suffix='cfg.nCooldown', parser='UaUInt32')
+        ignore_fault: NC = NC(suffix='cfg.bIgnoreFault' )
+        initial_state: NC = NC(suffix='cfg.bInitialState' )
+        initial_intensity: NC = NC(suffix="cfg.lrInitialIntensity")
+        invert_analog: NC = NC(suffix='cfg.bInvertAnalog' )
+        low_fault: NC = NC(suffix='cfg.bActiveLowFault' )
+        low_on: NC = NC(suffix='cfg.bActiveLowOn' )
+        low_switch: NC = NC(suffix='cfg.bActiveLowSwitch' )
+        maxon: NC = NC(suffix='cfg.nMaxOn', parser='UaUInt32')
+        timeout: NC = NC(suffix='cfg.nTimeout', parser='UaUInt32')
+        warmup: NC = NC(suffix='cfg.nWarmup', parser='UaUInt32')
 
 
     

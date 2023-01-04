@@ -1,14 +1,12 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults, NodeVar
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt, get_txt
+from pydevmgr_core import  NodeVar
+from pydevmgr_elt.base import EltDevice
 
 from enum import Enum
 Base = EltDevice.Interface
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -41,22 +39,22 @@ class CcsSimStat(Base):
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
         
-        target_alt : ND = NC(suffix="stat.data.target_observed_altaz[0]")
-        target_az : ND = NC(suffix="stat.data.target_observed_altaz[1]")
-        current_alt : ND = NC(suffix="stat.data.current_observed_altaz[0]")
-        current_az : ND = NC(suffix="stat.data.current_observed_altaz[1]")
-        time_lst: ND = NC(suffix="stat.data.time_lst")
-        time_tai: ND = NC(suffix="stat.data.time_tai")
-        time_utc: ND = NC(suffix="stat.data.time_utc")
+        target_alt : NC = NC(suffix="stat.data.target_observed_altaz[0]")
+        target_az : NC = NC(suffix="stat.data.target_observed_altaz[1]")
+        current_alt : NC = NC(suffix="stat.data.current_observed_altaz[0]")
+        current_az : NC = NC(suffix="stat.data.current_observed_altaz[1]")
+        time_lst: NC = NC(suffix="stat.data.time_lst")
+        time_tai: NC = NC(suffix="stat.data.time_tai")
+        time_utc: NC = NC(suffix="stat.data.time_utc")
         
-        north_angle: ND = NC(suffix="stat.data.north_angle")
-        pupil_angle: ND = NC(suffix="stat.data.pupil_angle")
-        elevation_direction_angle: ND = NC(suffix="stat.data.elevation_direction_angle")
-        ra_at_xy: ND = NC(suffix="stat.data.radec_at_altaz_at_requested_xy[0]")
-        dec_at_xy: ND = NC(suffix="stat.data.radec_at_altaz_at_requested_xy[1]")
-        alt_at_xy: ND = NC(suffix="stat.data.observed_altaz_at_requested_xy[0]")
-        az_at_xy: ND = NC(suffix="stat.data.observed_altaz_at_requested_xy[1]")
-        parallactic_angle: ND = NC(suffix="stat.data.parallactic_angle")
+        north_angle: NC = NC(suffix="stat.data.north_angle")
+        pupil_angle: NC = NC(suffix="stat.data.pupil_angle")
+        elevation_direction_angle: NC = NC(suffix="stat.data.elevation_direction_angle")
+        ra_at_xy: NC = NC(suffix="stat.data.radec_at_altaz_at_requested_xy[0]")
+        dec_at_xy: NC = NC(suffix="stat.data.radec_at_altaz_at_requested_xy[1]")
+        alt_at_xy: NC = NC(suffix="stat.data.observed_altaz_at_requested_xy[0]")
+        az_at_xy: NC = NC(suffix="stat.data.observed_altaz_at_requested_xy[1]")
+        parallactic_angle: NC = NC(suffix="stat.data.parallactic_angle")
 
 
 

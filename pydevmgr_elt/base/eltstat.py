@@ -1,5 +1,6 @@
+from typing import Tuple
 from .eltinterface import EltInterface
-from pydevmgr_core import NodeVar,  Defaults
+from pydevmgr_core import NodeVar
 from pydevmgr_core.decorators import nodealias
 
 from enum import Enum 
@@ -11,7 +12,6 @@ Base = EltInterface
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 
 
@@ -82,9 +82,9 @@ class StatInterface(EltInterface):
     STATE = STATE 
     
     class Config(EltInterface.Config):
-        state:             ND = NC(suffix="stat.nState")
-        substate:          ND = NC(suffix="stat.nSubstate") 
-        error_code:        ND = NC(suffix="stat.nErrorCode")
+        state:             NC = NC(suffix="stat.nState")
+        substate:          NC = NC(suffix="stat.nSubstate") 
+        error_code:        NC = NC(suffix="stat.nErrorCode")
 
     @nodealias("state")
     def is_operational(self, state: int) -> bool:
@@ -120,6 +120,14 @@ class StatInterface(EltInterface):
     def substate_group(self, substate: int):
         """ Return the afiliated group of the substate """
         return get_enum_group(self.SUBSTATE, substate, GROUP.UNKNOWN)
+    
+    @nodealias("substate")
+    def substate_info(self, substate: int)-> Tuple[int, str, GROUP]:
+        """ Return (code, text, group) of substate """
+        return (substate, 
+                get_enum_txt( self.SUBSTATE , substate, f"UNKNOWN ({substate})"),
+                get_enum_group(self.SUBSTATE, substate, GROUP.UNKNOWN), 
+               )
 
     @nodealias("state")
     def state_txt(self, state: int) -> str:
@@ -131,6 +139,17 @@ class StatInterface(EltInterface):
         """ Return the afiliated group of the state """
         return get_enum_group( self.STATE, state, GROUP.UNKNOWN )
     
+
+    @nodealias("state")
+    def state_info(self, state: int) -> Tuple[int, str, GROUP]:
+        """ Return (code, text, group) state """
+        return (state, 
+                get_enum_txt( self.STATE, state, f"UNKNOWN ({state})" ), 
+                get_enum_group( self.STATE, state, GROUP.UNKNOWN )
+            )
+
+
+
     @nodealias("error_code")
     def error_txt(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
@@ -148,6 +167,17 @@ class StatInterface(EltInterface):
     def error_group(self, error_code: int) -> str:
         """ Return the text representation of an error or '' if no error """
         return GROUP.ERROR if error_code else GROUP.OK
+
+    @nodealias("error_code")
+    def error_info(self, error_code: int) -> str:
+        """ Return (code, text, group) of  an error or """
+        
+        return ( error_code, 
+                get_enum_txt( self.ERROR , error_code, f"Unknown error ({error_code})" ), 
+                GROUP.ERROR if error_code else GROUP.OK 
+                )
+
+    
 
 
     class Data(EltInterface.Data):

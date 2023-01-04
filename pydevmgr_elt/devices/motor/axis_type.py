@@ -1,5 +1,7 @@
 from enum import Enum 
-from pydevmgr_core import record_class, BaseParser
+from valueparser import BaseParser
+from systemy import register_factory
+
 from pydevmgr_ua import UaInt32
 
 class AXIS_TYPE(int, Enum):
@@ -25,12 +27,10 @@ def axis_type(axis_type):
     return to_int32(axis_type)
 
 # a parser class for axis type
-@record_class
+@register_factory("Parser/AxisType")
 class AxisType(BaseParser):
-    class Config(BaseParser.Config):
-        type: str = "AxisType"
     @staticmethod
-    def fparse(value, config):
+    def __parse__(value, config):
         return axis_type(value)   
 
 

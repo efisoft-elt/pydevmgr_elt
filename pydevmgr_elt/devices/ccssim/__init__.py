@@ -3,8 +3,8 @@ from .cfg  import CcsSimCfg as Cfg
 from .rpcs import CcsSimRpcs as Rpcs
 from .ctrl import CcsSimCtrl as Ctrl
 
-from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class, upload
+from pydevmgr_elt.base import EltDevice, register
+from pydevmgr_core import  upload
 from typing import Optional
 
 
@@ -49,7 +49,7 @@ class CcsSimConfig(Base.Config):
 
 
 
-@record_class
+@register
 class CcsSim(Base):
     """ ELt Standard CcsSim device  as in IFW v3.0 (this may change)"""
     Config = CcsSimConfig

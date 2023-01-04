@@ -17,10 +17,7 @@ class EltManagerWidget(ManagerLinker.Widget):
         self.state.setMaximumHeight(30)
         self.rpc_feedback.setMaximumHeight(30)
 
-    def list_devices(self, manager):
-        # overwrite the function so it returns oonly the Elt Manager devices defined inside the devices property
-        return manager.devices
- 
+
 class EltManagerStatData(ManagerLinker.Data):
     state: NodeVar[int] = 0
     state_txt: NodeVar[str] =  ""
@@ -36,6 +33,11 @@ class EltManagerLinker(ManagerLinker):
     Data = EltManagerData 
     class Config(ManagerLinker.Config):
         alt_dev_type: Optional[List[str]] = ['Elt'] # not found device widget will fall back to the Elt Base
+    
+    def list_devices(self, manager):
+        # overwrite the function so it returns oonly the Elt Manager devices defined inside the devices property
+        return manager.devices
+ 
 
     def init_vars(self):
         # these shall get stat data

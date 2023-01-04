@@ -1,14 +1,12 @@
 
-from pydevmgr_core import  NodeAlias1, Defaults 
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base import EltDevice
+from pydevmgr_elt.base.tools import  enum_txt
 
 from enum import Enum
 Base = EltDevice.Rpcs
 
 R = Base.Rpc # Base Node
 RC = R.Config
-RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
 
 class RPC_ERROR(int, Enum):
@@ -40,13 +38,13 @@ class ShutterRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        rpcClose: RD = RC(suffix= 'RPC_Close')
-        rpcDisable: RD = RC(suffix= 'RPC_Disable')
-        rpcEnable: RD = RC(suffix= 'RPC_Enable')
-        rpcInit: RD = RC(suffix= 'RPC_Init')
-        rpcOpen: RD = RC(suffix= 'RPC_Open')
-        rpcReset: RD = RC(suffix= 'RPC_Reset')
-        rpcStop: RD = RC(suffix= 'RPC_Stop')
+        rpcClose: RC = RC(suffix= 'RPC_Close')
+        rpcDisable: RC = RC(suffix= 'RPC_Disable')
+        rpcEnable: RC = RC(suffix= 'RPC_Enable')
+        rpcInit: RC = RC(suffix= 'RPC_Init')
+        rpcOpen: RC = RC(suffix= 'RPC_Open')
+        rpcReset: RC = RC(suffix= 'RPC_Reset')
+        rpcStop: RC = RC(suffix= 'RPC_Stop')
 
 
 if __name__ == "__main__":

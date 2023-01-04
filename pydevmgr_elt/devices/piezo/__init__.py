@@ -2,8 +2,7 @@ from .stat import PiezoStat as Stat
 from .cfg  import PiezoCfg as Cfg
 from .rpcs import PiezoRpcs as Rpcs
 
-from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class
+from pydevmgr_elt.base import EltDevice, register
 from typing import Optional
 
 
@@ -38,7 +37,7 @@ class PiezoConfig(Base.Config):
 
 
 
-@record_class
+@register
 class Piezo(Base):
     """ ELt Standard Piezo device """
     Config = PiezoConfig

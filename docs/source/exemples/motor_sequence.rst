@@ -62,7 +62,7 @@ We want also to calibrate them so we can make a ``NodeAlias`` to convert value o
 .. code-block:: python 
 
    from pydevmgr_ua import UaNode, UaDevice
-   from pydevmgr_core import NodeAlias1, Defaults
+   from pydevmgr_core import NodeAlias1
    
    # make an alias node to correct a value with a linear law 
    class TempCorector(NodeAlias1, offset=(float, 0.0), slope=(float,1.0) ):
@@ -74,8 +74,8 @@ We want also to calibrate them so we can make a ``NodeAlias`` to convert value o
             raw_temp1: UaNode.Config = UaNode.Config( suffix="lrTemp1" )
             raw_temp2: UaNode.Config = UaNode.Config( suffix="lrTemp2" )
             
-            temp1: Defaults[TempCorector.Config] = TempCorector.Config( node = 'raw_temp1' ) 
-            temp2: Defaults[TempCorector.Config] = TempCorector.Config( node = 'raw_temp2' )
+            temp1: TempCorector.Config = TempCorector.Config( node = 'raw_temp1' ) 
+            temp2: TempCorector.Config = TempCorector.Config( node = 'raw_temp2' )
 
 It can be used in standalone like this: 
 
@@ -86,12 +86,7 @@ It can be used in standalone like this:
 
 
 .. note:: 
-
-   The `Defaults` type above insure that the TempCorrector.Config  instantied in the Sensor Config is understood as
-   default values, so user do not have the needs to write the 'node' argument in each conf file.
-
-
-   
+      
 
 A class for the Sequence
 ------------------------
@@ -167,7 +162,7 @@ pydevmgr. We can make a yaml configuration file as follow
 
 .. code-block:: yaml 
 
-   motor:
+    motor:
         address: opc.tcp://127.0.0.1:4840 
         prefix: MAIN.Motor1
 
@@ -223,7 +218,7 @@ Just the copy / past of everything above
 
     from pydevmgr_serial import BaseSerialNode, SerialDevice
     from pydevmgr_ua import UaNode, UaDevice
-    from pydevmgr_core import NodeAlias1, Defaults, DataLink
+    from pydevmgr_core import NodeAlias1,  DataLink
     from pydevmgr_core import BaseManager,  wait, NodeVar
     from pydevmgr_core.nodes import DequeList, UtcTime
     from pydantic import Field
@@ -293,8 +288,8 @@ Just the copy / past of everything above
             raw_temp1: UaNode.Config = UaNode.Config( suffix="lrTemp1" )
             raw_temp2: UaNode.Config = UaNode.Config( suffix="lrTemp2" )
             
-            temp1: Defaults[TempCorector.Config] = TempCorector.Config( node = 'raw_temp1' ) 
-            temp2: Defaults[TempCorector.Config] = TempCorector.Config( node = 'raw_temp2' )
+            temp1: TempCorector.Config = TempCorector.Config( node = 'raw_temp1' ) 
+            temp2: TempCorector.Config = TempCorector.Config( node = 'raw_temp2' )
 
        
     class MotorSequence(BaseManager):

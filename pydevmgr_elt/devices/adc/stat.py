@@ -1,5 +1,5 @@
 
-from pydevmgr_core import   Defaults, NodeVar
+from pydevmgr_core import   NodeVar
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -11,7 +11,6 @@ Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -107,15 +106,15 @@ class AdcStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        state:             ND = NC(suffix="stat.sm.nState")
-        substate:          ND = NC(suffix="stat.sm.nSubstate")
-        initialised:       ND = NC(suffix="stat.bInitialised")
-        track_mode:        ND = NC(suffix="stat.nMode")
-        alpha:             ND = NC(suffix="stat.apparent.alpha")
-        delta:             ND = NC(suffix="stat.apparent.delta")
-        error_code:        ND = NC(suffix="stat.nErrorCode")
-        status:            ND = NC(suffix="stat.nStatus")
-        local:             ND = NC(suffix="stat.bLocal")
+        state:         NC = NC(suffix="stat.sm.nState")
+        substate:      NC = NC(suffix="stat.sm.nSubstate")
+        initialised:   NC = NC(suffix="stat.bInitialised")
+        track_mode:    NC = NC(suffix="stat.nMode")
+        alpha:         NC = NC(suffix="stat.apparent.alpha")
+        delta:         NC = NC(suffix="stat.apparent.delta")
+        error_code:    NC = NC(suffix="stat.nErrorCode")
+        status:        NC = NC(suffix="stat.nStatus")
+        local:         NC = NC(suffix="stat.bLocal")
         
   
 

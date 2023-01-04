@@ -19,6 +19,6 @@ adc1:
       prefix: motor1
       cfgfile: tins/adc1Motor1.yml
     - name: adc1_motor2
-      prefix: motor3
+      prefix: motor2
       cfgfile: tins/adc1Motor2.yml
 

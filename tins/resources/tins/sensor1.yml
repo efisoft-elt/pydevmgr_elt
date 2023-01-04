@@ -1,9 +1,10 @@
 sensor1: 
+  type: Sensor8_4
   identifier: PLC1
-  prefix: MAIN.IODev1
+  prefix: MAIN.Sensor1
   dev_endpoint: opc.tcp://myplc.local:4840
   sim_endpoint: opc.tcp://134.171.57.209:4840
-  fits_prefix: "SENSOR1"
+  fits_prefix: "Sensor1"
   #ctrl_config:
   channels: [
   {
@@ -21,14 +22,6 @@ sensor1:
   type: DI,
   unit: dd,
   map: di2
-  },
-  {
-  name: ch3,
-  description: "channel3",
-  fits_prefix: "CH3 STAT",
-  type: DI,
-  unit: df,
-  map: di3
   },
   {
   name: ch4,

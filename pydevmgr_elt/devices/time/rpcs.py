@@ -1,13 +1,14 @@
-from pydevmgr_core import  NodeAlias1, Defaults, BaseParser, record_class   
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base import EltDevice
+from pydevmgr_elt.base.tools import  enum_txt
+from valueparser import BaseParser
+from systemy import register_factory
+
 from datetime import datetime 
 from enum import Enum
 Base = EltDevice.Interface
 
 R = Base.Rpc # Base Node
 RC = R.Config
-RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
 
 class RPC_ERROR(int, Enum):
@@ -29,10 +30,10 @@ enum_txt ( {
    RPC_ERROR.PTP_NOT_SYNCHRONIZED:      'WARNING: PTP not synchronized',
 })
 
-@record_class
-class PlcTime(BaseParser, fmt='%Y-%m-%d-%H:%M:%S.%f', type="PlcTime"):
+@register_factory("Parser/PlcTime")
+class PlcTime(BaseParser, fmt='%Y-%m-%d-%H:%M:%S.%f'):
     @staticmethod
-    def fparse(value, config):
+    def __parse__(value, config):
         if isinstance(value, datetime):
             return value.strftime( config.fmt)
         return str(value).replace('T','-')
@@ -41,8 +42,8 @@ class TimeRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        rpcSetTime: RD = RC(suffix="RPC_SetTime", arg_parsers=[PlcTime])
-        rpcSetMode: RD = RC(suffix="RPC_SetMode", arg_parsers=["UaInt32"])
+        rpcSetTime: RC = RC(suffix="RPC_SetTime", arg_parsers=[PlcTime])
+        rpcSetMode: RC = RC(suffix="RPC_SetMode", arg_parsers=["UaInt32"])
 
 if __name__ == "__main__":
     TimeRpcs()

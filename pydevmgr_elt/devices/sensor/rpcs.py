@@ -1,13 +1,11 @@
-from pydevmgr_core import  NodeAlias1, Defaults 
-from pydevmgr_elt.base import EltDevice,  GROUP
-from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from pydevmgr_elt.base import EltDevice
+from pydevmgr_elt.base.tools import  enum_txt
 
 from enum import Enum
 Base = EltDevice.Rpcs
 
 R = Base.Rpc # Base Node
 RC = R.Config
-RD = Defaults[RC] # this typing var says that it is a Rpc object holding default values 
 
 
 
@@ -33,18 +31,16 @@ enum_txt ( {
 
 
 
-
-
 class SensorRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        rpcDisable: RD = RC(suffix= 'RPC_Disable')
-        rpcEnable: RD = RC(suffix= 'RPC_Enable')
-        rpcInit: RD = RC(suffix= 'RPC_Init')
-        rpcReset: RD = RC(suffix= 'RPC_Reset')
-        rpcStop: RD = RC(suffix= 'RPC_Stop')
-        rpcSetOutputs: RD = RC(suffix="RPC_SetOutputs") 
+        rpcDisable: RC = RC(suffix= 'RPC_Disable')
+        rpcEnable: RC = RC(suffix= 'RPC_Enable')
+        rpcInit: RC = RC(suffix= 'RPC_Init')
+        rpcReset: RC = RC(suffix= 'RPC_Reset')
+        rpcStop: RC = RC(suffix= 'RPC_Stop')
+        rpcSetOutputs: RC = RC(suffix="RPC_SetOutputs") 
 
  
 

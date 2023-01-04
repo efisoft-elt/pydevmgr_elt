@@ -14,7 +14,7 @@ if __name__=="__main__":
     devLinker.widget.show()
     downloader = Downloader()
     
-    motor = Motor.from_cfgfile("tins/motor1.yml", path="motor1", key="motor1")
+    motor = Motor.from_cfgfile("tins/motor1.yml(motor1)")
     # motor = Motor(address="opc.tcp://ipag-plc1:4840", prefix="Motor1")
     
     ctrl = devLinker.connect(downloader, motor)

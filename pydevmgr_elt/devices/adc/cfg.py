@@ -1,4 +1,4 @@
-from pydevmgr_core import   Defaults, NodeVar
+from pydevmgr_core import    NodeVar
 from pydevmgr_elt.base import EltDevice
 
 from enum import Enum
@@ -6,40 +6,39 @@ Base = EltDevice.Cfg
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 
 
 
 class AdcCfg(Base):
     class Config(Base.Config):
-        pslope:             ND = NC(suffix="cfg.lrPslope")
-        poffset:            ND = NC(suffix="cfg.lrPoffset")
-        tslope:             ND = NC(suffix="cfg.lrTslope")
-        toffset:            ND = NC(suffix="cfg.lrToffset")
-        afactor:            ND = NC(suffix="cfg.lrAfactor")
-        zdlimit:            ND = NC(suffix="cfg.lrZDlimit")
-        minelev:            ND = NC(suffix="cfg.lrMinElev")
-        latitude:           ND = NC(suffix="cfg.site.latitude")
-        longitude:          ND = NC(suffix="cfg.site.longitude")
-        trk_period:         ND = NC(suffix="cfg.nMinSkipCycles", parser="UaInt32")
-        trk_threshold:      ND = NC(suffix="cfg.lrTrkThreshold")
-        mot1_signoff:       ND = NC(suffix="cfg.unitCfg[1].nSignOff",parser="UaInt32")
-        mot2_signoff:       ND = NC(suffix="cfg.unitCfg[2].nSignOff",parser="UaInt32")
-        mot1_signauto:      ND = NC(suffix="cfg.unitCfg[1].nSignAuto",parser="UaInt32")
-        mot2_signauto:      ND = NC(suffix="cfg.unitCfg[2].nSignAuto",parser="UaInt32")
-        mot1_signphi:       ND = NC(suffix="cfg.unitCfg[1].nSignPhi",parser="UaInt32")
-        mot2_signphi:       ND = NC(suffix="cfg.unitCfg[2].nSignPhi",parser="UaInt32")
-        mot1_refoff:        ND = NC(suffix="cfg.unitCfg[1].lrRefOff")
-        mot2_refoff:        ND = NC(suffix="cfg.unitCfg[2].lrRefOff")
-        mot1_refauto:       ND = NC(suffix="cfg.unitCfg[1].lrRefAuto")
-        mot2_refauto:       ND = NC(suffix="cfg.unitCfg[2].lrRefAuto")
-        mot1_coffset:       ND = NC(suffix="cfg.unitCfg[1].lrCoffset")
-        mot2_coffset:       ND = NC(suffix="cfg.unitCfg[2].lrCoffset")
-        mot1_poffset:       ND = NC(suffix="cfg.unitCfg[1].lrPosOffset")
-        mot2_poffset:       ND = NC(suffix="cfg.unitCfg[2].lrPosOffset")
-        mot1_drotfactor:    ND = NC(suffix="cfg.unitCfg[1].lrDrotFactor")
-        mot2_drotfactor:    ND = NC(suffix="cfg.unitCfg[2].lrDrotFactor")
+        pslope:          NC = NC(suffix="cfg.lrPslope")
+        poffset:         NC = NC(suffix="cfg.lrPoffset")
+        tslope:          NC = NC(suffix="cfg.lrTslope")
+        toffset:         NC = NC(suffix="cfg.lrToffset")
+        afactor:         NC = NC(suffix="cfg.lrAfactor")
+        zdlimit:         NC = NC(suffix="cfg.lrZDlimit")
+        minelev:         NC = NC(suffix="cfg.lrMinElev")
+        latitude:        NC = NC(suffix="cfg.site.latitude")
+        longitude:       NC = NC(suffix="cfg.site.longitude")
+        trk_period:      NC = NC(suffix="cfg.nMinSkipCycles", parser="UaInt32")
+        trk_threshold:   NC = NC(suffix="cfg.lrTrkThreshold")
+        mot1_signoff:    NC = NC(suffix="cfg.unitCfg[1].nSignOff",parser="UaInt32")
+        mot2_signoff:    NC = NC(suffix="cfg.unitCfg[2].nSignOff",parser="UaInt32")
+        mot1_signauto:   NC = NC(suffix="cfg.unitCfg[1].nSignAuto",parser="UaInt32")
+        mot2_signauto:   NC = NC(suffix="cfg.unitCfg[2].nSignAuto",parser="UaInt32")
+        mot1_signphi:    NC = NC(suffix="cfg.unitCfg[1].nSignPhi",parser="UaInt32")
+        mot2_signphi:    NC = NC(suffix="cfg.unitCfg[2].nSignPhi",parser="UaInt32")
+        mot1_refoff:     NC = NC(suffix="cfg.unitCfg[1].lrRefOff")
+        mot2_refoff:     NC = NC(suffix="cfg.unitCfg[2].lrRefOff")
+        mot1_refauto:    NC = NC(suffix="cfg.unitCfg[1].lrRefAuto")
+        mot2_refauto:    NC = NC(suffix="cfg.unitCfg[2].lrRefAuto")
+        mot1_coffset:    NC = NC(suffix="cfg.unitCfg[1].lrCoffset")
+        mot2_coffset:    NC = NC(suffix="cfg.unitCfg[2].lrCoffset")
+        mot1_poffset:    NC = NC(suffix="cfg.unitCfg[1].lrPosOffset")
+        mot2_poffset:    NC = NC(suffix="cfg.unitCfg[2].lrPosOffset")
+        mot1_drotfactor: NC = NC(suffix="cfg.unitCfg[1].lrDrotFactor")
+        mot2_drotfactor: NC = NC(suffix="cfg.unitCfg[2].lrDrotFactor")
         
     class Data(Base.Data):
         pslope:             NV[float]  =  0.0023

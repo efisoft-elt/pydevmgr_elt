@@ -20,12 +20,24 @@ Example:
 """
 from pydevmgr_core import *
 
-from pydevmgr_ua import  (UaInt16, UaInt32, UaInt64, UaUInt16, UaUInt32, UaUInt64, UaFloat, UaDouble, 
-                          UaCom, UaDevice, UaNode, UaInterface, UaRpc 
-                          )
+from pydevmgr_ua import  (
+        UaInt16, 
+        UaInt32, 
+        UaInt64, 
+        UaUInt16, 
+        UaUInt32, 
+        UaUInt64, 
+        UaFloat, 
+        UaDouble,                   
+        UaCom, 
+        UaDevice, 
+        UaNode, 
+        UaInterface, 
+        UaRpc 
+    )
 
 
 from .base import *
 from .devices import * 
 from .base import io
-  
+

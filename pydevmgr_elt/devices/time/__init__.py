@@ -2,8 +2,7 @@ from pydevmgr_elt.devices.time.stat import TimeStat as Stat, MODE
 from pydevmgr_elt.devices.time.cfg  import TimeCfg as Cfg
 from pydevmgr_elt.devices.time.rpcs import TimeRpcs as Rpcs
 
-from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class
+from pydevmgr_elt.base import EltDevice, register
 from typing import Optional, Union
 
 import datetime
@@ -48,7 +47,7 @@ def isodate(d: Union[str,datetime.datetime]):
 
 
 
-@record_class
+@register
 class Time(Base):
     """ ELt Standard Time device """
     Config = TimeConfig

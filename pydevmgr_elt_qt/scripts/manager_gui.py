@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 import sys, os
 from pydevmgr_elt import Downloader, open_elt_manager
 from pydevmgr_elt_qt  import EltManagerLinker
+from pydevmgr_elt.base.io import explore_config
 from pydevmgr_core_qt import io
 from pydevmgr_core import io as pio
 import yaml
@@ -17,6 +18,7 @@ usage = "pydevmgr_gui relative/path/to/manager.yml [path/to/manager_gui.yml]"
 
 
 default_ui_cfg = """
+link_failure: false
 ctrl: # all devices in more complete control widget 
     size: [800,500]
     setup:
@@ -25,7 +27,10 @@ ctrl: # all devices in more complete control widget
           widget_kind: "ctrl"
 
 line: # all devices in one line control widget 
-    setup:
+    serom pydevmgr_elt import open_device
+
+adc = open_device("tins/adc1.yml(adc1)")
+setup:
         - device: "*"
           layout: ly_devices
           widget_kind: "line"
@@ -76,7 +81,7 @@ def app_main():
     ctrl = linker.connect(downloader, mgr, data)
         
     linker.widget.show()
-    
+     
     timer = QtCore.QTimer()
     timer.timeout.connect(downloader.download)
     
@@ -89,7 +94,7 @@ def main():
     if len(sys.argv)<2:
         print(usage)
         print("\nManager file found in $CFGPATH:")
-        for f,r in pio.explore_config("Manager"):
+        for f,r in explore_config("Manager"):
             print(f"    {f}    inside {r}")
         return 1
     

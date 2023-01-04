@@ -48,3 +48,4 @@
       {name: 'ON', value: 30}, 
       {name: 'OFF', value: 100}
     ]
+  tolerance: 1  

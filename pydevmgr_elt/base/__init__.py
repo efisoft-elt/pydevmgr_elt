@@ -4,4 +4,5 @@ from .eltrpc import EltRpc
 from .eltinterface import EltInterface
 from .eltmanager import EltManager, open_elt_manager
 from .config import GROUP, eltconfig 
+from .register import register 
 from . import io

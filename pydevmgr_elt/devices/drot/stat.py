@@ -1,5 +1,5 @@
 
-from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core import NodeVar
 from pydevmgr_core.decorators import nodealias 
 from pydevmgr_elt.base import   GROUP
 from pydevmgr_elt.devices.motor import Motor
@@ -10,7 +10,6 @@ Base = Motor.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -100,41 +99,41 @@ class DrotStat(Base):
         # all configured node will be accessible by the Interface
 
         # All other nodes are similar to Drot
-        state:            ND = NC (suffix="stat.sm.nState")
-        substate:         ND = NC (suffix="stat.sm.nSubstate")
-        initialised:      ND = NC (suffix="stat.bInitialised")
-        track_mode:       ND = NC (suffix="stat.nMode")
-        alpha:            ND = NC (suffix="stat.apparent.alpha")
-        delta:            ND = NC (suffix="stat.apparent.delta")
-        angle_on_sky:     ND = NC (suffix="stat.lrAngleOnSky")
+        state:            NC = NC (suffix="stat.sm.nState")
+        substate:         NC = NC (suffix="stat.sm.nSubstate")
+        initialised:      NC = NC (suffix="stat.bInitialised")
+        track_mode:       NC = NC (suffix="stat.nMode")
+        alpha:            NC = NC (suffix="stat.apparent.alpha")
+        delta:            NC = NC (suffix="stat.apparent.delta")
+        angle_on_sky:     NC = NC (suffix="stat.lrAngleOnSky")
         
-        axis_brake: ND = NC(suffix='motor.stat.bBrakeActive' )
-        axis_enable: ND = NC(suffix='motor.stat.bEnabled' )
-        axis_info_data1: ND = NC(suffix='motor.stat.nInfoData1' )
-        axis_info_data2: ND = NC(suffix='motor.stat.nInfoData2' )
-        axis_inposition: ND = NC(suffix='motor.stat.bInPosition' )
-        axis_lock: ND = NC(suffix='motor.stat.bLock' )
-        axis_ready: ND = NC(suffix='motor.stat.bAxisReady' )
-        backlash_step: ND = NC(suffix='motor.stat.nBacklashStep' )
-        error_code: ND = NC(suffix='motor.stat.nErrorCode' )
-        init_action: ND = NC(suffix='motor.stat.nInitAction' )
-        init_step: ND = NC(suffix='motor.stat.nInitStep' )
-        local: ND = NC(suffix='motor.stat.bLocal' )
-        mode: ND = NC(suffix='motor.stat.nMode' )
-        pos_actual: ND = NC(suffix='motor.stat.lrPosActual' )
-        pos_error: ND = NC(suffix='motor.stat.lrPosError' )
-        pos_target: ND = NC(suffix='motor.stat.lrPosTarget' )
-        scale_factor: ND = NC(suffix='motor.stat.lrScaleFactor' )
-        signal_index: ND = NC(suffix='motor.stat.signals[3].bActive' )
-        signal_lhw: ND = NC(suffix='motor.stat.signals[1].bActive' )
-        signal_lstop: ND = NC(suffix='motor.stat.signals[0].bActive' )
-        signal_ref: ND = NC(suffix='motor.stat.signals[2].bActive' )
-        signal_uhw: ND = NC(suffix='motor.stat.signals[4].bActive' )
-        signal_ustop: ND = NC(suffix='motor.stat.signals[5].bActive' )
-        state: ND = NC(suffix='motor.stat.nState' )
-        status: ND = NC(suffix='motor.stat.nStatus' )
-        substate: ND = NC(suffix='motor.stat.nSubstate' )
-        vel_actual: ND = NC(suffix='motor.stat.lrVelActual' )
+        axis_brake: NC = NC(suffix='motor.stat.bBrakeActive' )
+        axis_enable: NC = NC(suffix='motor.stat.bEnabled' )
+        axis_info_data1: NC = NC(suffix='motor.stat.nInfoData1' )
+        axis_info_data2: NC = NC(suffix='motor.stat.nInfoData2' )
+        axis_inposition: NC = NC(suffix='motor.stat.bInPosition' )
+        axis_lock: NC = NC(suffix='motor.stat.bLock' )
+        axis_ready: NC = NC(suffix='motor.stat.bAxisReady' )
+        backlash_step: NC = NC(suffix='motor.stat.nBacklashStep' )
+        error_code: NC = NC(suffix='motor.stat.nErrorCode' )
+        init_action: NC = NC(suffix='motor.stat.nInitAction' )
+        init_step: NC = NC(suffix='motor.stat.nInitStep' )
+        local: NC = NC(suffix='motor.stat.bLocal' )
+        mode: NC = NC(suffix='motor.stat.nMode' )
+        pos_actual: NC = NC(suffix='motor.stat.lrPosActual' )
+        pos_error: NC = NC(suffix='motor.stat.lrPosError' )
+        pos_target: NC = NC(suffix='motor.stat.lrPosTarget' )
+        scale_factor: NC = NC(suffix='motor.stat.lrScaleFactor' )
+        signal_index: NC = NC(suffix='motor.stat.signals[3].bActive' )
+        signal_lhw: NC = NC(suffix='motor.stat.signals[1].bActive' )
+        signal_lstop: NC = NC(suffix='motor.stat.signals[0].bActive' )
+        signal_ref: NC = NC(suffix='motor.stat.signals[2].bActive' )
+        signal_uhw: NC = NC(suffix='motor.stat.signals[4].bActive' )
+        signal_ustop: NC = NC(suffix='motor.stat.signals[5].bActive' )
+        state: NC = NC(suffix='motor.stat.nState' )
+        status: NC = NC(suffix='motor.stat.nStatus' )
+        substate: NC = NC(suffix='motor.stat.nSubstate' )
+        vel_actual: NC = NC(suffix='motor.stat.lrVelActual' )
 
 
     # We can add some nodealias to compute some stuff on the fly 

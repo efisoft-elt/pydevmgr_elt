@@ -1,5 +1,5 @@
 
-from pydevmgr_core import  Defaults, NodeVar
+from pydevmgr_core import   NodeVar
 from pydevmgr_core.decorators  import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -11,7 +11,6 @@ Base = EltDevice.Stat
 
 N = Base.Node # Base Node
 NC = N.Config
-ND = Defaults[NC] # this typing var says that it is a Node object holding default values 
 NV = NodeVar # used in Data 
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
@@ -94,22 +93,22 @@ class PiezoStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        actual_pos_bit1: ND = NC(suffix='stat.nActPosBit[0].nValue' )
-        actual_pos_bit2: ND = NC(suffix='stat.nActPosBit[1].nValue' )
-        actual_pos_bit3: ND = NC(suffix='stat.nActPosBit[2].nValue' )
-        actual_pos_user1: ND = NC(suffix='stat.lrActPosUsr[0].lrValue' )
-        actual_pos_user2: ND = NC(suffix='stat.lrActPosUsr[1].lrValue' )
-        actual_pos_user3: ND = NC(suffix='stat.lrActPosUsr[2].lrValue' )
-        error_code: ND = NC(suffix='stat.nErrorCode' )
-        local: ND = NC(suffix='stat.bLocal' )
-        mon_act_pos_bit1: ND = NC(suffix='stat.monSetPosBit_0' )
-        mon_act_pos_bit2: ND = NC(suffix='stat.monSetPosBit_1' )
-        mon_act_pos_bit3: ND = NC(suffix='stat.monSetPosBit_2' )
-        mon_act_pos_usr1: ND = NC(suffix='stat.monActPosUsr_0' )
-        mon_act_pos_usr2: ND = NC(suffix='stat.monActPosUsr_1' )
-        mon_act_pos_usr3: ND = NC(suffix='stat.monActPosUsr_2' )
-        state: ND = NC(suffix='stat.nState' )
-        substate: ND = NC(suffix='stat.nSubstate' )
+        actual_pos_bit1: NC = NC(suffix='stat.nActPosBit[0].nValue' )
+        actual_pos_bit2: NC = NC(suffix='stat.nActPosBit[1].nValue' )
+        actual_pos_bit3: NC = NC(suffix='stat.nActPosBit[2].nValue' )
+        actual_pos_user1: NC = NC(suffix='stat.lrActPosUsr[0].lrValue' )
+        actual_pos_user2: NC = NC(suffix='stat.lrActPosUsr[1].lrValue' )
+        actual_pos_user3: NC = NC(suffix='stat.lrActPosUsr[2].lrValue' )
+        error_code: NC = NC(suffix='stat.nErrorCode' )
+        local: NC = NC(suffix='stat.bLocal' )
+        mon_act_pos_bit1: NC = NC(suffix='stat.monSetPosBit_0' )
+        mon_act_pos_bit2: NC = NC(suffix='stat.monSetPosBit_1' )
+        mon_act_pos_bit3: NC = NC(suffix='stat.monSetPosBit_2' )
+        mon_act_pos_usr1: NC = NC(suffix='stat.monActPosUsr_0' )
+        mon_act_pos_usr2: NC = NC(suffix='stat.monActPosUsr_1' )
+        mon_act_pos_usr3: NC = NC(suffix='stat.monActPosUsr_2' )
+        state: NC = NC(suffix='stat.nState' )
+        substate: NC = NC(suffix='stat.nSubstate' )
 
     
     @nodealias("substate")

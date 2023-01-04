@@ -2,12 +2,12 @@ from pydevmgr_elt.devices.adc.stat import AdcStat as Stat, AXIS, MODE
 from pydevmgr_elt.devices.adc.cfg  import AdcCfg as Cfg
 from pydevmgr_elt.devices.adc.rpcs import AdcRpcs as Rpcs
 
-from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class,  RpcError 
-from typing import Optional, Any, Dict 
+from pydevmgr_elt.base import EltDevice, register
+from pydevmgr_core import RpcError 
+from typing import List, Optional, Any, Dict 
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt import io
-from pydevmgr_core import   FactoryList, BaseFactory
+from pydevmgr_core import    BaseFactory
 from pydevmgr_core.nodes import Opposite 
 
 Base = EltDevice
@@ -58,24 +58,23 @@ class AdcConfig(Base.Config , extra="forbid"):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Adc"
     ctrl_config : CtrlConfig= CtrlConfig()
-    motors: FactoryList[MotorFactory] = FactoryList(
-                [{'prefix':'motor1', 'name':'motor1'}, 
-                 {'prefix':'motor2', 'name':'motor2'} ],
-                MotorFactory
-            )
+    motors: List[MotorFactory] = [
+                 MotorFactory( prefix = 'motor1', name= 'motor1'),
+                 MotorFactory( prefix = 'motor2', name= 'motor2'),
+                ]
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
     rpcs: Rpcs = Rpcs()
       
-    @property
-    def motor1(self):
-        return self.motors[0]
-    @property
-    def motor2(self):
-        return self.motors[1]
+    # @property
+    # def motor1(self):
+    #     return self.motors[0]
+    # @property
+    # def motor2(self):
+    #     return self.motors[1]
     
-@record_class(overwrite=True)
+@register
 class Adc(Base):
     """ ELt Standard Adc device """
     Config = AdcConfig

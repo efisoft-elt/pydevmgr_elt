@@ -1,27 +1,28 @@
-from dataclasses import Field, dataclass, field
 import weakref
-from pydevmgr_core import (KINDS, NodeAlias, BaseNode, kjoin, ksplit, BaseInterface,  
-                           BaseManager, upload,   get_class, record_class, 
+from pydevmgr_core import (KINDS, NodeAlias, kjoin, ksplit, BaseInterface,  
+                           BaseManager, upload,   get_class,  
                            BaseDevice, NodeVar,  
-                           FactoryList , FactoryDict, ObjectDict, BaseFactory
+                           ObjectDict, BaseFactory, 
+                           create_data_class
                         )
-from pydevmgr_core.base.node_alias import BaseNodeAlias
+from pydevmgr_core import BaseData, BaseNodeAlias
 from pydevmgr_core.nodes import AllTrue
 from pydevmgr_core.decorators import nodealias
-
+from pydevmgr_core.io import open_manager 
+from systemy import FactoryList, FactoryDict
 
 from . import io
 from .eltdevice import EltDevice, EltDeviceIO
 from .eltengine import EltManagerEngine 
-
+from .register import register 
 from .tools import  get_txt, get_group
 import logging
 
 from collections import OrderedDict
 from warnings import warn
 
-from pydantic import BaseModel, root_validator, validator, AnyUrl
-from typing import List, Type, Optional, Dict, Union, Iterable
+from pydantic import create_model, BaseModel, root_validator, validator, AnyUrl
+from typing import Any, Iterator, List, Tuple, Type, Optional, Dict, Union, Iterable
 import warnings
 
 
@@ -38,7 +39,7 @@ class EltDeviceFactory(EltDeviceIO):
 
 class ManagerServerConfig(BaseModel):
     fits_prefix: str = ""
-    devices : FactoryList[EltDeviceFactory] = FactoryList(Factory=EltDeviceFactory) # list of device names for the record 
+    devices : List[EltDeviceFactory] = [] # list of device names for the record 
     cmdtout : int = 60000    # not yet used in pydevmgr 
     # ~~~~~~ Not Used by pydevmgr ~~~~~~~~~~~~~~~~~~~~~~
     req_endpoint    : str =  "zpb.rr://127.0.0.1:12082/"
@@ -125,7 +126,8 @@ def open_elt_manager(cfgfile, key=None, path=None, prefix=""):
     Output:
         manager (EleManager) : elt manager handler
     """
-    return EltManager.from_cfgfile(cfgfile, path=path, prefix=prefix, key=key)
+    return open_manager(cfgfile, path=path, prefix=prefix, key=key , Factory=EltManager.Config)
+    # return EltManager.from_cfgfile(cfgfile, path=path, prefix=prefix, key=key)
     
     
 class ManagerIOConfig(BaseModel):
@@ -170,20 +172,6 @@ def load_manager_config(file_name: str, extrafile: Optional[str] =None) -> Manag
 #   These are created in the .stat UaInterface property
 #
 
-class SubstateNodeAlias(NodeAlias):
-    """ Attempt to build one substate out of severals """
-    SUBSTATE = EltDevice.SUBSTATE
-    
-    def fget(self, *substates) -> int:        
-        if not substates: return self.SUBSTATE.UNKNOWN
-        first = substates[0]
-        if all( s==first for s in substates):
-            return int(first)
-        return int(self.SUBSTATE.UNKNOWN)
-
-
-def get_device_state_nodes(parent):
-    return sum( [[d.stat.state,d.is_ignored] for d in  parent.devices ], [])
 
 ##
 # The stat manager for stat interface will be build of NodeAliases only 
@@ -193,6 +181,8 @@ class ManagerStatInterface(BaseInterface):
     STATE = EltDevice.STATE
     
     class StateAlias(BaseNodeAlias):
+        STATE = EltDevice.STATE
+
         """ Compute a State for all devices combined """
         @staticmethod
         def manager_ref():
@@ -240,12 +230,21 @@ class ManagerStatInterface(BaseInterface):
         """ group of the state """
         return get_group(self.STATE(state))
     
+    @nodealias("state")
+    def state_info(self, state: int) -> Tuple[int, str, str]:
+        """ Return (code, text, group) state """
+        return (state, 
+                get_txt(self.STATE(state)), 
+                get_group(self.STATE(state))
+            )
+
+   
     class Data(BaseInterface.Data):
         state: NodeVar[int] = 0 
         state_txt: NodeVar[str] = ""
         state_group: NodeVar[str] = ""
 
-@record_class            
+@register            
 class EltManager(BaseManager):
     """ UaManager object, handling several devices 
     
@@ -285,12 +284,12 @@ class EltManager(BaseManager):
     
     ::
         
-         from pydevmgr_elt import EltManager, Motor, Lamp, Defaults, wait 
+         from pydevmgr_elt import EltManager, Motor, Lamp,  wait 
         
          class AitBench(EltManager):
             class Config( EltManager.Config, extra="forbid" ):
-                motor: Defaults[Motor.Config] = Motor.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1" )
-                lamp: Defaults[Lamp.Config] = Lamp.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1" )
+                motor: Motor.Config = Motor.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1" )
+                lamp: Lamp.Config = Lamp.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1" )
                 server =  EltManager.Config.Server( devices=['motor', 'lamp'] )
                 
                 
@@ -306,12 +305,12 @@ class EltManager(BaseManager):
 
     ::
 
-         from pydevmgr_elt import EltManager, Motor, Lamp, CcsSim, Defaults, wait, BaseManager
+         from pydevmgr_elt import EltManager, Motor, Lamp, CcsSim,  wait, BaseManager
          from typing import List    
          class AitBench(EltManager):
             class Config( BaseManager.Config, extra="forbid" ):
-                motor: Defaults[Motor.Config] = Motor.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1" )
-                lamp: Defaults[Lamp.Config] = Lamp.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1" )
+                motor: Motor.Config = Motor.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Motor1" )
+                lamp: Lamp.Config = Lamp.Config( address="opc.tcp://myplc.local:4840", prefix="MAIN.Lamp1" )
                 ccs: CcsSim.Config = CcsSim.Config(address="opc.tcp://myplc.local:4840", prefix="MAIN.ccs_sim")
                 devices: List[str] = ['lamp', 'motor']
              
@@ -384,19 +383,7 @@ class EltManager(BaseManager):
         # self.__dict__[device.name] = device
         self._devices_dict[device.name] = device
             
-
-
-    @classmethod
-    def from_cfgfile(cls, cfgfile, path="", prefix: str = '', key=None):
-        return super().from_cfgfile( cfgfile, path=path, prefix=prefix, key=key)
     
-    @property
-    def key(self) -> str:
-        return self._key
-    
-    # @property
-    # def prefix(self):
-    #     return ksplit(self._key)[0]
     
     @property
     def devices(self):
@@ -405,7 +392,7 @@ class EltManager(BaseManager):
 
     @property
     def name(self) -> str:
-        return ksplit(self._key)[1]
+        return ksplit(self.key)[1]
     
     
     def __getattr__(self, attr):
@@ -535,8 +522,21 @@ class EltManager(BaseManager):
         """ set ignored flag to False for  all devices """
         for device in self.devices:
             device.is_ignored.set(False)
-    
+   
+
     ### deprecated 
+    def create_data_class( self, children: Iterator[str],  Base = None ) -> Type[BaseData]:
+        """ deprecated use :func:pydevmgr_core.create_data_class instead """
+        warn(DeprecationWarning("create_data_class method is deprecated, use create_data_class function"))
+
+        if self.key:
+            class_name= "Data_Of_"+self.key
+        else:
+            class_name = "ManagerData"
+
+        return create_data_class(class_name, [getattr(self,name) for name in children ], base_class = Base ) 
+
+
     def connect_all(self) -> None:
         """ Deprecated use connect instead  """
         warn(DeprecationWarning("connect_all method will be removed use connect "))

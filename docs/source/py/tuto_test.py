@@ -113,11 +113,11 @@ class TestWriteCollector:
 
 # The goal here is to create a Node for the use of our client 
 
-from pydevmgr_core import BaseNode, kjoin, record_class
+from pydevmgr_core import BaseNode, kjoin, register
 from pydevmgr_core.decorators import nodealias 
 from typing import Optional, Any 
 
-@record_class 
+@register 
 class TestNode(BaseNode):
     class Config(BaseNode.Config):
         type = "Test" # each object has a kind (this one is a node) and a type 
@@ -168,10 +168,10 @@ class TestNode(BaseNode):
 #       |_|         
 
 # The Rpc construction  will look very similar 
-from pydevmgr_core import BaseRpc, kjoin, record_class
+from pydevmgr_core import BaseRpc, kjoin, register
 
 
-@record_class
+@register
 class TestRpc(BaseRpc):
     class Config(BaseRpc.Config):
         type = "Test"
@@ -209,10 +209,10 @@ class TestRpc(BaseRpc):
 
 # The node and Rpc we have created will make more sens when creating a device
 
-from pydevmgr_core import BaseDevice, record_class
+from pydevmgr_core import BaseDevice, register
 from pydantic import AnyUrl 
 
-@record_class
+@register
 class TestMotor(BaseDevice):
     class Config(BaseDevice.Config):
         type = "TestMotor"

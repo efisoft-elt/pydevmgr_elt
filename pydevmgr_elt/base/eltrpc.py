@@ -1,7 +1,6 @@
 from pydevmgr_ua import UaRpc
-from pydevmgr_core import record_class
 from .eltengine import EltRpcEngine
-
+from .register import register 
 from .tools import enum_txt, get_txt
 from enum import Enum
 
@@ -24,7 +23,7 @@ enum_txt( {
     # etc 
 })
 
-@record_class
+@register
 class EltRpc(UaRpc):
     class Config(UaRpc.Config):
         type: str = "Elt"

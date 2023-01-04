@@ -3,7 +3,7 @@ from pydevmgr_elt.devices.shutter.cfg  import ShutterCfg as Cfg
 from pydevmgr_elt.devices.shutter.rpcs import ShutterRpcs as Rpcs
 
 from pydevmgr_elt.base import EltDevice
-from pydevmgr_core import record_class, Defaults
+from pydevmgr_elt import register 
 from typing import Optional
 
 
@@ -37,16 +37,16 @@ class ShutterConfig(Base.Config):
     type: str = "Shutter"
     ctrl_config : CtrlConfig= CtrlConfig()
     
-    cfg: Defaults[Cfg] = Cfg()
-    stat: Defaults[Stat] = Stat()
-    rpcs: Defaults[Rpcs] = Rpcs()
+    cfg:  Cfg  = Cfg()
+    stat: Stat = Stat()
+    rpcs: Rpcs = Rpcs()
     
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 
 
-@record_class
+@register
 class Shutter(Base):
     """ ELt Standard Shutter device """
     Config = ShutterConfig
