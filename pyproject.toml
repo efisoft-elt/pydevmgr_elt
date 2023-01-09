@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydevmgr_elt"
-version = "0.6a2"
+version = "0.6a3"
 description = "pydevmgr pluggin for Elt devices"
 license = "CeCILL Free Software License Agreement v2.1"
 authors = ["Sylvain Guieu <sylvain.guieu@univ-grenoble-alpes.fr>"]
