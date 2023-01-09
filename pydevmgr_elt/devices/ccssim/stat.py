@@ -1,5 +1,6 @@
 
 from pydevmgr_core import  NodeVar
+from pydevmgr_core.nodes import  Rad2Degree
 from pydevmgr_elt.base import EltDevice
 
 from enum import Enum
@@ -7,7 +8,10 @@ Base = EltDevice.Interface
 
 N = Base.Node # Base Node
 NC = N.Config
-NV = NodeVar # used in Data 
+NV = NodeVar # used in Data
+
+
+
 #                      _              _   
 #   ___ ___  _ __  ___| |_ __ _ _ __ | |_ 
 #  / __/ _ \| '_ \/ __| __/ _` | '_ \| __|
@@ -55,6 +59,15 @@ class CcsSimStat(Base):
         alt_at_xy: NC = NC(suffix="stat.data.observed_altaz_at_requested_xy[0]")
         az_at_xy: NC = NC(suffix="stat.data.observed_altaz_at_requested_xy[1]")
         parallactic_angle: NC = NC(suffix="stat.data.parallactic_angle")
+
+    target_alt_deg = Rad2Degree.Config( node="target_alt")
+    target_az_deg = Rad2Degree.Config( node="target_az")
+    current_alt_deg = Rad2Degree.Config( node="current_alt")
+    current_az_deg = Rad2Degree.Config( node="current_az")
+    north_angle_deg = Rad2Degree.Config( node="north_angle")
+    pupil_angle_deg = Rad2Degree.Config( node="pupil_angle")
+    elevation_direction_angle_deg = Rad2Degree.Config( node="elevation_direction_angle")
+    parallactic_angle_deg = Rad2Degree.Config( node="parallactic_angle")
 
 
 
