@@ -104,7 +104,7 @@ class Motor(Base):
                       without changing the config file. 
         """
         
-        config = self._config 
+        config = self.config 
         
         ctrl_config = config.ctrl_config
         # just update what is in ctrl_config, this should work for motor 

@@ -107,7 +107,7 @@ class Adc(Base):
         for m in self.motors:
             cfg_dict.update( m.get_configuration(exclude_unset=exclude_unset) )
         
-        config = self._config 
+        config = self.config 
         
         ctrl_config = config.ctrl_config
         # just update what is in ctrl_config, except axes      
