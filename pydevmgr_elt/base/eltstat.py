@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from typing import Tuple
 from .eltinterface import EltInterface
 from pydevmgr_core import NodeVar
@@ -75,18 +76,31 @@ enum_txt({
         # etc ...
 })
 
+
+@dataclass
+class StateInfo:
+    code: int = 0 
+    text: str = ""
+    group: GROUP = GROUP.UNKNOWN 
+    def __iter__(self):
+        yield self.code 
+        yield self.text 
+        yield self.group
+
 class StatInterface(EltInterface):
      
     ERROR = ERROR # needed for error_txt alias 
     SUBSTATE = SUBSTATE # needed for substate_txt node alias
     STATE = STATE 
+    StateInfo = StateInfo 
     
     class Config(EltInterface.Config):
         state:             NC = NC(suffix="stat.nState")
         substate:          NC = NC(suffix="stat.nSubstate") 
         error_code:        NC = NC(suffix="stat.nErrorCode")
+    
 
-    @nodealias("state")
+    @nodealias("state", vtype=bool)
     def is_operational(self, state: int) -> bool:
         """ True if device is operational """
         return state == self.STATE.OP
@@ -116,15 +130,15 @@ class StatInterface(EltInterface):
         """ Return a text representation of the substate """
         return get_enum_txt( self.SUBSTATE , substate, f"UNKNOWN ({substate})")
     
-    @nodealias("substate")
-    def substate_group(self, substate: int):
+    @nodealias("substate", vtype=(GROUP, GROUP.UNKNOWN))
+    def substate_group(self, substate: int)-> GROUP:
         """ Return the afiliated group of the substate """
         return get_enum_group(self.SUBSTATE, substate, GROUP.UNKNOWN)
     
     @nodealias("substate")
-    def substate_info(self, substate: int)-> Tuple[int, str, GROUP]:
+    def substate_info(self, substate: int)-> StateInfo:
         """ Return (code, text, group) of substate """
-        return (substate, 
+        return StateInfo(substate, 
                 get_enum_txt( self.SUBSTATE , substate, f"UNKNOWN ({substate})"),
                 get_enum_group(self.SUBSTATE, substate, GROUP.UNKNOWN), 
                )
@@ -134,16 +148,16 @@ class StatInterface(EltInterface):
         """ Return a text representation of the state """
         return get_enum_txt( self.STATE, state, f"UNKNOWN ({state})" )
 
-    @nodealias("state")
+    @nodealias("state", vtype=(GROUP, GROUP.UNKNOWN))
     def state_group(self, state: int):
         """ Return the afiliated group of the state """
         return get_enum_group( self.STATE, state, GROUP.UNKNOWN )
     
 
     @nodealias("state")
-    def state_info(self, state: int) -> Tuple[int, str, GROUP]:
+    def state_info(self, state: int) -> StateInfo:
         """ Return (code, text, group) state """
-        return (state, 
+        return StateInfo(state, 
                 get_enum_txt( self.STATE, state, f"UNKNOWN ({state})" ), 
                 get_enum_group( self.STATE, state, GROUP.UNKNOWN )
             )
@@ -156,8 +170,8 @@ class StatInterface(EltInterface):
         return get_enum_txt( self.ERROR , error_code, f"Unknown error ({error_code})" )
     
 
-    @nodealias("error_code", "error_txt")
-    def noerror_check(self, error_code, error_txt):
+    @nodealias("error_code", "error_txt", vtype=(bool, True))
+    def noerror_check(self, error_code, error_txt)->bool:
         """ Return always True but raise a ValueError in case of a non zero error code """
         if error_code:
             raise ValueError(f"Error [{self.key}]  error={error_code}: {error_txt}")
@@ -165,14 +179,14 @@ class StatInterface(EltInterface):
 
     @nodealias("error_code")
     def error_group(self, error_code: int) -> str:
-        """ Return the text representation of an error or '' if no error """
+        """ Return the group representation of an error or '' if no error """
         return GROUP.ERROR if error_code else GROUP.OK
 
     @nodealias("error_code")
-    def error_info(self, error_code: int) -> str:
+    def error_info(self, error_code: int) -> StateInfo:
         """ Return (code, text, group) of  an error or """
         
-        return ( error_code, 
+        return StateInfo( error_code, 
                 get_enum_txt( self.ERROR , error_code, f"Unknown error ({error_code})" ), 
                 GROUP.ERROR if error_code else GROUP.OK 
                 )

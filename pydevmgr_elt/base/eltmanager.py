@@ -3,7 +3,7 @@ from pydevmgr_core import (KINDS, NodeAlias, kjoin, ksplit, BaseInterface,
                            BaseManager, upload,   get_class,  
                            BaseDevice, NodeVar,  
                            ObjectDict, BaseFactory, 
-                           create_data_class
+                           create_data_model
                         )
 from pydevmgr_core import BaseData, BaseNodeAlias
 from pydevmgr_core.nodes import AllTrue
@@ -39,7 +39,7 @@ class EltDeviceFactory(EltDeviceIO):
 
 class ManagerServerConfig(BaseModel):
     fits_prefix: str = ""
-    devices : List[EltDeviceFactory] = [] # list of device names for the record 
+    devices : List[EltDeviceFactory] = [] # list of device 
     cmdtout : int = 60000    # not yet used in pydevmgr 
     # ~~~~~~ Not Used by pydevmgr ~~~~~~~~~~~~~~~~~~~~~~
     req_endpoint    : str =  "zpb.rr://127.0.0.1:12082/"
@@ -534,7 +534,7 @@ class EltManager(BaseManager):
         else:
             class_name = "ManagerData"
 
-        return create_data_class(class_name, [getattr(self,name) for name in children ], base_class = Base ) 
+        return create_data_model(class_name, [getattr(self,name) for name in children ], base_class = Base ) 
 
 
     def connect_all(self) -> None:

@@ -168,6 +168,18 @@ files = [
 test = ["pytest (>=6)"]
 
 [[package]]
+name = "get-annotations"
+version = "0.1.2"
+description = "A backport of Python 3.10's inspect.get_annotation() function"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+files = [
+    {file = "get-annotations-0.1.2.tar.gz", hash = "sha256:da7b69b8043237cc7f7ce5919e9cc59bd18fc4e2704b43eb34e3ba4fa9374bab"},
+    {file = "get_annotations-0.1.2-py3-none-any.whl", hash = "sha256:788ba8aa2434ee34ffb985c4aea2f9e575204c884c0e0dd0f969be846470e527"},
+]
+
+[[package]]
 name = "importlib-metadata"
 version = "6.0.0"
 description = "Read metadata from Python packages"
@@ -190,14 +202,14 @@ testing = ["flake8 (<5)", "flufl.flake8", "importlib-resources (>=1.3)", "packag
 
 [[package]]
 name = "iniconfig"
-version = "1.1.1"
-description = "iniconfig: brain-dead simple config-ini parsing"
+version = "2.0.0"
+description = "brain-dead simple config-ini parsing"
 category = "dev"
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
-    {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
+    {file = "iniconfig-2.0.0-py3-none-any.whl", hash = "sha256:b6a85871a79d2e3b22d2d1b94ac2824226a63c6b741c88f7ae975f18b6778374"},
+    {file = "iniconfig-2.0.0.tar.gz", hash = "sha256:2d91e135bf72d31a410b17c16da610a82cb55f6b0477d1a902134b24a455b8b3"},
 ]
 
 [[package]]
@@ -382,14 +394,14 @@ encryption = ["cryptography"]
 
 [[package]]
 name = "packaging"
-version = "22.0"
+version = "23.0"
 description = "Core utilities for Python packages"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "packaging-22.0-py3-none-any.whl", hash = "sha256:957e2148ba0e1a3b282772e791ef1d8083648bc131c8ab0c1feba110ce1146c3"},
-    {file = "packaging-22.0.tar.gz", hash = "sha256:2198ec20bd4c017b8f9717e00f0c8714076fc2fd93816750ab48e2c41de2cfd3"},
+    {file = "packaging-23.0-py3-none-any.whl", hash = "sha256:714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2"},
+    {file = "packaging-23.0.tar.gz", hash = "sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97"},
 ]
 
 [[package]]
@@ -490,49 +502,50 @@ email = ["email-validator (>=1.0.3)"]
 
 [[package]]
 name = "pydevmgr-core"
-version = "0.6a0"
+version = "0.6a2"
 description = "Python package to handle distributed device handling"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "pydevmgr_core-0.6a0-py3-none-any.whl", hash = "sha256:3f972714c1392b4b308b70e3e6007937c97e24018203c09ff184cb75df194c63"},
-    {file = "pydevmgr_core-0.6a0.tar.gz", hash = "sha256:2fdef483c572618f9633de65821cc51a6135bd88410443f5d9432dd45c47ff81"},
+    {file = "pydevmgr_core-0.6a2-py3-none-any.whl", hash = "sha256:adce5899e73b1f176273039df4be953d16e431a69263a84836bee126bc86873c"},
+    {file = "pydevmgr_core-0.6a2.tar.gz", hash = "sha256:0ca936f7e8ee2b3a55176e6965d415b359770553ab6ee6455000ac2f808ffff7"},
 ]
 
 [package.dependencies]
+get-annotations = ">=0.1.2,<0.2.0"
 py-expression-eval = ">=0.3.14,<0.4.0"
 pydantic = ">=1.9,<2.0"
 systemy = ">=0.1.1,<0.2.0"
-valueparser = ">=0.1.1,<0.2.0"
+valueparser = ">=0.1.2,<0.2.0"
 
 [[package]]
 name = "pydevmgr-ua"
-version = "0.6a0"
+version = "0.6a2"
 description = "pydevmgr plugin to handle opc-ua communication"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "pydevmgr_ua-0.6a0-py3-none-any.whl", hash = "sha256:88034f5ff4f78b1edeeb482ca1e0484c65513a5e419848c4748cc527a486ca8b"},
-    {file = "pydevmgr_ua-0.6a0.tar.gz", hash = "sha256:c1e1bf3baa1bc21d546eb8cc7453e841fffbf4e9e5ce065ffd3b11c5bb8a3e37"},
+    {file = "pydevmgr_ua-0.6a2-py3-none-any.whl", hash = "sha256:1ae69c820bd68b3066cbf628dbca912269974b1184a2ca991aa8db1e962b73f2"},
+    {file = "pydevmgr_ua-0.6a2.tar.gz", hash = "sha256:a1d5eb8f5f214f97bdc98a57301a2d3a6cd6dc2bd94bc11d28915c30d1df3be9"},
 ]
 
 [package.dependencies]
 cryptography = ">=39.0.0,<40.0.0"
 opcua = ">=0.98.13,<0.99.0"
-pydevmgr-core = "0.6.a0"
+pydevmgr-core = ">=0.6.a2"
 
 [[package]]
 name = "pytest"
-version = "7.2.0"
+version = "7.2.1"
 description = "pytest: simple powerful testing with Python"
 category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "pytest-7.2.0-py3-none-any.whl", hash = "sha256:892f933d339f068883b6fd5a459f03d85bfcb355e4981e146d2c7616c21fef71"},
-    {file = "pytest-7.2.0.tar.gz", hash = "sha256:c4014eb40e10f11f355ad4e3c2fb2c6c6d1919c73f3b5a433de4708202cade59"},
+    {file = "pytest-7.2.1-py3-none-any.whl", hash = "sha256:c7c6ca206e93355074ae32f7403e8ea12163b1163c976fee7d4d84027c162be5"},
+    {file = "pytest-7.2.1.tar.gz", hash = "sha256:d45e0952f3727241918b8fd0f376f5ff6b301cc0777c6f9a556935c92d8a7d42"},
 ]
 
 [package.dependencies]
@@ -565,14 +578,14 @@ six = ">=1.5"
 
 [[package]]
 name = "pytz"
-version = "2022.7"
+version = "2022.7.1"
 description = "World timezone definitions, modern and historical"
 category = "main"
 optional = false
 python-versions = "*"
 files = [
-    {file = "pytz-2022.7-py2.py3-none-any.whl", hash = "sha256:93007def75ae22f7cd991c84e02d434876818661f8df9ad5df9e950ff4e52cfd"},
-    {file = "pytz-2022.7.tar.gz", hash = "sha256:7ccfae7b4b2c067464a6733c6261673fdb8fd1be905460396b97a073e9fa683a"},
+    {file = "pytz-2022.7.1-py2.py3-none-any.whl", hash = "sha256:78f4f37d8198e0627c5f1143240bb0206b8691d8d7ac6d78fee88b78733f8c4a"},
+    {file = "pytz-2022.7.1.tar.gz", hash = "sha256:01a0681c4b9684a28304615eba55d1ab31ae00bf68ec157ec3708a8182dbbcd0"},
 ]
 
 [[package]]
@@ -681,14 +694,14 @@ files = [
 
 [[package]]
 name = "valueparser"
-version = "0.1.1"
+version = "0.1.2"
 description = "Python package for quick creation of tools to parse a value"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "valueparser-0.1.1-py3-none-any.whl", hash = "sha256:d55e9613b2f2e598279be53f5a7bfe39470775c6e76518c8dfc76ef4c5e84bfa"},
-    {file = "valueparser-0.1.1.tar.gz", hash = "sha256:67158319271a660dcbdbd17a55e4588adc7b083d0865c3aae4925abf67c20f3f"},
+    {file = "valueparser-0.1.2-py3-none-any.whl", hash = "sha256:29aa88387703a110d5b411564bf1bf3b01a64f2772ba01ee0590f9cab170da66"},
+    {file = "valueparser-0.1.2.tar.gz", hash = "sha256:425bbf3e57f67979bff7db9de26f3815e929a535a9f118abca5ece0f9fef8273"},
 ]
 
 [package.dependencies]
@@ -713,4 +726,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "061f2c899fdb9bfb07758ab30ee1a5ae4982c02e82deb8518eef5a5b60d4759a"
+content-hash = "4a9b100f65868fbdeef27ddb22e863ea28ed020d5fd57e4c211f9f631298c440"

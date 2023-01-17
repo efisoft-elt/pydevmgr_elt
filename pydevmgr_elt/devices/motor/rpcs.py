@@ -1,6 +1,6 @@
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import enum_txt
-
+from pydevmgr_core import argc
 from enum import Enum
 Base = EltDevice.Rpcs
 
@@ -43,9 +43,9 @@ class MotorRpcs(Base):
         rpcDisable: RC = RC(suffix= 'RPC_Disable')
         rpcEnable: RC = RC(suffix= 'RPC_Enable')
         rpcInit: RC = RC(suffix= 'RPC_Init')
-        rpcMoveAbs: RC = RC(suffix= 'RPC_MoveAbs', arg_parsers=['Float', 'Float'] )
-        rpcMoveRel: RC = RC(suffix= 'RPC_MoveRel', arg_parsers=['Float', 'Float'] )
-        rpcMoveVel: RC = RC(suffix= 'RPC_MoveVel', arg_parsers=['Float'] )
+        rpcMoveAbs: RC = RC(suffix= 'RPC_MoveAbs', args=[argc('pos','Float'), argc('vel','Float')] )
+        rpcMoveRel: RC = RC(suffix= 'RPC_MoveRel', args=[argc('pos','Float'), argc('vel','Float')]  )
+        rpcMoveVel: RC = RC(suffix= 'RPC_MoveVel', args=[argc('vel','Float')] )
         rpcReset: RC = RC(suffix= 'RPC_Reset')
         rpcStop: RC = RC(suffix= 'RPC_Stop')
 

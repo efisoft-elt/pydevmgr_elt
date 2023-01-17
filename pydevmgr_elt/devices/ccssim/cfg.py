@@ -1,4 +1,5 @@
 from pydevmgr_core import  NodeVar
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_elt.base import EltDevice
 from enum import Enum
 Base = EltDevice.Interface
@@ -8,15 +9,11 @@ NC = N.Config
 NV = NodeVar # used in Data 
 
 
-
+@set_data_model
 class CcsSimCfg(Base):
     class Config(Base.Config):
-        latitude: NC = NC(suffix="cfg.site.latitude")
-        longitude: NC = NC(suffix="cfg.site.longitude")
-        height: NC = NC(suffix="cfg.site.height")
+        latitude: NC = NC(suffix="cfg.site.latitude", vtype=(float,-0.429833092))
+        longitude: NC = NC(suffix="cfg.site.longitude", vtype=(float, 1.228800386))
+        height: NC = NC(suffix="cfg.site.height", vtype=(float,3046.0 ))
 
-    class Data(Base.Data):
-        latitude:  NodeVar[float] =  -0.429833092     
-        longitude:  NodeVar[float] = 1.228800386    
-        height: NodeVar[float] = 3046.0
 

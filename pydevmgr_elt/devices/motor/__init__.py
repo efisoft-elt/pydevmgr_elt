@@ -1,3 +1,4 @@
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_elt.devices.motor.axis_type import AXIS_TYPE
 from pydevmgr_elt.devices.motor.stat import MotorStat as Stat
 from pydevmgr_elt.devices.motor.cfg  import MotorCfg as Cfg
@@ -76,6 +77,7 @@ class MotorConfig(Base.Config):
 
 
 @register
+@set_data_model
 class Motor(Base):
     """ ELt Standard Motor device """
     Config = MotorConfig

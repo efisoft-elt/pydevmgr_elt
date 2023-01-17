@@ -1,3 +1,4 @@
+from pydantic.config import Extra
 from pydevmgr_elt.devices.time.stat import TimeStat as Stat, MODE
 from pydevmgr_elt.devices.time.cfg  import TimeCfg as Cfg
 from pydevmgr_elt.devices.time.rpcs import TimeRpcs as Rpcs
@@ -18,7 +19,7 @@ class TimeCtrlConfig(Base.Config.CtrlConfig):
     longitude : Optional[float] = 1.228800386
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     
-class TimeConfig(Base.Config):
+class TimeConfig(Base.Config, extra=Extra.forbid):
     CtrlConfig = TimeCtrlConfig
     
     Cfg = Cfg.Config

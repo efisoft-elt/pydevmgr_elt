@@ -56,7 +56,7 @@ class CcsSim(Base):
     Cfg = Cfg
     Stat = Stat
     Rpcs = Rpcs
-    
+    Ctrl = Ctrl 
     class Data(Base.Data):
         Cfg = Cfg.Data
         Stat = Stat.Data

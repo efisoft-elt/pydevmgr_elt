@@ -1,5 +1,6 @@
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import  enum_txt
+from pydevmgr_core import argc
 from valueparser import BaseParser
 from systemy import register_factory
 
@@ -42,8 +43,8 @@ class TimeRpcs(Base):
     RPC_ERROR = RPC_ERROR
 
     class Config(Base.Config):
-        rpcSetTime: RC = RC(suffix="RPC_SetTime", arg_parsers=[PlcTime])
-        rpcSetMode: RC = RC(suffix="RPC_SetMode", arg_parsers=["UaInt32"])
+        rpcSetTime: RC = RC(suffix="RPC_SetTime", args=[argc('time',PlcTime)])
+        rpcSetMode: RC = RC(suffix="RPC_SetMode", args=[argc('mode',"UaInt32")])
 
 if __name__ == "__main__":
     TimeRpcs()

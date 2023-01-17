@@ -1,6 +1,6 @@
 
 import weakref
-from pydevmgr_core import   NodeVar
+from pydevmgr_core import   NodeVar, set_data_model
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -175,6 +175,7 @@ enum_txt ({
     #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
     # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
+@set_data_model
 class MotorStat(Base):
     # Add the constants to this class 
     ERROR = ERROR
@@ -186,35 +187,34 @@ class MotorStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        axis_brake: NC = NC(suffix='stat.bBrakeActive' )
-        axis_enable: NC = NC(suffix='stat.bEnabled' )
-        axis_info_data1: NC = NC(suffix='stat.nInfoData1' )
-        axis_info_data2: NC = NC(suffix='stat.nInfoData2' )
-        axis_inposition: NC = NC(suffix='stat.bInPosition' )
-        axis_lock: NC = NC(suffix='stat.bLock' )
-        axis_ready: NC = NC(suffix='stat.bAxisReady' )
-        backlash_step: NC = NC(suffix='stat.nBacklashStep' )
-        error_code: NC = NC(suffix='stat.nErrorCode' )
-        init_action: NC = NC(suffix='stat.nInitAction' )
-        init_step: NC = NC(suffix='stat.nInitStep' )
-        initialised: NC = NC(suffix='stat.bInitialised' )
-        local: NC = NC(suffix='stat.bLocal' )
-        mode: NC = NC(suffix='stat.nMode' )
-        pos_actual: NC = NC(suffix='stat.lrPosActual' )
-        pos_error: NC = NC(suffix='stat.lrPosError' )
-        pos_target: NC = NC(suffix='stat.lrPosTarget' )
-        scale_factor: NC = NC(suffix='stat.lrScaleFactor' )
-        signal_index: NC = NC(suffix='stat.signals[3].bActive' )
-        signal_lhw: NC = NC(suffix='stat.signals[1].bActive' )
-        signal_lstop: NC = NC(suffix='stat.signals[0].bActive' )
-        signal_ref: NC = NC(suffix='stat.signals[2].bActive' )
-        signal_uhw: NC = NC(suffix='stat.signals[4].bActive' )
-        signal_ustop: NC = NC(suffix='stat.signals[5].bActive' )
-        state: NC = NC(suffix='stat.nState' )
-        status: NC = NC(suffix='stat.nStatus' )
-        substate: NC = NC(suffix='stat.nSubstate' )
-        vel_actual: NC = NC(suffix='stat.lrVelActual' )
-                
+        axis_brake:       NC  =  NC(suffix='stat.bBrakeActive',        vtype=bool   )
+        axis_enable:      NC  =  NC(suffix='stat.bEnabled',            vtype=bool   )
+        axis_info_data1:  NC  =  NC(suffix='stat.nInfoData1',          vtype=int    )
+        axis_info_data2:  NC  =  NC(suffix='stat.nInfoData2',          vtype=int    )
+        axis_inposition:  NC  =  NC(suffix='stat.bInPosition',         vtype=bool   )
+        axis_lock:        NC  =  NC(suffix='stat.bLock',               vtype=bool   )
+        axis_ready:       NC  =  NC(suffix='stat.bAxisReady',          vtype=bool   )
+        backlash_step:    NC  =  NC(suffix='stat.nBacklashStep',       vtype=int    )
+        error_code:       NC  =  NC(suffix='stat.nErrorCode',          vtype=int    )
+        init_action:      NC  =  NC(suffix='stat.nInitAction',         vtype=int    )
+        init_step:        NC  =  NC(suffix='stat.nInitStep',           vtype=int    )
+        initialised:      NC  =  NC(suffix='stat.bInitialised',        vtype=bool   )
+        local:            NC  =  NC(suffix='stat.bLocal',              vtype=bool   )
+        mode:             NC  =  NC(suffix='stat.nMode',               vtype=int    )
+        pos_actual:       NC  =  NC(suffix='stat.lrPosActual',         vtype=float  )
+        pos_error:        NC  =  NC(suffix='stat.lrPosError',          vtype=float  )
+        pos_target:       NC  =  NC(suffix='stat.lrPosTarget',         vtype=float  )
+        scale_factor:     NC  =  NC(suffix='stat.lrScaleFactor',       vtype=float  )
+        signal_index:     NC  =  NC(suffix='stat.signals[3].bActive',  vtype=bool   )
+        signal_lhw:       NC  =  NC(suffix='stat.signals[1].bActive',  vtype=bool   )
+        signal_lstop:     NC  =  NC(suffix='stat.signals[0].bActive',  vtype=bool   )
+        signal_ref:       NC  =  NC(suffix='stat.signals[2].bActive',  vtype=bool   )
+        signal_uhw:       NC  =  NC(suffix='stat.signals[4].bActive',  vtype=bool   )
+        signal_ustop:     NC  =  NC(suffix='stat.signals[5].bActive',  vtype=bool   )
+        state:            NC  =  NC(suffix='stat.nState',              vtype=int    )
+        status:           NC  =  NC(suffix='stat.nStatus',             vtype=int    )
+        substate:         NC  =  NC(suffix='stat.nSubstate',           vtype=int    )
+        vel_actual:       NC  =  NC(suffix='stat.lrVelActual',         vtype=float  )
     # for this one we redefine the init so it does accept a mot_positions argument
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -234,18 +234,18 @@ class MotorStat(Base):
         return stat
 
     @nodealias("substate")
-    def is_moving(self, substate):
+    def is_moving(self, substate)-> bool:
         """ -> True is axis is moving """
         return substate == self.SUBSTATE.OP_MOVING
 
     @nodealias("substate")
-    def is_standstill(self,  substate):
+    def is_standstill(self,  substate)-> bool:
         """ -> True is axis is standstill """
         return substate == self.SUBSTATE.OP_STANDSTILL
     
     
     @nodealias("pos_actual")
-    def pos_name(self, pos_actual):
+    def pos_name(self, pos_actual)-> float:
         parent = self.parent_ref()
         if not parent: return ''
         try:
@@ -266,39 +266,39 @@ class MotorStat(Base):
     
     # Node Alias here     
     # Build the Data object to be use with DataLink, the type and default are added here 
-    class Data(Base.Data):
-        axis_brake: NodeVar[bool] = False
-        axis_enable: NodeVar[bool] = False
-        axis_info_data1: NodeVar[int] = 0
-        axis_info_data2: NodeVar[int] = 0
-        axis_inposition: NodeVar[bool] = False
-        axis_lock: NodeVar[bool] = False
-        axis_ready: NodeVar[bool] = False
-        backlash_step: NodeVar[int] = 0
-        error_code: NodeVar[int] = 0
-        init_action: NodeVar[int] = 0
-        init_step: NodeVar[int] = 0
-        initialised: NodeVar[bool] = False
-        local: NodeVar[bool] = False
-        mode: NodeVar[int] = 0
-        pos_actual: NodeVar[float] = 0.0
-        pos_error: NodeVar[float] = 0.0
-        pos_target: NodeVar[float] = 0.0
-        scale_factor: NodeVar[float] = 0.0
-        signal_index: NodeVar[bool] = False
-        signal_lhw: NodeVar[bool] = False
-        signal_lstop: NodeVar[bool] = False
-        signal_ref: NodeVar[bool] = False
-        signal_uhw: NodeVar[bool] = False
-        signal_ustop: NodeVar[bool] = False
-        state: NodeVar[int] = 0
-        status: NodeVar[int] = 0
-        substate: NodeVar[int] = 0
-        vel_actual: NodeVar[float] = 0.0
-        # ~~~~~~~~Add some node alis as well 
-        is_moving: NodeVar[bool] = False
-        is_standstill: NodeVar[bool] = False
-        pos_name: NodeVar[str] = ""
+    # class Data(Base.Data):
+    #     axis_brake: NodeVar[bool] = False
+    #     axis_enable: NodeVar[bool] = False
+    #     axis_info_data1: NodeVar[int] = 0
+    #     axis_info_data2: NodeVar[int] = 0
+    #     axis_inposition: NodeVar[bool] = False
+    #     axis_lock: NodeVar[bool] = False
+    #     axis_ready: NodeVar[bool] = False
+    #     backlash_step: NodeVar[int] = 0
+    #     error_code: NodeVar[int] = 0
+    #     init_action: NodeVar[int] = 0
+    #     init_step: NodeVar[int] = 0
+    #     initialised: NodeVar[bool] = False
+    #     local: NodeVar[bool] = False
+    #     mode: NodeVar[int] = 0
+    #     pos_actual: NodeVar[float] = 0.0
+    #     pos_error: NodeVar[float] = 0.0
+    #     pos_target: NodeVar[float] = 0.0
+    #     scale_factor: NodeVar[float] = 0.0
+    #     signal_index: NodeVar[bool] = False
+    #     signal_lhw: NodeVar[bool] = False
+    #     signal_lstop: NodeVar[bool] = False
+    #     signal_ref: NodeVar[bool] = False
+    #     signal_uhw: NodeVar[bool] = False
+    #     signal_ustop: NodeVar[bool] = False
+    #     state: NodeVar[int] = 0
+    #     status: NodeVar[int] = 0
+    #     substate: NodeVar[int] = 0
+    #     vel_actual: NodeVar[float] = 0.0
+    #     # ~~~~~~~~Add some node alis as well 
+    #     is_moving: NodeVar[bool] = False
+    #     is_standstill: NodeVar[bool] = False
+    #     pos_name: NodeVar[str] = ""
 
 
 if __name__ == "__main__":

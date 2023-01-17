@@ -1,10 +1,13 @@
 
+from pydantic.config import Extra
 from pydevmgr_core import   NodeVar
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_core.decorators import nodealias 
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import  get_txt
 import datetime
 from enum import Enum
+from valueparser.parsers import Enumerated 
 
 Base = EltDevice.Interface # not the .Stat
 N = Base.Node # Base Node
@@ -20,9 +23,11 @@ NV = NodeVar # used in Data
 ##### ###########
 # SUBSTATE
 class MODE(int, Enum):
-    LOCAL                  =   0    
-    UTC                    =   1
-    SIMULATION             =   2
+    LOCAL                  =   0   
+    UTC_PTP                =   1
+    UTC_NTP                =   2
+    UTC                    =   3
+    SIMULATION             =   4
     
     UNREGISTERED = -9999
 
@@ -45,35 +50,36 @@ class QOS(int, Enum):
     #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
     # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
+@set_data_model
 class TimeStat(Base):
     # Add the constants to this class 
     MODE = MODE
     QOS = QOS
     STATUS = STATUS
     fits_key = ""
-    class Config(Base.Config):
+    class Config(Base.Config, extra=Extra.forbid):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        dc_time :  NC = NC(suffix="stat.sDcTime")
-        utc_time : NC = NC(suffix="stat.sUtcTime")
-        tai_time : NC = NC(suffix="stat.sTaiTime")
-        error_msg : NC = NC(suffix="stat.sErrorMsg")
-        mode :  NC = NC(suffix="stat.mode")
-        ptp_offset_time : NC = NC(suffix="stat.lPtpOffsetTime")
-        sim_offset_time : NC = NC(suffix="stat.lSimOffsetTime")
-        dc_time_int : NC = NC(suffix="stat.lDcCurrentTime")
-        utc_time_int : NC = NC(suffix="stat.lUtcTime")
-        tai_time_int : NC = NC(suffix="stat.lTaiTime")
-        tai_unix_time : NC = NC(suffix="stat.lTaiUnixTime")
+        dc_time :  NC = NC(suffix="stat.sDcTime", vtype=str)
+        utc_time : NC = NC(suffix="stat.sUtcTime", vtype=str)
+        tai_time : NC = NC(suffix="stat.sTaiTime", vtype=str)
+        error_msg : NC = NC(suffix="stat.sErrorMsg", vtype=str)
+        mode :  NC = NC(suffix="stat.mode", vtype=(MODE,MODE.LOCAL), output_parser=MODE)
+        ptp_offset_time : NC = NC(suffix="stat.lPtpOffsetTime", vtype=int)
+        sim_offset_time : NC = NC(suffix="stat.lSimOffsetTime", vtype=int)
+        dc_time_int : NC = NC(suffix="stat.lDcCurrentTime", vtype=int)
+        utc_time_int : NC = NC(suffix="stat.lUtcTime", vtype=int)
+        tai_time_int : NC = NC(suffix="stat.lTaiTime", vtype=int)
+        tai_unix_time : NC = NC(suffix="stat.lTaiUnixTime", vtype=int)
         
     
-        user_time : NC = NC(suffix="stat.sUserTime") 
+        user_time : NC = NC(suffix="stat.sUserTime", vtype=str) 
         # STRING(29) := 'YYYY-MM-DD-hh:mm:ss.nnnnnnnnn';
-        user_time_int :  NC = NC(suffix="stat.tUserTime") #      ULINT := 0;
-        status: NC = NC(suffix="stat.signal.status")
-        qos: NC = NC(suffix="stat.signal.qos")
-        time_difference : NC = NC(suffix="stat.signal.time_difference") 
+        user_time_int :  NC = NC(suffix="stat.tUserTime", vtype=int) #      ULINT := 0;
+        status: NC = NC(suffix="stat.signal.status", vtype=(STATUS,STATUS.NOT_CONNECTED), output_parser=STATUS)
+        qos: NC = NC(suffix="stat.signal.qos", vtype=(QOS, QOS.NOT_VALID), output_parser=QOS)
+        time_difference : NC = NC(suffix="stat.signal.time_difference" , vtype=int) 
         #: UDINT; // Time difference between DC and External Time Source
     
     @nodealias("mode", "utc_time", "dc_time")
@@ -104,39 +110,6 @@ class TimeStat(Base):
     def status_txt(self, status: int) -> str:
         """ Return a text representation of the status """
         return get_txt(self.QOS(status))
-
-
-
-    
-    # We can add some nodealias to compute some stuff on the fly 
-    # If they node to be configured one can set a configuration above 
-    
-    # Node Alias here     
-    # Build the Data object to be use with DataLink, the type and default are added here 
-    class Data(Base.Data):
-        dc_time : NV[str] = "" 
-        utc_time : NV[str] = "" 
-        tai_time : NV[str] = "" 
-        error_msg : NV[str] = "" 
-        mode :  NV[int] = 0
-        mode_txt :  NV[str] = ""
-        
-        ptp_offset_time : NV[int] = 0 
-        sim_offset_time : NV[int] = 0 
-        dc_time_int     : NV[int] = 0 
-        utc_time_int    : NV[int] = 0 
-        tai_time_int    : NV[int] = 0 
-        tai_unix_time   : NV[int] = 0 
-        
-        
-        user_time : NV[str] = "" 
-        user_time_int : NV[int] = 0 
-        status :  NV[int] = 0 
-        status_txt : NV[str] = ""
-         
-        qos: NV[int] = 0 
-        qos_txt: NV[str] = 0 
-        time_difference: NV[int] = 0
 
 
 if __name__ == "__main__":

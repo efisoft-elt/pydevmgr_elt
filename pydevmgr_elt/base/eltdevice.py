@@ -192,7 +192,7 @@ class EltDevice(UaDevice):
         return self.rpcs
     
 
-    is_ignored = Local.Config(default=False)
+    is_ignored = Local.Config(default=False, vtype=bool)
     
     _devices = None # some device can have child devices (e.g. ADC)
     

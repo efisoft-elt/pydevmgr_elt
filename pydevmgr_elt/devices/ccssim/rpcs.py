@@ -1,5 +1,6 @@
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import  enum_txt
+from pydevmgr_core import argc
 
 from enum import Enum
 Base = EltDevice.Interface
@@ -23,6 +24,10 @@ class CcsSimRpcs(Base):
     RPC_ERROR = RPC_ERROR
     
     class Config(Base.Config):
-        rpcSetCoordinates:  RC = RC(suffix="RPC_SetCoordinates", arg_parsers=[float, float, float])
+        rpcSetCoordinates:  RC = RC(suffix="RPC_SetCoordinates", 
+                                    args=[argc("alpha",float), 
+                                          argc("delta",float),
+                                          argc("equinox",float)]
+                                )
 
 

@@ -1,6 +1,6 @@
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import enum_txt
-
+from pydevmgr_core import argc
 from enum import Enum
 Base = EltDevice.Rpcs
 
@@ -49,7 +49,7 @@ class LampRpcs(Base):
         rpcReset: RC = RC(suffix= 'RPC_Reset')
         rpcStop: RC = RC(suffix= 'RPC_Stop')
         rpcSwitchOff: RC = RC(suffix= 'RPC_Off')
-        rpcSwitchOn: RC = RC(suffix= 'RPC_On', arg_parsers=['Float', 'UaUInt32'] )
+        rpcSwitchOn: RC = RC(suffix= 'RPC_On', args=[argc('intencity',float), argc('time','UaUInt32')] )
 
 
  

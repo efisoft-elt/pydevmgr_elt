@@ -1,5 +1,10 @@
 
-from pydevmgr_core import  NodeVar
+from collections import namedtuple
+import math
+from typing import Type
+from pydevmgr_core import  NodeVar, VType
+from pydevmgr_core.base.dataclass import set_data_model
+from pydevmgr_core.base.node_alias import NodeAlias, NodeAlias1
 from pydevmgr_core.nodes import  Rad2Degree
 from pydevmgr_elt.base import EltDevice
 
@@ -27,6 +32,14 @@ class TIME_MODE(int, Enum):
     
     UNREGISTERED = -9999
 
+_r2d = 180/math.pi
+_d2r = math.pi/180.
+class Rad2DegreeVect(NodeAlias1):
+        def fget(self, angles):
+            return angles.__class__( *(a*_r2d for a in angles))
+        
+        def fset(self, angles_deg):
+            return angles_deg.__class__( *(a*_d2r for a in angles_deg))
 
 #  ____  _        _     ___       _             __                 
 # / ___|| |_ __ _| |_  |_ _|_ __ | |_ ___ _ __ / _| __ _  ___ ___  
@@ -34,6 +47,25 @@ class TIME_MODE(int, Enum):
 #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
 # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
+
+RaDec = namedtuple("RaDec", ["ra", "dec"])
+AltAz = namedtuple("AltAz", ["alt", "az"])
+RaDecType = (RaDec, RaDec(0.0, 0.0))
+AltAzType = (AltAz, AltAz(0.0, 0.0))
+
+class AltAzNode(Base.Node):
+    class Config:
+        vtype: VType  = (AltAz, AltAz(0.0, 0.0))
+    def parse_output(self, value):
+        return AltAz(*value)
+
+class RaDecNode(Base.Node):
+    class Config:
+        vtype: VType = (RaDec, RaDec(0.0, 0.0))
+    def parse_output(self, value):
+        return RaDec(*value)
+
+@set_data_model
 class CcsSimStat(Base):
     # Add the constants to this class 
     TIME_MODE = TIME_MODE
@@ -43,57 +75,28 @@ class CcsSimStat(Base):
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
         
-        target_alt : NC = NC(suffix="stat.data.target_observed_altaz[0]")
-        target_az : NC = NC(suffix="stat.data.target_observed_altaz[1]")
-        current_alt : NC = NC(suffix="stat.data.current_observed_altaz[0]")
-        current_az : NC = NC(suffix="stat.data.current_observed_altaz[1]")
-        time_lst: NC = NC(suffix="stat.data.time_lst")
-        time_tai: NC = NC(suffix="stat.data.time_tai")
-        time_utc: NC = NC(suffix="stat.data.time_utc")
+        pass
+        target_altaz =  AltAzNode.Config(suffix="stat.data.target_observed_altaz")
+        current_altaz = AltAzNode.Config(suffix="stat.data.current_observed_altaz")
+        time_lst: NC = NC(suffix="stat.data.time_lst", vtype=float)
+        time_tai: NC = NC(suffix="stat.data.time_tai", vtype=float)
+        time_utc: NC = NC(suffix="stat.data.time_utc", vtype=float)
         
-        north_angle: NC = NC(suffix="stat.data.north_angle")
-        pupil_angle: NC = NC(suffix="stat.data.pupil_angle")
-        elevation_direction_angle: NC = NC(suffix="stat.data.elevation_direction_angle")
-        ra_at_xy: NC = NC(suffix="stat.data.radec_at_altaz_at_requested_xy[0]")
-        dec_at_xy: NC = NC(suffix="stat.data.radec_at_altaz_at_requested_xy[1]")
-        alt_at_xy: NC = NC(suffix="stat.data.observed_altaz_at_requested_xy[0]")
-        az_at_xy: NC = NC(suffix="stat.data.observed_altaz_at_requested_xy[1]")
-        parallactic_angle: NC = NC(suffix="stat.data.parallactic_angle")
+        north_angle: NC = NC(suffix="stat.data.north_angle", vtype=float)
+        pupil_angle: NC = NC(suffix="stat.data.pupil_angle", vtype=float)
+        elevation_direction_angle: NC = NC(suffix="stat.data.elevation_direction_angle", vtype=float)
+        radec_at_xy = RaDecNode.Config(suffix="stat.data.radec_at_altaz_at_requested_xy")
+        altaz_at_xy = AltAzNode.Config(suffix="stat.data.observed_altaz_at_requested_xy")
+        parallactic_angle: NC = NC(suffix="stat.data.parallactic_angle", vtype=float)
 
-    target_alt_deg = Rad2Degree.Config( node="target_alt")
-    target_az_deg = Rad2Degree.Config( node="target_az")
-    current_alt_deg = Rad2Degree.Config( node="current_alt")
-    current_az_deg = Rad2Degree.Config( node="current_az")
-    north_angle_deg = Rad2Degree.Config( node="north_angle")
-    pupil_angle_deg = Rad2Degree.Config( node="pupil_angle")
-    elevation_direction_angle_deg = Rad2Degree.Config( node="elevation_direction_angle")
-    parallactic_angle_deg = Rad2Degree.Config( node="parallactic_angle")
-
-
-
-    # We can add some nodealias to compute some stuff on the fly 
-    # If they node to be configured one can set a configuration above 
-    
-    # Node Alias here     
-    # Build the Data object to be use with DataLink, the type and default are added here 
-    class Data(Base.Data):
         
-        target_alt: NV[float] = 0.0
-        target_az: NV[float] = 0.0 
-        current_alt: NV[float] = 0.0
-        current_az: NV[float] = 0.0    
-        time_lst: NV[float] = 0.0
-        time_tai: NV[float] = 0.0
-        time_utc: NV[float] = 0.0
 
-        north_angle: NV[float] = 0.0
-        pupil_angle: NV[float] = 0.0
-        elevation_direction_angle: NV[float] = 0.0
-        ra_at_xy: NV[float] = 0.0
-        dec_at_xy: NV[float] = 0.0
-        alt_at_xy: NV[float] = 0.0
-        az_at_xy: NV[float] = 0.0
-        parallactic_angle: NV[float] = 0.0
+    target_altaz_deg = Rad2DegreeVect.Config( node="target_altaz", vtype=AltAzType)
+    current_altaz_deg = Rad2DegreeVect.Config( node="current_altaz", vtype=AltAzType)
+    north_angle_deg = Rad2Degree.Config( node="north_angle", vtype=float)
+    pupil_angle_deg = Rad2Degree.Config( node="pupil_angle", vtype=float)
+    elevation_direction_angle_deg = Rad2Degree.Config( node="elevation_direction_angle", vtype=float)
+    parallactic_angle_deg = Rad2Degree.Config( node="parallactic_angle", vtype=float)
 
 
 

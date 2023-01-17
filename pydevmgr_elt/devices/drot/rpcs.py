@@ -1,7 +1,7 @@
 from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt.devices.drot.stat import MODE
 from pydevmgr_ua import UaInt16
-
+from pydevmgr_core import argc
 from enum import Enum
 Base = Motor.Rpcs
 
@@ -32,8 +32,8 @@ def mode_parser(mode):
 class DrotRpcs(Base):
 
     class Config(Base.Config):
-        rpcMoveAngle : RC = RC(suffix="RPC_MoveAngle", arg_parsers=[float])
-        rpcStartTrack: RC = RC(suffix="RPC_StartTrack", arg_parsers=[mode_parser, float])
+        rpcMoveAngle : RC = RC(suffix="RPC_MoveAngle", args=[argc('angle',float)])
+        rpcStartTrack: RC = RC(suffix="RPC_StartTrack", args=[argc('mode',mode_parser), argc('angle',float)])
          
         rpcStopTrack: RC = RC(suffix="RPC_StopTrack")
 

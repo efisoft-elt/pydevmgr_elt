@@ -1,6 +1,6 @@
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import  enum_txt
-
+from pydevmgr_core import argc
 from enum import Enum
 Base = EltDevice.Rpcs
 
@@ -44,8 +44,10 @@ class PiezoRpcs(Base):
         rpcEnable: RC = RC(suffix= 'RPC_Enable')
         rpcHome: RC = RC(suffix= 'RPC_Home')
         rpcInit: RC = RC(suffix= 'RPC_Init')
-        rpcMoveBits: RC = RC(suffix= 'RPC_MoveBit', arg_parsers=['UaInt16', 'UaInt16', 'UaInt16'] )
-        rpcMoveUser: RC = RC(suffix= 'RPC_MoveUser', arg_parsers=['Float', 'Float', 'Float'] )
+        rpcMoveBits: RC = RC(suffix= 'RPC_MoveBit', 
+            args=[argc('bits1','UaInt16'), argc('bits2','UaInt16'),  argc('bits3','UaInt16')] )
+        rpcMoveUser: RC = RC(suffix= 'RPC_MoveUser', 
+            args=[argc('pos1',float), argc('pos2',float), argc('pos3',float)] )
         rpcPos: RC = RC(suffix= 'RPC_Pos')
         rpcReset: RC = RC(suffix= 'RPC_Reset')
         rpcStop: RC = RC(suffix= 'RPC_Stop')

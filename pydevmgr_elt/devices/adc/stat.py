@@ -1,11 +1,12 @@
 
 from pydevmgr_core import   NodeVar
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
 from pydevmgr_elt.devices.motor import Motor
-
+from valueparser.parsers import Error 
 from enum import Enum
 Base = EltDevice.Stat
 
@@ -66,6 +67,7 @@ enum_group({
 
 
 ERROR = Motor.Stat.ERROR
+ErrorParser = Error.Config(Error=ERROR, UNKNOWN=ERROR.UNREGISTERED )
 
 class AXIS(int, Enum):
     """ AXIS enumeration has defined inside the PLC """
@@ -95,7 +97,7 @@ enum_group({ # associate mode to group (used for graphical representation)
     # \___ \| __/ _` | __|  | || '_ \| __/ _ \ '__| |_ / _` |/ __/ _ \ 
     #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
     # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
-
+@set_data_model
 class AdcStat(Base):
     # Add the constants to this class 
     ERROR = ERROR
@@ -106,15 +108,15 @@ class AdcStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        state:         NC = NC(suffix="stat.sm.nState")
-        substate:      NC = NC(suffix="stat.sm.nSubstate")
-        initialised:   NC = NC(suffix="stat.bInitialised")
-        track_mode:    NC = NC(suffix="stat.nMode")
-        alpha:         NC = NC(suffix="stat.apparent.alpha")
-        delta:         NC = NC(suffix="stat.apparent.delta")
-        error_code:    NC = NC(suffix="stat.nErrorCode")
-        status:        NC = NC(suffix="stat.nStatus")
-        local:         NC = NC(suffix="stat.bLocal")
+        state:         NC = NC(suffix="stat.sm.nState", vtype=int)
+        substate:      NC = NC(suffix="stat.sm.nSubstate", vtype=int)
+        initialised:   NC = NC(suffix="stat.bInitialised", vtype=bool)
+        track_mode:    NC = NC(suffix="stat.nMode", vtype=int)
+        alpha:         NC = NC(suffix="stat.apparent.alpha", vtype=float)
+        delta:         NC = NC(suffix="stat.apparent.delta", vtype=float)
+        error_code:    NC = NC(suffix="stat.nErrorCode", vtype=(ERROR, ERROR.OK), output_parser=ErrorParser)
+        status:        NC = NC(suffix="stat.nStatus", vtype=int)
+        local:         NC = NC(suffix="stat.bLocal", vtype=bool)
         
   
 
@@ -141,29 +143,6 @@ class AdcStat(Base):
     def is_standstill(self,  substate: int) -> bool:
         """ -> True is axis is standstill """
         return substate == self.SUBSTATE.OP_STANDSTILL
-
     
-    # We can add some nodealias to compute some stuff on the fly 
-    # If they node to be configured one can set a configuration above 
-    
-    # Node Alias here     
-    # Build the Data object to be use with DataLink, the type and default are added here 
-    class Data(Base.Data):
-        error_code: NV[ERROR] = ERROR.OK
-        initialised:     NV[bool] =   False
-        track_mode:      NV[int] =    0  
-        alpha:           NV[float] =  0.0 
-        delta:           NV[float] =  0.0 
-        error_code:      NV[int] =    0  
-        status:          NV[int] =    0  
-        local:           NV[bool] =   False  
-
-        track_mode: NV[int] = 0  
-        is_moving: NV[bool] = False
-        is_standstill : NV[bool] = False 
-        is_presetting : NV[bool] = False
-        is_tracking: NV[bool] = False 
-        pass
-
 if __name__ == "__main__":
     AdcStat( )
