@@ -1,6 +1,7 @@
 
 import weakref
 from pydevmgr_core import   NodeVar, set_data_model
+from pydevmgr_core.base.base import ParentWeakRef
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -176,7 +177,7 @@ enum_txt ({
     # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
 @set_data_model
-class MotorStat(Base):
+class MotorStat(ParentWeakRef, Base):
     # Add the constants to this class 
     ERROR = ERROR
     SUBSTATE = SUBSTATE
@@ -221,18 +222,7 @@ class MotorStat(Base):
         self.positions = []
         self.tolerance = 1.0
     
-    @staticmethod 
-    def parent_ref():
-        return None
-    
-    @classmethod
-    def new(cls, parent, name, config=None):
-        # record a weakreference of the parent (Motor) object 
-        # it is used by pos_name
-        stat = super().new(parent, name, config)
-        stat.parent_ref = weakref.ref(parent)
-        return stat
-
+        
     @nodealias("substate")
     def is_moving(self, substate)-> bool:
         """ -> True is axis is moving """
@@ -246,7 +236,7 @@ class MotorStat(Base):
     
     @nodealias("pos_actual")
     def pos_name(self, pos_actual)-> float:
-        parent = self.parent_ref()
+        parent = self.get_parent()
         if not parent: return ''
         try:
             positions = parent.config.positions
@@ -260,47 +250,6 @@ class MotorStat(Base):
         return ''
   
   
-
-    # We can add some nodealias to compute some stuff on the fly 
-    # If they node to be configured one can set a configuration above 
-    
-    # Node Alias here     
-    # Build the Data object to be use with DataLink, the type and default are added here 
-    # class Data(Base.Data):
-    #     axis_brake: NodeVar[bool] = False
-    #     axis_enable: NodeVar[bool] = False
-    #     axis_info_data1: NodeVar[int] = 0
-    #     axis_info_data2: NodeVar[int] = 0
-    #     axis_inposition: NodeVar[bool] = False
-    #     axis_lock: NodeVar[bool] = False
-    #     axis_ready: NodeVar[bool] = False
-    #     backlash_step: NodeVar[int] = 0
-    #     error_code: NodeVar[int] = 0
-    #     init_action: NodeVar[int] = 0
-    #     init_step: NodeVar[int] = 0
-    #     initialised: NodeVar[bool] = False
-    #     local: NodeVar[bool] = False
-    #     mode: NodeVar[int] = 0
-    #     pos_actual: NodeVar[float] = 0.0
-    #     pos_error: NodeVar[float] = 0.0
-    #     pos_target: NodeVar[float] = 0.0
-    #     scale_factor: NodeVar[float] = 0.0
-    #     signal_index: NodeVar[bool] = False
-    #     signal_lhw: NodeVar[bool] = False
-    #     signal_lstop: NodeVar[bool] = False
-    #     signal_ref: NodeVar[bool] = False
-    #     signal_uhw: NodeVar[bool] = False
-    #     signal_ustop: NodeVar[bool] = False
-    #     state: NodeVar[int] = 0
-    #     status: NodeVar[int] = 0
-    #     substate: NodeVar[int] = 0
-    #     vel_actual: NodeVar[float] = 0.0
-    #     # ~~~~~~~~Add some node alis as well 
-    #     is_moving: NodeVar[bool] = False
-    #     is_standstill: NodeVar[bool] = False
-    #     pos_name: NodeVar[str] = ""
-
-
 if __name__ == "__main__":
     MotorStat( local=NC(parser=float) )
     print("OK")

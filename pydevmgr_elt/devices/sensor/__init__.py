@@ -1,4 +1,5 @@
 from pydantic.main import BaseModel
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_elt.devices.sensor.stat import SensorStat as Stat
 from pydevmgr_elt.devices.sensor.cfg  import SensorCfg as Cfg
 from pydevmgr_elt.devices.sensor.rpcs import SensorRpcs as Rpcs
@@ -73,6 +74,7 @@ class BaseSensor(Base):
         rpcs: Rpcs = Rpcs()
  
 @register
+@set_data_model
 class Sensor(BaseSensor):
     class Config:
         type: str = "Sensor"
@@ -94,6 +96,7 @@ class Sensor(BaseSensor):
 
 
 @register
+@set_data_model
 class Sensor8_4(BaseSensor):
     class Config:
         type: str = "Sensor8_4"

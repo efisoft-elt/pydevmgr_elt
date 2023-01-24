@@ -1,7 +1,9 @@
 from pydantic import BaseModel, validator
-from typing import List
+from typing import List, Type
 from enum import Enum 
 from dataclasses import dataclass
+
+from pydevmgr_core.base.node_alias import NodeAlias
 
 
 
@@ -74,6 +76,41 @@ class InitSeqequenceStep(BaseModel):
 class InitialisationConfig(BaseModel):
     __root__ : List[InitSeqequenceStep] = []
     
+@dataclass
+class InitSeq:
+    action_number: InitSeqNumber = InitSeqNumber.END
+    value1: float = 0.0
+    value2: float = 0.0
+    
+    @property
+    def action_name(self):
+        try:
+            n = InitSeqNumber(self.action_number)
+        except ValueError:
+            return ""
+        return n.name
+
+class InitSeqNode(NodeAlias):
+    """ Alias node returning a structure to handle sequence """
+    class Config:
+        seq_number: int 
+        vtype: Type = InitSeq
+
+    @classmethod
+    def new(cls, parent, name, config: Config = None ):
+        num = config.seq_number
+        nodes =  (f"init_seq{num}_action", 
+                  f"init_seq{num}_value1",  
+                  f"init_seq{num}_value2")
+        config.nodes = nodes
+        return super().new(parent, name, config)
+    
+    def fget(self, action , val1, val2):
+        return InitSeq(action, val1, val2)
+
+    def fset(self, init_seq: InitSeq):
+        return (init_seq.action_number, init_seq.value1, init_seq.value2)
+
 
 
 
@@ -85,8 +122,10 @@ class InitialisationConfig(BaseModel):
 #     sequence : List[str] = []
 #     END          : SeqStepConfig = SeqStepConfig(index=0) 
 #     FIND_INDEX   : SeqStepConfig = SeqStepConfig(index=1)
-#     FIND_REF_LE  : SeqStepConfig = SeqStepConfig(index=2)
-#     FIND_REF_UE  : SeqStepConfig = SeqStepConfig(index=3)
+#     FIND_REF_LE  : SeqStepConfig = SeqStepConfig(index=2)<pydevmgr_elt.base.eltnode.EltNode at 0x7fdb77284ef0>: 0,
+#  <pydevmgr_elt.base.eltnode.EltNode at 0x7fdb77284fd0>: 0.0,
+#  <pydevmgr_elt.base.eltnode.EltNode at 0x7fdb772870f0>: 0.0
+# #     FIND_REF_UE  : SeqStepConfig = SeqStepConfig(index=3)
 #     FIND_LHW     : SeqStepConfig = SeqStepConfig(index=4)
 #     FIND_UHW     : SeqStepConfig = SeqStepConfig(index=5)  
 #     DELAY        : SeqStepConfig = SeqStepConfig(index=6)
@@ -136,16 +175,32 @@ def init_sequence_to_cfg(initialisation, loockup=init_sequence_loockup):
     # set the init sequence    
     cfg_dict = {}
     for i in range(1, 11):
-        cfg_dict["init_seq{}_action".format(i)] = int(InitSeqNumber.END)
-        cfg_dict["init_seq{}_value1".format(i)] = 0.0
-        cfg_dict["init_seq{}_value2".format(i)] = 0.0
-
+        cfg_dict[f"init_seq{i}"] = InitSeq(
+                    action_number=int(InitSeqNumber.END), 
+                    value1=0.0 , 
+                    value2=0.0 
+                    )
+        
 
     for i,step in enumerate(initialisation, start=1):
         definition = loockup[step.step]
-        cfg_dict["init_seq{}_action".format(i)] = int(definition.number)
-        cfg_dict["init_seq{}_value1".format(i)] = step.value1 
-        cfg_dict["init_seq{}_value2".format(i)] = step.value2
+        cfg_dict[f"init_seq{i}"] = InitSeq( 
+                    int(definition.number), 
+                    value1 = step.value1, 
+                    value2 = step.value2 
+                )
+
+    # for i in range(1, 11):
+    #     cfg_dict["init_seq{}_action".format(i)] = int(InitSeqNumber.END)
+    #     cfg_dict["init_seq{}_value1".format(i)] = 0.0
+    #     cfg_dict["init_seq{}_value2".format(i)] = 0.0
+
+
+    # for i,step in enumerate(initialisation, start=1):
+    #     definition = loockup[step.step]
+    #     cfg_dict["init_seq{}_action".format(i)] = int(definition.number)
+    #     cfg_dict["init_seq{}_value1".format(i)] = step.value1 
+    #     cfg_dict["init_seq{}_value2".format(i)] = step.value2
     
     return cfg_dict
 

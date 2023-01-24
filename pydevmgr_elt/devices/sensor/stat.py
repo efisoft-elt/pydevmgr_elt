@@ -1,5 +1,6 @@
 
 from pydevmgr_core import   NodeVar
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
@@ -74,6 +75,7 @@ enum_txt ({
     #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
     # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
+@set_data_model
 class SensorStat(Base):
     # Add the constants to this class 
     ERROR = ERROR
@@ -85,26 +87,14 @@ class SensorStat(Base):
         # all configured node will be accessible by the Interface
 
 
-        state:          NC = NC(suffix="stat.nState")
-        substate:       NC = NC(suffix="stat.nSubstate")
-        local:          NC = NC(suffix="stat.bLocal")
-        error_code:     NC = NC(suffix="stat.nErrorCode")
+        substate:       NC = NC(suffix="stat.nSubstate", vtype=(SUBSTATE, SUBSTATE.NONE), output_parser=SUBSTATE)
+        local:          NC = NC(suffix="stat.bLocal", vtype=bool)
+        error_code:     NC = NC(suffix="stat.nErrorCode", vtype=int)
 
     @nodealias("substate")
-    def is_ready(self, substate):
+    def is_ready(self, substate) -> bool:
         """ Alias node: True if lamp is ready (substate NOTOP_READY_ON or NOTOP_READY_OFF) """
         return substate in [self.SUBSTATE.NOTOP_READY]
-    
-
-
-    # We can add some nodealias to compute some stuff on the fly 
-    # If they node to be configured one can set a configuration above 
-    
-    # Node Alias here     
-    # Build the Data object to be use with DataLink, the type and default are added here 
-    class Data(Base.Data):
-        error_code: NV[int] = 0
-       
 
 if __name__ == "__main__":
-    SensorStat( local=NC(parser=float) )
+    SensorStat()

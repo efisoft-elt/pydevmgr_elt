@@ -16,6 +16,18 @@ NC = N.Config
 NV = NodeVar # used in Data 
 
 
+
+
+@dataclass
+class StateInfo:
+    code: int = 0 
+    text: str = ""
+    group: GROUP = GROUP.UNKNOWN 
+    def __iter__(self):
+        yield self.code 
+        yield self.text 
+        yield self.group
+
 ########################
 ### STATE 
 class STATE(int, Enum):
@@ -77,15 +89,7 @@ enum_txt({
 })
 
 
-@dataclass
-class StateInfo:
-    code: int = 0 
-    text: str = ""
-    group: GROUP = GROUP.UNKNOWN 
-    def __iter__(self):
-        yield self.code 
-        yield self.text 
-        yield self.group
+
 
 class StatInterface(EltInterface):
      
@@ -95,9 +99,9 @@ class StatInterface(EltInterface):
     StateInfo = StateInfo 
     
     class Config(EltInterface.Config):
-        state:             NC = NC(suffix="stat.nState")
-        substate:          NC = NC(suffix="stat.nSubstate") 
-        error_code:        NC = NC(suffix="stat.nErrorCode")
+        state:             NC = NC(suffix="stat.nState" , vtype=(STATE, STATE.NOTOP), output_parser=STATE)
+        substate:          NC = NC(suffix="stat.nSubstate", vtype=int) 
+        error_code:        NC = NC(suffix="stat.nErrorCode", vtype=int)
     
 
     @nodealias("state", vtype=bool)

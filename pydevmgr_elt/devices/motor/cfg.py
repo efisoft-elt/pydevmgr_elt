@@ -4,7 +4,7 @@ from pydevmgr_core import  NodeAlias,  NodeVar, BaseNode
 from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.devices.motor.axis_type import  AXIS_TYPE, AxisType # just needed to record axis type parser
-from pydevmgr_elt.devices.motor.init_seq import InitSeqNumber, init_sequence_loockup
+from pydevmgr_elt.devices.motor.init_seq import InitSeq, InitSeqNode, InitSeqNumber, init_sequence_loockup
 from enum import Enum
 from dataclasses import dataclass
 Base = EltDevice.Cfg
@@ -13,40 +13,11 @@ N = Base.Node # Base Node
 NC = N.Config
 NV = NodeVar # used in Data 
 
-@dataclass
-class InitSeq:
-    action_number: InitSeqNumber = InitSeqNumber.END
-    value1: float = 0.0
-    value2: float = 0.0
-    
-    @property
-    def action_name(self):
-        try:
-            n = InitSeqNumber(self.action_number)
-        except ValueError:
-            return ""
-        return n.name
 
-class InitSeqNode(NodeAlias):
-    """ Alias node returning a structure to handle sequence """
-    class Config:
-        seq_number: int 
-        vtype: Type = InitSeq
 
-    @classmethod
-    def new(cls, parent, name, config: Config = None ):
-        num = config.seq_number
-        nodes =  (f"init_seq{num}_action", 
-                  f"init_seq{num}_value1",  
-                  f"init_seq{num}_value2")
-        config.nodes = nodes
-        return super().new(parent, name, config)
-    
-    def fget(self, action , val1, val2):
-        return InitSeq(action, val1, val2)
 
-    def fset(self, init_seq: InitSeq):
-        return (init_seq.action_number, init_seq.value1, init_seq.value2)
+
+
 
 
 @set_data_model    

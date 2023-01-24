@@ -1,9 +1,11 @@
 
 from pydevmgr_core import NodeVar
+from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_core.decorators import nodealias 
 
 from pydevmgr_elt.base import EltDevice,  GROUP
 from pydevmgr_elt.base.tools import _inc, enum_group, enum_txt
+from valueparser.parsers import Error 
 
 from enum import Enum
 Base = EltDevice.Stat
@@ -99,7 +101,7 @@ enum_txt ({
         ERROR.UNREGISTERED:        'ERROR: Unregistered Error'
     })
 
-
+ErrorParser = Error.Config(Error=ERROR, UNKNOWN=ERROR.UNREGISTERED)
 
     #  ____  _        _     ___       _             __                 
     # / ___|| |_ __ _| |_  |_ _|_ __ | |_ ___ _ __ / _| __ _  ___ ___  
@@ -107,6 +109,7 @@ enum_txt ({
     #  ___) | || (_| | |_   | || | | | ||  __/ |  |  _| (_| | (_|  __/ 
     # |____/ \__\__,_|\__| |___|_| |_|\__\___|_|  |_|  \__,_|\___\___| 
 
+@set_data_model
 class ShutterStat(Base):
     # Add the constants to this class 
     ERROR = ERROR
@@ -116,33 +119,32 @@ class ShutterStat(Base):
         # define all the default configuration for each nodes. 
         # e.g. the suffix can be overwriten in construction (from a map file for instance)
         # all configured node will be accessible by the Interface
-        error_code: NC = NC(suffix='stat.nErrorCode' )
-        local: NC = NC(suffix='stat.bLocal' )
-        state: NC = NC(suffix='stat.nState' )
-        status: NC = NC(suffix='stat.nStatus' )
-        substate: NC = NC(suffix='stat.nSubstate' )
-
+        error_code: NC = NC(suffix='stat.nErrorCode', vtype=(ERROR, ERROR.OK), output_parser=ErrorParser)
+        local: NC = NC(suffix='stat.bLocal', vtype=bool )
+        state: NC = NC(suffix='stat.nState', vtype=int )
+        status: NC = NC(suffix='stat.nStatus', vtype=int )
+        substate: NC = NC(suffix='stat.nSubstate', vtype=int )
 
     # We can add some nodealias to compute some stuff on the fly 
     # If they node to be configured one can set a configuration above 
     
     @nodealias("substate")
-    def is_ready(self, substate):
+    def is_ready(self, substate) -> bool:
         """ True if device is ready """
         return substate in [self.SUBSTATE.NOT_OP_READY_OPEN, self.SUBSTATE.NOT_OP_READY_CLOSED]
     
     @nodealias("substate")
-    def is_not_ready(self, substate):
+    def is_not_ready(self, substate) -> bool:
         """ True if device is not ready """
         return substate in [self.SUBSTATE.NOT_OP_NOT_READY]
     
     @nodealias("substate")
-    def is_open(self, substate):
+    def is_open(self, substate)-> bool:
         """ True if shutter is OPEN  """
         return substate in [self.SUBSTATE.OP_OPEN, self.SUBSTATE.NOT_OP_READY_OPEN]
     
     @nodealias("substate")
-    def is_closed(self, substate):
+    def is_closed(self, substate)-> bool:
         return substate in [self.SUBSTATE.OP_CLOSED, self.SUBSTATE.NOT_OP_READY_CLOSED]
         
     @nodealias("substate")
@@ -150,18 +152,7 @@ class ShutterStat(Base):
         """ -> True if device is in error state:  NOP_ERROR or OP_ERROR """
         return substate in [self.SUBSTATE.NOT_OP_FAILURE, self.SUBSTATE.OP_FAILURE]
             
-    
-    # Build the Data object to be use with DataLink, the type and default are added here 
-    class Data(Base.Data):
-        error_code: NV[ERROR] = ERROR.OK
-        local: NV[bool] = False
-        state: NV[int] = 0
-        status: NV[int] = 0
-        substate: NV[int] = 0
+
            
 if __name__ == "__main__":
-    s = ShutterStat( local=NC(parser=float) )
-    assert s.Data(local=1).local == True
-    assert s.config.local.suffix == "stat.bLocal" # this should not change because of the Default Type
-    assert isinstance(s.local, N)
-    s.is_closed
+    s = ShutterStat( )

@@ -23,4 +23,4 @@ if False:
             DataLink(ccs.ctrl, data ).download()
             print(data)
 
-    test_ccs_stat_live()
+    test_ccs_cfg_live()
