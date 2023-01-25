@@ -1,6 +1,4 @@
-from os import wait
-from typing import Type
-from pydevmgr_core import  NodeAlias,  NodeVar, BaseNode
+from pydevmgr_core import    NodeVar
 from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.devices.motor.axis_type import  AXIS_TYPE, AxisType # just needed to record axis type parser
@@ -12,10 +10,6 @@ Base = EltDevice.Cfg
 N = Base.Node # Base Node
 NC = N.Config
 NV = NodeVar # used in Data 
-
-
-
-
 
 
 
