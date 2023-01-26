@@ -1,5 +1,4 @@
 from enum import Enum
-import weakref
 from pydevmgr_core.base.base import ParentWeakRef
 from pydevmgr_core.base.node_alias import BaseNodeAlias1 
 

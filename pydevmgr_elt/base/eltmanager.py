@@ -37,9 +37,10 @@ class EltDeviceFactory(EltDeviceIO):
         else:
             return super().build(parent, name) 
 
+DeviceList = FactoryList[EltDeviceFactory]
 class ManagerServerConfig(BaseModel):
     fits_prefix: str = ""
-    devices : List[EltDeviceFactory] = [] # list of device 
+    devices : DeviceList = DeviceList() # list of device 
     cmdtout : int = 60000    # not yet used in pydevmgr 
     # ~~~~~~ Not Used by pydevmgr ~~~~~~~~~~~~~~~~~~~~~~
     req_endpoint    : str =  "zpb.rr://127.0.0.1:12082/"

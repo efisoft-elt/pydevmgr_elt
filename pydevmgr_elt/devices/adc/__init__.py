@@ -1,3 +1,4 @@
+from systemy import FactoryList
 from pydevmgr_elt.devices.adc.stat import AdcStat as Stat, AXIS, MODE
 from pydevmgr_elt.devices.adc.cfg  import AdcCfg as Cfg
 from pydevmgr_elt.devices.adc.rpcs import AdcRpcs as Rpcs
@@ -45,7 +46,11 @@ class AdcCtrlConfig(Base.Config.CtrlConfig):
     longitude : Optional[float] = 1.228800386
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
+
+
+MotorList = FactoryList[MotorFactory] 
+
 class AdcConfig(Base.Config , extra="forbid"):
     CtrlConfig = AdcCtrlConfig
     MotorFactory = MotorFactory
@@ -58,10 +63,10 @@ class AdcConfig(Base.Config , extra="forbid"):
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     type: str = "Adc"
     ctrl_config : CtrlConfig= CtrlConfig()
-    motors: List[MotorFactory] = [
+    motors: MotorList = MotorList([
                  MotorFactory( prefix = 'motor1', name= 'motor1'),
                  MotorFactory( prefix = 'motor2', name= 'motor2'),
-                ]
+                ])
     
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
@@ -221,7 +226,7 @@ if __name__ == "__main__":
     adc = Adc('adc')    
     from pydevmgr_elt import open_elt_device
     
-    adc = open_elt_device('tins/adc1.yml', 'adc1')
-    print(adc.motor1.config.address)
-    
-    print("OK")
+    adc = open_elt_device('tins/adc1.yml(adc1)')
+    # print(adc.motor1.config.address)
+    print( adc.motors[1] )
+    # print("OK")

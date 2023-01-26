@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "pydevmgr_elt"
-version = "0.6a5"
+version = "0.6a6"
 description = "pydevmgr pluggin for Elt devices"
 license = "CeCILL Free Software License Agreement v2.1"
 authors = ["Sylvain Guieu <sylvain.guieu@univ-grenoble-alpes.fr>"]
@@ -9,7 +9,7 @@ packages = [{include = "pydevmgr_elt"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-pydevmgr-ua = "0.6.a2"
+pydevmgr-ua = "0.6.a4"
 jinja2 = "^3.1.2"
 
 [tool.poetry.group.dev.dependencies]

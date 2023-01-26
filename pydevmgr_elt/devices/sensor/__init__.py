@@ -1,5 +1,6 @@
 from pydantic.main import BaseModel
 from pydevmgr_core.base.dataclass import set_data_model
+from systemy import FactoryList
 from pydevmgr_elt.devices.sensor.stat import SensorStat as Stat
 from pydevmgr_elt.devices.sensor.cfg  import SensorCfg as Cfg
 from pydevmgr_elt.devices.sensor.rpcs import SensorRpcs as Rpcs
@@ -28,7 +29,10 @@ class SensorCtrlConfig(Base.Config.CtrlConfig):
     timeout:          int  = 2000 
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    
+
+
+SensorChannelFactoryList = FactoryList[SensorChannelAlias.Config]
+
 class BaseSensorConfig(Base.Config):
     CtrlConfig = SensorCtrlConfig
     
@@ -43,7 +47,7 @@ class BaseSensorConfig(Base.Config):
     type: str = "BaseSensor"
     ctrl_config : CtrlConfig= CtrlConfig()
     
-    channels: List[SensorChannelAlias.Config] = []
+    channels: SensorChannelFactoryList = SensorChannelFactoryList()
 
     cfg: Cfg = Cfg()
     stat: Stat = Stat()
@@ -111,4 +115,5 @@ class Sensor8_4(BaseSensor):
         
 
 if __name__ == "__main__":
-    Sensor()
+    print(Sensor().channels, type(Sensor().channels))
+    print( type(Sensor(channels=[] ).channels )) 

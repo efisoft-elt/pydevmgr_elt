@@ -1,4 +1,5 @@
 import yaml
+
 from . import io
 from .tools import    get_enum_txt
 from .config import eltconfig
@@ -145,9 +146,9 @@ class EltDeviceConfig(UaDevice.Config):
         return d
 
 
-def open_elt_device(cfgfile, key=None, path=0, prefix=""):
+def open_elt_device(cfgfile, path=None, prefix="", key=None, Factory=DeviceFactory):
     """ open a device """
-    return open_device(cfgfile, key=key, path=path, prefix=prefix) 
+    return open_device(cfgfile,  path=path, prefix=prefix, key=key, Factory=Factory) 
 
 
 class RpcInterface(EltInterface):
