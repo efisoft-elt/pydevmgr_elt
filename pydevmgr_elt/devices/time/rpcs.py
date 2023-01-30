@@ -1,7 +1,7 @@
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_elt.base.tools import  enum_txt
 from pydevmgr_core import argc
-from valueparser import BaseParser
+from valueparser import Parser
 from systemy import register_factory
 
 from datetime import datetime 
@@ -32,7 +32,9 @@ enum_txt ( {
 })
 
 @register_factory("Parser/PlcTime")
-class PlcTime(BaseParser, fmt='%Y-%m-%d-%H:%M:%S.%f'):
+class PlcTime(Parser):
+    class Config:
+        fmt='%Y-%m-%d-%H:%M:%S.%f'
     @staticmethod
     def __parse__(value, config):
         if isinstance(value, datetime):

@@ -1,5 +1,5 @@
 from enum import Enum 
-from valueparser import BaseParser
+from valueparser import Parser
 from systemy import register_factory
 
 from pydevmgr_ua import UaInt32
@@ -28,7 +28,7 @@ def axis_type(axis_type):
 
 # a parser class for axis type
 @register_factory("Parser/AxisType")
-class AxisType(BaseParser):
+class AxisType(Parser):
     @staticmethod
     def __parse__(value, config):
         return axis_type(value)   
