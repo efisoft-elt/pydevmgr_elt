@@ -221,4 +221,5 @@ class Motor(Base):
         return abs(apos-pos)<tol
 
 if __name__ == "__main__":
+    set_data_model(Motor)
     Motor()

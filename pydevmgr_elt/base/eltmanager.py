@@ -337,7 +337,8 @@ class EltManager(BaseManager):
     
     StatInterface = ManagerStatInterface    
     stat = StatInterface.Config()
-        
+    
+    _devices_dict = FactoryDict[str, BaseDevice.Config]( {} )
     def __init__(self, 
           key : Optional[str] = None, 
           config : Union[ManagerConfig,ManagerIOConfig, Dict] = None, 
@@ -347,7 +348,7 @@ class EltManager(BaseManager):
        
         super().__init__(key, config=config, **kwargs)
 
-        self._devices_dict = ObjectDict()
+        # self._devices_dict = ObjectDict()
         
         if devices is not None:
            self._add_devices(devices)
@@ -356,13 +357,13 @@ class EltManager(BaseManager):
             self._add_devices(self.config.server.devices)
         
 
-    def __dir__(self):
-        lst = [name for name in self._devices_dict]
-        for sub in self.__class__.__mro__:
-            for k in sub.__dict__:
-                if not k.startswith('_'):
-                    lst.append(k)
-        return lst 
+    # def __dir__(self):
+    #     lst = [name for name in self._devices_dict]
+    #     for sub in self.__class__.__mro__:
+    #         for k in sub.__dict__:
+    #             if not k.startswith('__'):
+    #                 lst.append(k)
+    #     return lst 
     
     def _add_devices(self, devices):
         if isinstance( devices, (dict, FactoryDict)):
