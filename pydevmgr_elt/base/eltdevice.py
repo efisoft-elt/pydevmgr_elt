@@ -11,7 +11,10 @@ from .eltstat import StatInterface
 from .eltengine import EltEngine 
 from .register import register
 
-from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
+try:
+    from pydantic.v1 import BaseModel,  AnyUrl,  validator, Field, root_validator
+except ModuleNotFoundError:
+    from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
 from pydevmgr_core import (upload, NodeVar, open_device,  get_class, DeviceFactory, KINDS, BaseFactory) 
 from pydevmgr_core.nodes import Local
 from pydevmgr_ua import UaDevice
@@ -87,7 +90,7 @@ class EltDeviceConfig(UaDevice.Config):
     # ###############################################
     class Config: # BaseModel configuration of pydantic 
         # ignore/allow extra stuff for auto setup
-        extra = 'allow'
+        extra = 'forbid'
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

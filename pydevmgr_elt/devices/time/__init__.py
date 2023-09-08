@@ -1,4 +1,7 @@
-from pydantic.config import Extra
+try:
+    from pydantic.v1.config import Extra
+except ModuleNotFoundError:
+    from pydantic.config import Extra
 from pydevmgr_elt.devices.time.stat import TimeStat as Stat, MODE
 from pydevmgr_elt.devices.time.cfg  import TimeCfg as Cfg
 from pydevmgr_elt.devices.time.rpcs import TimeRpcs as Rpcs

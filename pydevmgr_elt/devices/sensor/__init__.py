@@ -1,4 +1,3 @@
-from pydantic.main import BaseModel
 from pydevmgr_core.base.dataclass import set_data_model
 from systemy import FactoryList
 from pydevmgr_elt.devices.sensor.stat import SensorStat as Stat

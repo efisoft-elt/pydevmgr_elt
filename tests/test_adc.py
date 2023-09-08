@@ -1,4 +1,3 @@
-from pydantic.main import BaseModel
 from pydevmgr_core.base.datamodel import DataLink, NodeVar
 import pytest 
 from pydevmgr_elt import Adc 

@@ -7,7 +7,7 @@ motor2:
   simulated: false
   ignored: false
   address: opc.tcp://myplc.local:4840
-  simaddr: opc.tcp://127.0.0.1:7578
+  sim_endpoint: opc.tcp://127.0.0.1:7578
   mapfile: "tins/mapMotor.yml"
   fits_prefix: "MOT1"
   axis_type:             LINEAR

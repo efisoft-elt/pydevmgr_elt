@@ -8,7 +8,10 @@ from pydevmgr_elt.devices.motor.positions import PositionConfig
 
 from pydevmgr_elt.base import EltDevice, register
 from typing import Any, List, Optional, Dict, Union
-from pydantic import validator
+try:
+    from pydantic.v1 import validator
+except ModuleNotFoundError:
+    from pydantic import validator
 Base = EltDevice
 
 

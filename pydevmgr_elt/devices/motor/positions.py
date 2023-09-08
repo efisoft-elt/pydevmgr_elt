@@ -1,7 +1,8 @@
 from ctypes import string_at
-from pydantic import BaseModel, root_validator  
-from typing import List, Dict
-from collections import OrderedDict
+try:
+    from pydantic.v1 import BaseModel
+except ModuleNotFoundError:
+    from pydantic import BaseModel
 
 
 

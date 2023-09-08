@@ -5,7 +5,10 @@ from pydevmgr_elt import io
 from jinja2 import Template
 from collections import namedtuple  
 from typer import Argument, echo, run , Option
-from pydantic import BaseModel, Field
+try:
+    from pydantic.v1 import BaseModel, Field
+except ModuleNotFoundError:
+    from pydantic import BaseModel, Field
 from pydantic_cli import run_and_exit, to_runner
 
 print(sys.argv)

@@ -21,7 +21,10 @@ import logging
 from collections import OrderedDict
 from warnings import warn
 
-from pydantic import create_model, BaseModel, root_validator, validator, AnyUrl
+try:
+    from pydantic.v1 import create_model, BaseModel, root_validator, validator, AnyUrl
+except ModuleNotFoundError:
+    from pydantic import create_model, BaseModel, root_validator, validator, AnyUrl
 from typing import Any, Iterator, List, Tuple, Type, Optional, Dict, Union, Iterable
 import warnings
 

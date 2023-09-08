@@ -7,7 +7,7 @@ shutter1:
   simulated: false
   ignored: false
   address: opc.tcp://myplc.local:4840
-  simaddr: opc.tcp://134.171.2.213:7576      # Simulation address
+  sim_endpoint: opc.tcp://134.171.2.213:7576      # Simulation address
   mapfile: "tins/mapShutter.yml"
   fits_prefix: "SHUT1"
   ctrl_config:

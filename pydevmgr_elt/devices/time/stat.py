@@ -1,5 +1,8 @@
 
-from pydantic.config import Extra
+try:
+    from pydantic.v1.config import Extra
+except ModuleNotFoundError:
+    from pydantic.config import Extra
 from pydevmgr_core import   NodeVar
 from pydevmgr_core.base.dataclass import set_data_model
 from pydevmgr_core.decorators import nodealias 
