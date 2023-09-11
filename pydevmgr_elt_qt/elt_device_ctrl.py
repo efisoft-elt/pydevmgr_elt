@@ -1,6 +1,9 @@
 from pydevmgr_core import NodeVar, BaseData
 from pydevmgr_core_qt import find_ui, BaseUiLinker, get_style, record_widget_factory, Outputs
-from pydantic import BaseModel
+try:
+    from pydantic.v1 import BaseModel
+except ModuleNotFoundError:
+    from pydantic import BaseModel
 from .io import find_ui 
 
 from PyQt5 import uic

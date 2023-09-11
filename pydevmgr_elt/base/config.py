@@ -1,4 +1,3 @@
-from pydantic import BaseModel
 from pydevmgr_ua.config import UAConfig, uaconfig
 from .io import IOConfig
 

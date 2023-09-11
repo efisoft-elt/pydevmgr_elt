@@ -1,4 +1,7 @@
-from pydantic import BaseModel, root_validator  
+try:
+    from pydantic.v1 import BaseModel, root_validator  
+except ModuleNotFoundError:
+    from pydantic import BaseModel, root_validator  
 from typing import List, Dict
 from collections import OrderedDict
 

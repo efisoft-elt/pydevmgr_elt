@@ -8,7 +8,10 @@ from pydevmgr_elt.devices.motor.axis_type import AXIS_TYPE
 from pydevmgr_elt.base import EltDevice
 from pydevmgr_core import record_class, Defaults
 from typing import Any, Optional, Dict, Union
-from pydantic import validator
+try:
+    from pydantic.v1 import validator
+except ModuleNotFoundError:
+    from pydantic import validator
 Base = EltDevice
 
 

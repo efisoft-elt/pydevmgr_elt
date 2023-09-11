@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+try:
+    from pydantic.v1 import BaseModel
+except ModuleNotFoundError:
+    from pydantic import BaseModel
 from pydevmgr_elt import NodeVar, EltDevice
 
 from PyQt5 import uic

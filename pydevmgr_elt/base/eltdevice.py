@@ -7,7 +7,10 @@ from .eltnode import EltNode
 from .eltrpc import EltRpc
 from .eltstat import StatInterface
 
-from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
+try:
+    from pydantic.v1 import BaseModel,  AnyUrl,  validator, Field, root_validator
+except ModuleNotFoundError:
+    from pydantic import BaseModel,  AnyUrl,  validator, Field, root_validator
 from pydevmgr_core import (upload, NodeVar, open_device, record_class, GenInterface)
 from pydevmgr_core.nodes import Local
 from pydevmgr_ua import UaDevice

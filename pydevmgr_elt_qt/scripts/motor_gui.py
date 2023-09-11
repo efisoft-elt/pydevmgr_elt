@@ -6,7 +6,10 @@ from pydevmgr_elt_qt import MotorCtrl, MotorCfg
 from pydevmgr_core_qt import BaseUiLinker
 from pydevmgr_core import io
 
-from pydantic import BaseModel, Field
+try:
+    from pydantic.v1 import BaseModel, Field
+except ModuleNotFoundError:
+    from pydantic import BaseModel, Field
 from PyQt5 import  QtCore
 from PyQt5.QtWidgets import QApplication, QWidget, QHBoxLayout, QVBoxLayout, QPushButton, QTabWidget, QMainWindow, QAction, qApp, QMenu
 import numpy as np

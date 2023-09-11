@@ -6,7 +6,10 @@ from .tools import fjoin
 from .eltnode import EltNode
 from .eltrpc import EltRpc
 from . import io
-from pydantic import root_validator
+try:
+    from pydantic.v1 import root_validator
+except ModuleNotFoundError:
+    from pydantic import root_validator
 
 
 @record_class

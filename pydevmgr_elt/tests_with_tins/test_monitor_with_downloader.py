@@ -3,7 +3,10 @@ from pydevmgr_elt import Motor, nodes, BaseMonitor, NodeVar, wait, Downloader
 from pydevmgr_core import signals 
 
 
-from pydantic import Field 
+try:
+    from pydantic.v1 import Field 
+except ModuleNotFoundError:
+    from pydantic import Field 
 from matplotlib.pylab import plt 
 
 

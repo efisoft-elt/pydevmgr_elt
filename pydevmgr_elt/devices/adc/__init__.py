@@ -9,7 +9,10 @@ from pydevmgr_elt.devices.motor import Motor
 from pydevmgr_elt import io
 from pydevmgr_core import path_walk_item , KINDS, get_class
 from pydevmgr_core.nodes import Opposite 
-from pydantic import BaseModel 
+try:
+    from pydantic.v1 import BaseModel 
+except ModuleNotFoundError:
+    from pydantic import BaseModel 
 
 Base = EltDevice
 

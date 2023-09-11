@@ -209,7 +209,10 @@ class TestRpc(BaseRpc):
 # The node and Rpc we have created will make more sens when creating a device
 
 from pydevmgr_core import BaseDevice, record_class
-from pydantic import AnyUrl 
+try:
+    from pydantic.v1 import AnyUrl 
+except ModuleNotFoundError:
+    from pydantic import AnyUrl 
 
 @record_class
 class TestMotor(BaseDevice):
@@ -258,7 +261,10 @@ class TestMotor2(TestMotor):
 
 from pydevmgr_core import BaseDevice, NodeAlias1, NodeVar
 from pydevmgr_core.nodes import UtcTime, Deque
-from pydantic import Field 
+try:
+    from pydantic.v1 import Field 
+except ModuleNotFoundError:
+    from pydantic import Field 
 from collections import deque 
 
 class TestMotor3(TestMotor):

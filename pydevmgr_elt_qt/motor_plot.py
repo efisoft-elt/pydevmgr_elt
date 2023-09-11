@@ -7,7 +7,10 @@ from pydevmgr_core import NodeVar
 from .elt_device_ctrl import EltDeviceCtrl
 from pydevmgr_core_qt import record_widget_factory, BaseUiLinker
 from pydevmgr_core.nodes import Time, DequeList
-from pydantic import Field
+try:
+    from pydantic.v1 import Field
+except ModuleNotFoundError:
+    from pydantic import Field
 import pyqtgraph as pg
 import numpy as np 
 from enum import IntEnum

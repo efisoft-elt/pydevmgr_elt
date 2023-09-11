@@ -1,4 +1,7 @@
-from pydantic import BaseModel, validator
+try:
+    from pydantic.v1 import BaseModel, validator
+except ModuleNotFoundError:
+    from pydantic import BaseModel, validator
 from typing import List
 from enum import Enum 
 

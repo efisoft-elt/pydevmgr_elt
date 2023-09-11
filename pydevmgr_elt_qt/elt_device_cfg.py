@@ -1,4 +1,7 @@
-from pydantic import BaseModel
+try:
+    from pydantic.v1 import BaseModel
+except ModuleNotFoundError:
+    from pydantic import BaseModel
 from PyQt5.QtWidgets import QFrame
 from pydevmgr_core_qt import BaseUiLinker, record_widget_factory
 
