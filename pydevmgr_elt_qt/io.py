@@ -1,17 +1,20 @@
-import os
-import pkg_resources
-from pydevmgr_core.io import load_config, find_config
+from pydevmgr_core.io import find_config
+import importlib
 
-pkg_name = 'pydevmgr_elt_qt'
+pkg_name = "pydevmgr_elt_qt"
+
+
+def get_pkg_path():
+    return importlib.resources.files(pkg_name)
+
 
 def find_ui(resource):
     try:
         return find_config(resource)
     except ValueError:
-        pass 
-    
-    if not pkg_resources.resource_exists(pkg_name, os.path.join('uis',resource)):
-        raise IOError('coud not find ui file %r'%(resource))        
-    return pkg_resources.resource_filename(pkg_name, os.path.join('uis',resource))   
-
-
+        pass
+    pkg_path = get_pkg_path()
+    path = pkg_path.joinpath("uis", resource)
+    if not path.exists():
+        raise IOError("coud not find ui file %r" % (resource))
+    return str(path)
